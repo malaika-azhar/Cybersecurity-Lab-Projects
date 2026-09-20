@@ -545,6 +545,6 @@ project-04-fim-custom-detection-rules/
 
 <div align="center">
 
-🛡️ **[Wazuh](https://wazuh.com)** · 🐧 **[Ubuntu](https://ubuntu.com)** · 🎯 **[MITRE ATT&CK](https://attack.mitre.org)** · 🔍 **Detection Engineering**
+🛡️ **[Wazuh](https://wazuh.com)** · 🐧 **[Ubuntu](https://ubuntu.com)** · 🎯 **[MITRE ATT&CK](https://attack.mitre.org)** · 🔍 **[Detection Engineering](#detection-pipeline)**
 
 </div>
