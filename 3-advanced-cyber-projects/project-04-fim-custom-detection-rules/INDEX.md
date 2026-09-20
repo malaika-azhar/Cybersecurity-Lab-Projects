@@ -28,23 +28,25 @@
 
 </div>
 
+<p align="center">🧩 <b>Lab:</b> Ubuntu Server (Wazuh Agent v4.14.6) ➜ Wazuh Manager · Indexer · Dashboard, both in Oracle VirtualBox</p>
+
 ---
 
 ## 📑 Step Index
 
 All 9 steps of the project, with the screenshot that proves each one.
 
-| # | Step | Module | Evidence |
-|:---:|---|:---:|:---:|
-| 1 | Enable real-time syscheck on `/etc` and `/var/log` | 🔵 Module 1 | [Exhibit 1](#ex1) |
-| 2 | Restart the agent and confirm it is Active | 🔵 Module 1 | [Exhibit 2](#ex2) |
-| 3 | Create, modify and delete a test file in `/etc` | 🔵 Module 1 | Commands (see README) |
-| 4 | Confirm the 3 FIM events on the dashboard | 🔵 Module 1 | [Exhibit 3](#ex3) |
-| 5 | Write the custom rule set in `local_rules.xml` | 🟢 Module 2 | [Exhibit 4](#ex4) |
-| 6 | Trigger Rule 100001 with `adduser` | 🟢 Module 2 | [Exhibit 5](#ex5) |
-| 7 | Confirm Rule 100001 fires on the dashboard | 🟢 Module 2 | [Exhibit 7](#ex7) |
-| 8 | Trigger Rule 100002 with an SSH failure burst | 🟢 Module 2 | [Exhibit 6](#ex6) |
-| 9 | Confirm Rule 100002 fires on the dashboard | 🟢 Module 2 | [Exhibit 8](#ex8) |
+| # | Step | Module | Result | Evidence |
+|:---:|---|:---:|---|:---:|
+| 1 | Enable real-time syscheck on `/etc` and `/var/log` | 🔵 Module 1 | Real-time on `/etc`, notification-only on `/var/log` | [Exhibit 1](#ex1) |
+| 2 | Restart the agent and confirm it is Active | 🔵 Module 1 | `ubuntu-agent` shows Active | [Exhibit 2](#ex2) |
+| 3 | Create, modify and delete a test file in `/etc` | 🔵 Module 1 | 3 file events generated | Commands (see README) |
+| 4 | Confirm the 3 FIM events on the dashboard | 🔵 Module 1 | Rules 554 added, 550 modified, 553 deleted | [Exhibit 3](#ex3) |
+| 5 | Write the custom rule set in `local_rules.xml` | 🟢 Module 2 | 3 rules saved (2 tested, 1 drafted) | [Exhibit 4](#ex4) |
+| 6 | Trigger Rule 100001 with `adduser` | 🟢 Module 2 | Test user `cyberster_test_user` created | [Exhibit 5](#ex5) |
+| 7 | Confirm Rule 100001 fires on the dashboard | 🟢 Module 2 | Rule 100001 fired, Level 10 | [Exhibit 7](#ex7) |
+| 8 | Trigger Rule 100002 with an SSH failure burst | 🟢 Module 2 | Repeated SSH login failures generated | [Exhibit 6](#ex6) |
+| 9 | Confirm Rule 100002 fires on the dashboard | 🟢 Module 2 | Rule 100002 fired, Level 12 | [Exhibit 8](#ex8) |
 
 ---
 
@@ -131,49 +133,6 @@ Exhibits 4 to 8.
 
 > [!NOTE]
 > Rule 100003 is written but untested because the lab had no Windows agent.
-
----
-
-<div align="center">
-
-### 🧩 Lab Setup at a Glance
-
-<table>
-<tr>
-<td align="center" valign="top" width="42%">
-
-![Ubuntu](https://img.shields.io/badge/Endpoint-Ubuntu_Server-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
-
-**Monitored Endpoint**<br>
-<sub>Wazuh Agent v4.14.6<br>Watches <code>/etc</code> and <code>/var/log</code></sub>
-
-</td>
-<td align="center" valign="middle" width="16%">
-
-**➜**<br>
-<sub>events</sub>
-
-</td>
-<td align="center" valign="top" width="42%">
-
-![Wazuh](https://img.shields.io/badge/SIEM-Wazuh_Manager-005EB8?style=for-the-badge&logo=wazuh&logoColor=white)
-
-**Detection Engine**<br>
-<sub>Manager · Indexer · Dashboard<br>Custom rules in <code>local_rules.xml</code></sub>
-
-</td>
-</tr>
-<tr>
-<td colspan="3" align="center">
-
-![VirtualBox](https://img.shields.io/badge/Hypervisor-Oracle_VirtualBox-183A61?style=for-the-badge&logo=virtualbox&logoColor=white)<br>
-<sub>Both machines run inside Oracle VirtualBox (Bridged Adapter)</sub>
-
-</td>
-</tr>
-</table>
-
-</div>
 
 ---
 
