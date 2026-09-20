@@ -15,6 +15,8 @@ SIEM Detection Engineering (Wazuh)
 
 Real-time File Integrity Monitoring configured on a live Linux endpoint, validated end-to-end against actual create/modify/delete events, and extended with two custom Wazuh detection rules — local account creation and SSH brute-force — each engineered, tuned against real triggered traffic, and mapped to MITRE ATT&CK.
 
+### [📑 Open the visual index](INDEX.md)
+
 </div>
 
 ---
