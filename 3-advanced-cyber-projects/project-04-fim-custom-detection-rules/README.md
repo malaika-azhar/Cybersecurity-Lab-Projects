@@ -65,6 +65,47 @@ A third rule, for **USB storage insertion**, is written but clearly marked **unt
 - **Module 1 — File Integrity Monitoring:** Watch core system directories in real time and prove that every add, modify and delete event is captured and shown on the dashboard.
 - **Module 2 — Custom Detection Rules:** Write new Wazuh rules for specific threats, test each one with real traffic, and tag each one with a MITRE ATT&CK technique.
 
+<div align="center">
+
+### 🧩 Lab Setup at a Glance
+
+<table>
+<tr>
+<td align="center" valign="top" width="42%">
+
+![Ubuntu](https://img.shields.io/badge/Endpoint-Ubuntu_Server-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
+
+**Monitored Endpoint**<br>
+<sub>Wazuh Agent v4.14.6<br>Watches <code>/etc</code> and <code>/var/log</code></sub>
+
+</td>
+<td align="center" valign="middle" width="16%">
+
+**➜**<br>
+<sub>events</sub>
+
+</td>
+<td align="center" valign="top" width="42%">
+
+![Wazuh](https://img.shields.io/badge/SIEM-Wazuh_Manager-005EB8?style=for-the-badge&logo=wazuh&logoColor=white)
+
+**Detection Engine**<br>
+<sub>Manager · Indexer · Dashboard<br>Custom rules in <code>local_rules.xml</code></sub>
+
+</td>
+</tr>
+<tr>
+<td colspan="3" align="center">
+
+![VirtualBox](https://img.shields.io/badge/Hypervisor-Oracle_VirtualBox-183A61?style=for-the-badge&logo=virtualbox&logoColor=white)<br>
+<sub>Both machines run inside Oracle VirtualBox (Bridged Adapter)</sub>
+
+</td>
+</tr>
+</table>
+
+</div>
+
 ---
 
 <a id="environment"></a>
