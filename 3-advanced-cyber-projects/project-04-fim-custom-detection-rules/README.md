@@ -52,9 +52,13 @@ Real-time File Integrity Monitoring configured on a live Linux endpoint, validat
 <a id="project-background"></a>
 ## 📖 Project Background
 
-This project was completed during the **Cyberster Blue Team Internship (Week 2)**, under mentor Abdullah Zia, in the role of SOC Analyst / Detection Engineer Intern.
+Default SIEM installations only watch generic activity, while a real SOC needs detections built for its own environment. This project builds a small but complete detection setup on **Wazuh**, an open-source SIEM, using a lab of one **Wazuh Manager** and one **Ubuntu Server** agent running in **VirtualBox**. It covers two jobs that a SOC analyst does every day.
 
-Default SIEM installations only watch generic activity. A real SOC needs detections built for its own environment. This project has two goals:
+The first is **File Integrity Monitoring**: watching `/etc` in real time, then creating, editing and deleting a test file to prove that every change shows up on the dashboard with the correct rule ID.
+
+The second is **custom detection engineering**: writing new rules for **local account creation** and **SSH brute-force**, testing each one with **real traffic**, correcting the SSH rule after `wazuh-logtest` showed the wrong parent rule, and mapping every rule to a **MITRE ATT&CK** technique.
+
+A third rule, for **USB storage insertion**, is written but clearly marked **untested**, because the lab had no Windows machine. Every test result shown here comes with a screenshot as evidence. The project has two goals:
 
 - **Module 1 — File Integrity Monitoring:** Watch core system directories in real time and prove that every add, modify and delete event is captured and shown on the dashboard.
 - **Module 2 — Custom Detection Rules:** Write new Wazuh rules for specific threats, test each one with real traffic, and tag each one with a MITRE ATT&CK technique.
