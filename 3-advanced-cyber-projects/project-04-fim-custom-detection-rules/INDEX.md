@@ -138,6 +138,6 @@ Exhibits 4 to 8.
 
 [⬆️ Back to top](#top) &nbsp;·&nbsp; [📖 Full README](README.md)
 
-🛡️ **[Wazuh](https://wazuh.com)** · 🐧 **[Ubuntu](https://ubuntu.com)** · 🎯 **[MITRE ATT&CK](https://attack.mitre.org)** · 🔍 **Detection Engineering**
+🛡️ **[Wazuh](https://wazuh.com)** · 🐧 **[Ubuntu](https://ubuntu.com)** · 🎯 **[MITRE ATT&CK](https://attack.mitre.org)** · 🔍 **[Detection Engineering](README.md#detection-pipeline)**
 
 </div>
