@@ -27,17 +27,19 @@ Twelve weeks, two phases, one lab: from standing up a SIEM in Week 1 to reconstr
 1. [At a Glance](#at-a-glance)
 2. [About This Folder](#about)
 3. [Environment & Tools](#environment)
-4. [The 12-Week Journey](#journey)
+4. [The 12-Week Journey & Project Flow](#journey)
 5. [Phase One — SOC Operations (Weeks 1–6)](#phase-one)
 6. [Phase Two — Digital Forensics & IR (Weeks 7–12)](#phase-two)
 7. [Coverage Snapshot](#coverage-snapshot)
-8. [Highlights in Numbers](#highlights)
-9. [Challenges & Fixes](#challenges-fixes)
-10. [Scope & Limitations](#scope-limitations)
-11. [What I Learned](#what-i-learned)
-12. [Skills Demonstrated](#skills-demonstrated)
-13. [Reports Index](#reports-index)
-14. [Repo Structure](#repo-structure)
+8. [Detection-to-Response Pipeline](#pipeline)
+9. [Verification, Not Assumption](#verification)
+10. [Highlights in Numbers](#highlights)
+11. [Challenges & Fixes](#challenges-fixes)
+12. [Scope & Limitations](#scope-limitations)
+13. [What I Learned](#what-i-learned)
+14. [Skills Demonstrated](#skills-demonstrated)
+15. [Reports Index](#reports-index)
+16. [Repo Structure](#repo-structure)
 
 ---
 
@@ -214,6 +216,38 @@ flowchart LR
     class W7,W8,W9,W10,W11,W12 two
 ```
 
+### 📈 Project Flow
+
+```mermaid
+%%{init: { 'theme': 'base', 'themeVariables': {
+  'doneTaskBkgColor':'#1A5276', 'doneTaskBorderColor':'#0B2E43',
+  'critBkgColor':'#943126', 'critBorderColor':'#571C16',
+  'sectionBkgColor':'#D6DBDF', 'altSectionBkgColor':'#EAECEE',
+  'taskTextColor':'#FFFFFF', 'taskTextOutsideColor':'#1B2631',
+  'taskTextLightColor':'#FFFFFF',
+  'titleColor':'#1B2A4A', 'fontSize':'16px'
+}}}%%
+gantt
+    title Project Flow - 12 Weeks and Two Phases
+    dateFormat X
+    axisFormat %s
+    section Phase One - SOC Operations
+    Wk 1 - SIEM Setup               :done, 0, 1
+    Wk 2 - FIM and Custom Rules     :done, 1, 2
+    Wk 3 - Suricata Integration     :crit, 2, 3
+    Wk 4 - pfSense and Threat Intel :done, 3, 4
+    Wk 5 - Malware Analysis         :crit, 4, 5
+    Wk 6 - Phase One Capstone       :done, 5, 6
+    section Phase Two - DFIR
+    Wk 7 - Disk Imaging             :done, 6, 7
+    Wk 8 - Windows Artefacts        :done, 7, 8
+    Wk 9 - Browser and LNK          :done, 8, 9
+    Wk 10 - Registry Analysis       :done, 9, 10
+    Wk 11 - Email and Timeline      :crit, 10, 11
+    Wk 12 - Final Case              :crit, 11, 12
+```
+<p align="center"><em>Blue bars are completed weeks. Red bars (Weeks 3, 5, 11, 12) mark weeks with a documented partial result — see <a href="#scope-limitations">Scope & Limitations</a>.</em></p>
+
 ---
 
 <a id="phase-one"></a>
@@ -229,6 +263,32 @@ flowchart LR
 | **04** | pfSense · Threat Intel · Vulnerability Assessment · SOC Reporting | Managed perimeter with syslog forwarding, live URLhaus feed in a CDB list, patch-and-rescan cycle, 5-panel SOC dashboard | [📄 PDF](REPORTS/Week04_Report.pdf) |
 | **05** | Malware Analysis & Detection Engineering | Static and interactive dynamic analysis of two samples, IOC extraction, and a custom Suricata rule verified in isolation | [📄 PDF](REPORTS/Week05_Report.pdf) |
 | **06** | Phase One Capstone | Insider-threat simulation and incident response, drawing the six weeks together | [📄 PDF](REPORTS/Week06_Report.pdf) |
+
+### Rule Chaining Map — How a Network Alert Reaches the Dashboard
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant T as 📦 Packet on eth0
+    participant S as 🔎 Suricata
+    participant E as 📄 eve.json
+    participant A as 🤖 Wazuh Agent
+    participant M as 🧠 Wazuh Manager
+    participant D as 📊 Dashboard
+
+    rect rgba(0, 94, 184, 0.18)
+    Note over T,E: Detection (Week 3)
+    T->>S: Packet inspected against the loaded ruleset
+    S->>E: A matching rule writes a structured alert event
+    end
+
+    rect rgba(46, 164, 79, 0.18)
+    Note over E,D: Ingestion
+    A->>E: localfile block reads each new JSON entry
+    A->>M: Event forwarded to the Manager
+    M->>D: JSON decoder and Suricata rules classify it, alert becomes searchable
+    end
+```
 
 ---
 
@@ -246,6 +306,31 @@ flowchart LR
 | **11** | Email Forensics & Super Timeline | Email extraction, LNK / Prefetch / registry corroboration and the "start big, filter down" timeline method | [📄 PDF](REPORTS/Week11_Report.pdf) |
 | **12** | Final Case — M57.biz Capstone | Disk, memory and USB exfiltration analysis of a data-leak case | [📄 PDF](REPORTS/Week12_Report.pdf) |
 
+### 🔍 Analyst Note — Why Independent Artefacts Beat a Single Trace
+
+A single artefact, even a precise one, can be altered or can be a coincidence. LNK creation, a Prefetch execution record and a registry write are recorded by three independent parts of the operating system, none of which knows about the others.
+
+```mermaid
+flowchart TD
+    A["🔗 LNK file created<br/>when the target is first opened"] --> D
+    B["⚙️ Prefetch record written<br/>when the program runs"] --> D
+    C["🗝️ Registry RecentDocs<br/>key updated"] --> D
+    D{"Do all three cluster<br/>around the anchor time?"}
+    D -->|Yes| E["✅ Corroborated — three independent<br/>subsystems agree"]
+    D -->|No| F["🛑 Gap — investigate and explain<br/>e.g. file system tunnelling"]
+
+    classDef start fill:#e8f1fb,stroke:#005EB8,stroke-width:2px,color:#000
+    classDef work fill:#fff4e5,stroke:#e08a00,stroke-width:2px,color:#000
+    classDef good fill:#eef7ee,stroke:#2ea44f,stroke-width:2px,color:#000
+    classDef bad fill:#fdeaea,stroke:#C8102E,stroke-width:2px,color:#000
+    class A,B,C start
+    class D work
+    class E good
+    class F bad
+```
+
+Fabricating a consistent story across three unrelated binary structures is far harder than editing a single log, which is why agreement across categories is treated as much stronger evidence than any one category alone.
+
 ---
 
 <a id="coverage-snapshot"></a>
@@ -260,6 +345,51 @@ flowchart LR
 | Disk & File System Forensics | Weeks 7, 10 | E01 imaging, NTFS analysis, Autopsy triage |
 | Windows & Browser Artefacts | Weeks 8, 9 | Prefetch, event logs, Chrome, LNK files |
 | Timeline & Multi-Source Correlation | Weeks 11, 12 | Email + host artefacts + super timeline |
+
+---
+
+<a id="pipeline"></a>
+## 🧭 Detection-to-Response Pipeline
+
+How the twelve weeks fit together — from raw telemetry to a finished report
+
+```mermaid
+flowchart TB
+    Tel["📡 TELEMETRY<br/>Host logs · Network traffic"]:::telClass
+    Det["🚨 DETECTION<br/>Wazuh rules · Suricata signatures"]:::detClass
+    Enr["🧬 ENRICHMENT<br/>VirusTotal · URLhaus · MITRE ATT&CK"]:::enrClass
+    Tri["🧭 TRIAGE<br/>Severity · Scope · Priority"]:::triClass
+    Ana["🔬 ANALYSIS<br/>Malware sandbox · Disk and memory artefacts"]:::anaClass
+    Tim["⏱️ TIMELINE<br/>Filtered super timeline"]:::timClass
+    Rep["📝 REPORT<br/>Technical and executive summaries"]:::repClass
+
+    Tel --> Det --> Enr --> Tri --> Ana --> Tim --> Rep
+
+    classDef telClass fill:#2C3E70,stroke:#131B3A,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef detClass fill:#1A5276,stroke:#0B2E43,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef enrClass fill:#76448A,stroke:#432752,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef triClass fill:#B9770E,stroke:#6E4409,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef anaClass fill:#943126,stroke:#571C16,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef timClass fill:#1E8449,stroke:#0E4A28,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef repClass fill:#148F77,stroke:#0B5142,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+
+    linkStyle default stroke:#2C3E50,stroke-width:4px
+```
+
+---
+
+<a id="verification"></a>
+## ✅ Verification, Not Assumption
+
+A recurring rule across the reports: a step is not done until it has been proven with direct evidence.
+
+| Check | Method | Outcome |
+|---|---|---|
+| Custom rule works on its own | Isolated replay with only the custom rule loaded | ✅ 8 / 8 matches (Week 5) |
+| Patch actually closed the gap | Re-scan filtered to the patched packages | ✅ High-severity findings 3 → 0 (Week 4) |
+| Logs really reach the SIEM | `ss` showing an active listener on UDP 514 | ✅ Confirmed (Week 4) |
+| Lab is truly isolated | A failed ping after disabling the adapter at the hypervisor | ✅ Confirmed (Week 5) |
+| Downloaded samples are intact | Hashes compared against published values | ✅ Match (Week 5) |
 
 ---
 
