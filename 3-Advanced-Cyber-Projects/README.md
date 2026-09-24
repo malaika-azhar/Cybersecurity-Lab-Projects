@@ -1,17 +1,20 @@
-.<div align="center">
+<div align="center">
 
-# 🛡️ Project 4
-## File Integrity Monitoring & Custom Detection Rule Engineering
-### SIEM Detection Engineering with Wazuh
+# 🛡️ Home SOC Lab Setup
 
-![Wazuh](https://img.shields.io/badge/SIEM-Wazuh-005EB8?style=for-the-badge&logo=wazuh&logoColor=white)
-![Ubuntu](https://img.shields.io/badge/Endpoint-Ubuntu_Server-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
-![MITRE ATT&CK](https://img.shields.io/badge/MITRE_ATT%26CK-T1136.001_%7C_T1110.001-C8102E?style=for-the-badge)
-![Detection Engineering](https://img.shields.io/badge/Focus-Detection_Engineering-6f42c1?style=for-the-badge)
-![Cost](https://img.shields.io/badge/Cost-Free_%26_Open--Source-2ea44f?style=for-the-badge)
+**Project 01 of 29 — Blue Team Internship Portfolio**
+
+SOC Foundations · Network Traffic Basics · Wazuh SIEM Deployment
+
+![VMware](https://img.shields.io/badge/VMware_Workstation-607078?style=for-the-badge&logo=vmware&logoColor=white)
+![Ubuntu](https://img.shields.io/badge/Ubuntu_Server_22.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
+![Wazuh](https://img.shields.io/badge/Wazuh_Cloud_4.14.5-3AAFDA?style=for-the-badge)
+![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+![MITRE](https://img.shields.io/badge/MITRE_ATT%26CK-C6501F?style=for-the-badge)
+![Cost](https://img.shields.io/badge/Cost-Free-2EA043?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
 
-**Real-time File Integrity Monitoring on a live Linux endpoint, tested with real create / modify / delete events, then extended with custom Wazuh detection rules mapped to MITRE ATT&CK.**
+A defensive lab built from scratch on hardware that did not meet the brief's own minimum spec — one Ubuntu Server VM, a cloud-hosted Wazuh SIEM in place of a failed local install, and two live agents generating a real, verified failed-login alert. Every deviation from the original brief is recorded with the reason behind it.
 
 </div>
 
@@ -19,300 +22,517 @@
 
 ## 📑 Table of Contents
 
-1. [Project Overview](#-project-overview)
-2. [Environment](#-environment)
-3. [Detection Pipeline](#-detection-pipeline)
-4. [Module 1 — File Integrity Monitoring](#-module-1--file-integrity-monitoring-fim)
-5. [Module 2 — Custom Detection Rules](#-module-2--custom-detection-rule-engineering)
-6. [Results Summary](#-results-summary)
-7. [Challenges & Fixes](#-challenges--fixes)
-8. [What I Learned](#-what-i-learned)
-9. [Repository Structure](#-repository-structure)
+1. [At a Glance](#at-a-glance)
+2. [Project Background](#project-background)
+3. [Environment](#environment)
+4. [Project Flow](#project-flow)
+5. [Day 2 — VM Lab Setup](#day-2)
+6. [Day 3-4 — Wazuh Manager Setup](#day-3-4)
+7. [Day 5-6 — Agent Deployment & Alert Testing](#day-5-6)
+8. [Day 7 — Dashboard Navigation & Alert Triage](#day-7)
+9. [Coverage Snapshot](#coverage-snapshot)
+10. [Troubleshooting Pipeline](#troubleshooting-pipeline)
+11. [Command Reference](#command-reference)
+12. [Project Summary](#project-summary)
+13. [Challenges & Fixes](#challenges-fixes)
+14. [Scope & Limitations](#scope-limitations)
+15. [What I Learned](#what-i-learned)
+16. [Skills Demonstrated](#skills-demonstrated)
+17. [Screenshot Index](#screenshot-index)
+18. [Repo Structure](#repo-structure)
 
 ---
 
-## 🎯 Project Overview
+<a id="at-a-glance"></a>
+## 📊 At a Glance
 
-This project covers two core SIEM detection tasks on a live Ubuntu endpoint monitored by **Wazuh**:
-
-- **File Integrity Monitoring (FIM):** Watch `/etc` and `/var/log` in real time and confirm that file changes show up on the dashboard with the correct rule IDs.
-- **Custom Detection Rules:** Write rules that go beyond Wazuh's default set. Each rule is tested with real traffic, tuned with `wazuh-logtest`, and mapped to a MITRE ATT&CK technique.
-
-### 📊 At a Glance
-
-| 🧩 Modules | 🖼️ Screenshots | 📜 Custom Rules | 🎯 MITRE Techniques |
-|:---:|:---:|:---:|:---:|
-| **2** | **8** | **2 tested + 1 drafted** | **2 validated** (+1 drafted) |
+| 🖥️ VMs Built | 🔌 Agents Deployed | 🖼️ Screenshots | 📋 Alert Types Triaged | 💰 Cost |
+|:---:|:---:|:---:|:---:|:---:|
+| **1** | **2** | **9** | **10** | **$0** |
 
 ---
 
+<a id="project-background"></a>
+## 📖 Project Background
+
+The brief called for a three-VM lab (Kali, a Wazuh Manager, and a Windows 10 target) each with 4GB+ RAM, and a fully local Wazuh install. My own hardware — an HP 255 G5, AMD A6-7310, 4GB total RAM, 128GB SSD — could not run that as written.
+
+This was raised with program support before any build work started, and the following interim plan was approved:
+
+| Plan Item | Approved Decision |
+|---|---|
+| Build Scope | One VM only: Ubuntu Server, allocated 2GB RAM |
+| Windows Agent | Host Windows used as the Wazuh agent instead of a separate Windows 10 VM |
+| Kali Linux VM | Deferred until a RAM upgrade is complete |
+| Hypervisor | VMware Workstation (brief specifies VirtualBox; confirmed acceptable) |
+
+> [!NOTE]
+> Every substitution in this report follows directly from this approved plan. Where a screenshot for a step does not exist, that step is marked 📝 and described from my own notes instead.
+
+<div align="center">
+
+### 🧩 Lab Setup at a Glance
+
+<table>
+<tr>
+<td align="center" valign="top" width="42%">
+
+![Ubuntu](https://img.shields.io/badge/Endpoint-Ubuntu_Server_22.04.5-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
+
+**Monitored VM**<br>
+<sub>NAT + Host-only adapters<br>2048 MB RAM, 2 CPU cores</sub>
+
+</td>
+<td align="center" valign="middle" width="16%">
+
+**➜**<br>
+<sub>telemetry</sub>
+
+</td>
+<td align="center" valign="top" width="42%">
+
+![Wazuh](https://img.shields.io/badge/SIEM-Wazuh_Cloud_4.14.5-3AAFDA?style=for-the-badge)
+
+**Manager / Indexer / Dashboard**<br>
+<sub>Cloud-hosted, in place of a local install</sub>
+
+</td>
+</tr>
+<tr>
+<td colspan="3" align="center">
+
+**Second agent — Windows Host** (used directly, in place of a Windows 10 VM)<br>
+<sub>Deployed via the dashboard's PowerShell install command</sub>
+
+</td>
+</tr>
+</table>
+
+</div>
+
+---
+
+<a id="environment"></a>
 ## 🖧 Environment
 
 | Item | Value |
 |---|---|
-| **SIEM Platform** | Wazuh Manager / Indexer / Dashboard |
-| **Monitored Endpoint** | Ubuntu Server with Wazuh Agent |
-| **Agent Config File** | `/var/ossec/etc/ossec.conf` |
-| **Custom Rules File** | `/var/ossec/etc/rules/local_rules.xml` |
-| **Tuning Tool** | `wazuh-logtest` |
+| **Hypervisor** | VMware Workstation |
+| **Guest OS** | Ubuntu Server 22.04.5 LTS |
+| **VM Resources** | 2048 MB RAM, 2 CPU cores |
+| **NAT Adapter Range** | `192.168.48.x` |
+| **Host-Only Adapter Range** | `192.168.92.x` |
+| **Ubuntu Agent Name / IP** | `Ubuntu-server` / `192.168.92.132` |
+| **Second Agent** | `Windows-Host` (host machine, PowerShell install) |
+| **SIEM** | Wazuh Cloud v4.14.5 (Manager + Indexer + Dashboard) |
+| **Built-in Ruleset** | 4,513 rules, grouped by syslog / firewall / windows / wazuh etc. |
+| **Work Period** | Week 1, Days 1–7 |
 
----
+> [!IMPORTANT]
+> VMware's default Host-only range (`192.168.92.x`) differs from VirtualBox's typical `192.168.56.x` used in the brief. This is expected, not an error, since the brief assumes VirtualBox and this build used VMware per the approved plan.
 
-## 🧭 Detection Pipeline
-
-How a raw endpoint event becomes a tuned, MITRE-tagged alert:
+### 🗺️ Lab Topology
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}, 'flowchart': {'nodeSpacing': 24, 'rankSpacing': 34, 'padding': 8}}}%%
 flowchart LR
-    A["🖥️ Endpoint Event<br/>(file change / auth log)"] --> B["🔎 Wazuh Agent<br/>collects the event"]
-    B --> C["🧩 Decoder<br/>extracts fields"]
-    C --> D["📐 Parent Rule<br/>matches"]
-    D --> E["🚨 Custom Rule<br/>chains and fires"]
-    E --> F["🎯 MITRE ATT&CK<br/>tag on the alert"]
-    F --> G["📊 Wazuh Dashboard"]
-
-    style A fill:#e8f1fb,stroke:#005EB8,color:#000
-    style B fill:#e8f1fb,stroke:#005EB8,color:#000
-    style C fill:#eef7ee,stroke:#2ea44f,color:#000
-    style D fill:#eef7ee,stroke:#2ea44f,color:#000
-    style E fill:#fff4e5,stroke:#e08a00,color:#000
-    style F fill:#fdeaea,stroke:#C8102E,color:#000
-    style G fill:#f1ecfb,stroke:#6f42c1,color:#000
+    UB["🐧 Ubuntu Server 22.04.5<br/>192.168.92.132"]:::vm --> WZ["☁️ Wazuh Cloud 4.14.5<br/>Manager · Indexer · Dashboard"]:::siem
+    WH["🪟 Windows Host<br/>Agent 2"]:::vm --> WZ
+    NAT["🌐 NAT Adapter<br/>192.168.48.x"]:::net -.-> UB
+    HO["🔒 Host-Only Adapter<br/>192.168.92.x"]:::net -.-> UB
+    classDef vm fill:#2C3E70,stroke:#131B3A,stroke-width:2px,color:#FFFFFF
+    classDef siem fill:#117864,stroke:#083D33,stroke-width:2px,color:#FFFFFF
+    classDef net fill:#EAECEE,stroke:#707B7C,color:#3B4142,stroke-dasharray: 4 3
+    linkStyle default stroke:#2C3E50,stroke-width:2px
 ```
+<p align="center"><em>Two agents report into one cloud-hosted Wazuh stack. The Kali VM in the original three-VM design was deferred (see Scope & Limitations).</em></p>
 
-### ⏱️ Project Flow
+---
+
+<a id="project-flow"></a>
+## ⏱️ Project Flow
 
 ```mermaid
-flowchart TD
-    S1["1️⃣ Enable real-time syscheck"] --> S2["2️⃣ Restart agent, confirm Active"]
-    S2 --> S3["3️⃣ Create / modify / delete a test file"]
-    S3 --> S4["4️⃣ Confirm 3 FIM events on dashboard"]
-    S4 --> S5["5️⃣ Write custom rules"]
-    S5 --> S6["6️⃣ Trigger Rule 100001 (adduser)"]
-    S6 --> S7["7️⃣ Confirm Rule 100001 alert"]
-    S7 --> S8["8️⃣ Trigger Rule 100002 (SSH burst)"]
-    S8 --> S9["9️⃣ Confirm Rule 100002 alert"]
-
-    style S1 fill:#e8f1fb,stroke:#005EB8,color:#000
-    style S2 fill:#e8f1fb,stroke:#005EB8,color:#000
-    style S3 fill:#e8f1fb,stroke:#005EB8,color:#000
-    style S4 fill:#e8f1fb,stroke:#005EB8,color:#000
-    style S5 fill:#eef7ee,stroke:#2ea44f,color:#000
-    style S6 fill:#eef7ee,stroke:#2ea44f,color:#000
-    style S7 fill:#eef7ee,stroke:#2ea44f,color:#000
-    style S8 fill:#eef7ee,stroke:#2ea44f,color:#000
-    style S9 fill:#eef7ee,stroke:#2ea44f,color:#000
+%%{init: { 'theme': 'base', 'themeVariables': {
+  'doneTaskBkgColor':'#117864', 'doneTaskBorderColor':'#083D33',
+  'sectionBkgColor':'#D6DBDF', 'altSectionBkgColor':'#EAECEE',
+  'taskTextColor':'#FFFFFF', 'taskTextOutsideColor':'#1B2631',
+  'taskTextLightColor':'#FFFFFF',
+  'titleColor':'#1B2A4A', 'fontSize':'18px'
+}}}%%
+gantt
+    title Project Flow — Week 1, Days 1 to 7
+    dateFormat YYYY-MM-DD
+    axisFormat %b %d
+    section Foundations
+    Day 1 - Networking fundamentals (see Project 13)   :done, 2026-01-01, 1d
+    section Lab Build
+    Day 2 - VM creation and connectivity                :done, 2026-01-02, 1d
+    Day 3-4 - Wazuh Manager setup and cloud pivot        :done, 2026-01-03, 2d
+    section Detection
+    Day 5-6 - Agent deployment and alert testing         :done, 2026-01-05, 2d
+    Day 7 - Dashboard navigation and alert triage         :done, 2026-01-07, 1d
 ```
-
-> 🔵 Blue = Module 1 (FIM) &nbsp;|&nbsp; 🟢 Green = Module 2 (Custom Rules) &nbsp;|&nbsp; All steps completed.
+<p align="center"><em>Dates are relative day markers, not calendar dates from the original report. All seven days complete.</em></p>
 
 ---
 
-## 🔵 Module 1 — File Integrity Monitoring (FIM)
+<a id="day-2"></a>
+## 🔵 Day 2 — VM Lab Setup
 
-> **Objective:** Configure Wazuh's `syscheck` module for real-time monitoring of core system directories, generate live file events, and confirm that added, modified and deleted events are captured and shown on the dashboard.
+**Objective:** Build the one approved VM, confirm dual-adapter networking, and take a rollback snapshot before touching Wazuh.
 
-### Step 1 — Enable real-time syscheck on the target directories ✅
+### Step 1 — Create the VM and allocate hardware ✅
 
-```xml
-<syscheck>
-  <disabled>no</disabled>
-  <frequency>300</frequency>
-  <scan_on_start>yes</scan_on_start>
-  <directories realtime="yes" report_changes="yes">/etc</directories>
-  <directories realtime="yes" report_changes="no">/var/log</directories>
-</syscheck>
+Created a new VM in VMware Workstation using the Ubuntu Server 22.04.5 LTS ISO. Allocated 2048 MB RAM and 2 CPU cores, with two network adapters: one NAT (internet access), one Host-only (internal lab network).
+
+<p align="center">
+  <img src="screenshots/ss-01-vm-creation-hardware-config.PNG" alt="Exhibit 1 - VM creation and hardware configuration" width="850"><br>
+  <em>Exhibit 1 — VMware Workstation VM creation: Ubuntu Server 22.04.5 LTS, 2048 MB RAM, 2 CPU cores</em>
+</p>
+
+### Step 2 — Profile configuration ✅
+
+<p align="center">
+  <img src="screenshots/ss-02-profile-configuration.PNG" alt="Exhibit 2 - Profile configuration" width="850"><br>
+  <em>Exhibit 2 — Guest profile configuration during VM creation</em>
+</p>
+
+### Step 3 — Network configuration during install ✅
+
+<p align="center">
+  <img src="screenshots/ss-03-network-config-during-install.PNG" alt="Exhibit 3 - Network configuration during install" width="850"><br>
+  <em>Exhibit 3 — NAT + Host-only adapters configured during the Ubuntu Server install</em>
+</p>
+
+### Step 4 — IP address confirmation (post-install) ✅
+
+After a VM rebuild, only one interface initially appeared in `ip a`. The second adapter had to be re-added in VMware settings, then manually brought up inside Ubuntu:
+
+```
+sudo ip link set ens37 up
+sudo dhclient ens37
 ```
 
-- `/etc` uses `report_changes="yes"` because it holds high-value config files, so Wazuh stores the content diff of each change.
-- `/var/log` uses `report_changes="no"` because it is high-volume and low-signal. Only a notification is sent, which avoids storing large diffs.
+Both interfaces then showed correctly: one on the NAT range (`192.168.48.x`), one on the Host-only range (`192.168.92.x`).
 
 <p align="center">
-  <img src="screenshots/Exhibit1_FIM_syscheck_config.png" alt="Exhibit 1 - FIM syscheck configuration" width="850"><br>
-  <em>Exhibit 1 — syscheck configuration in <code>ossec.conf</code></em>
+  <img src="screenshots/ss-04-ip-address-confirmation.PNG" alt="Exhibit 4 - IP address confirmation" width="850"><br>
+  <em>Exhibit 4 — <code>ip a</code> output confirming both NAT and Host-only interfaces are up with addresses</em>
 </p>
 
-### Step 2 — Restart the agent and confirm it is Active ✅
+### Step 5 — Connectivity test ✅
 
-<p align="center">
-  <img src="screenshots/Exhibit2_agent_active_status.png" alt="Exhibit 2 - Agent active status" width="850"><br>
-  <em>Exhibit 2 — Wazuh agent back in <b>Active</b> status after restart</em>
-</p>
-
-### Step 3 — Generate a full file lifecycle on the monitored path ✅
-
-```bash
-touch /etc/test_file.txt              # create
-echo "edit" >> /etc/test_file.txt     # modify
-rm /etc/test_file.txt                 # delete
+```
+ping -c 4 8.8.8.8
 ```
 
-### Step 4 — Confirm all three events on the dashboard ✅
+Result: 4 packets transmitted, 4 received, 0% packet loss — confirming internet access through the NAT adapter.
 
 <p align="center">
-  <img src="screenshots/Exhibit3_FIM_all_alerts.png" alt="Exhibit 3 - FIM alerts on the dashboard" width="850"><br>
-  <em>Exhibit 3 — Added, modified and deleted events in the File Integrity Monitoring view</em>
+  <img src="screenshots/ss-05-connectivity-test-ping.PNG" alt="Exhibit 5 - Connectivity test" width="850"><br>
+  <em>Exhibit 5 — <code>ping -c 4 8.8.8.8</code>: 0% packet loss</em>
 </p>
 
-### 🎯 Module 1 Result
+### Step 6 — Snapshot ✅
 
-All three events appeared with the correct rule IDs and matching timestamps.
+Took a snapshot named `Ubuntu-Working-Day2` once connectivity was confirmed, as a rollback point before installing Wazuh.
 
-| Change | Rule ID | Rule Description |
-|:---:|:---:|---|
-| ➕ Added | `554` | File added to the system |
-| ✏️ Modified | `550` | Integrity checksum changed |
-| ❌ Deleted | `553` | File deleted |
-
-### 🌟 Coverage Snapshot
-
-| 🛡️ Layer | ✅ Status | 📌 Detail |
-|---|:---:|---|
-| File Integrity Monitoring | 🟢 Live | Real-time on `/etc`, notification-only on `/var/log` |
-| Detection Rules | 🟢 2 Firing | New-user creation + SSH brute-force |
-| MITRE Coverage | 🎯 2 Techniques | T1136.001 · T1110.001 |
-| Untested Rule | 🟡 1 Drafted | External storage insertion. Written, but no matching endpoint to test on |
+<p align="center">
+  <img src="screenshots/ss-06-snapshot-ubuntu-working-day2.PNG" alt="Exhibit 6 - Snapshot" width="850"><br>
+  <em>Exhibit 6 — VMware snapshot <code>Ubuntu-Working-Day2</code> taken as a pre-install rollback point</em>
+</p>
 
 ---
 
-## 🟢 Module 2 — Custom Detection Rule Engineering
+<a id="day-3-4"></a>
+## 🟠 Day 3-4 — Wazuh Manager Setup
 
-> **Objective:** Go beyond generic default SIEM rules. Write detection logic for specific threat scenarios, build it on top of existing parent rules instead of parsing raw logs from scratch, and test every rule with real traffic before trusting it.
+**Objective:** Install the Wazuh Manager on the local VM; when hardware limits block that, document the limit and pivot to a working alternative rather than force a result that didn't happen.
 
-### Step 5 — Write the custom rule set ✅
+### Step 7 — Local install pre-flight check ✅
 
-```xml
-<group name="syslog,sshd,windows,">
-
-  <!-- Rule 1: Local user account creation -->
-  <rule id="100001" level="10">
-    <if_sid>5501</if_sid>
-    <match>new user</match>
-    <description>New local user account has been created on Linux system.</description>
-    <mitre><id>T1136.001</id></mitre>
-  </rule>
-
-  <!-- Rule 2: SSH brute-force detection -->
-  <rule id="100002" level="12" frequency="5" timeframe="120">
-    <if_matched_sid>5710</if_matched_sid>
-    <same_source_ip />
-    <description>SSH Brute Force attack detected from source IP.</description>
-    <mitre><id>T1110.001</id></mitre>
-  </rule>
-
-  <!-- Rule 3: External storage device insertion (drafted, pending a matching endpoint) -->
-  <rule id="100003" level="7">
-    <if_sid>60001</if_sid>
-    <field name="win.system.eventID">^2003$|^1006$</field>
-    <description>External storage device insertion detected on host.</description>
-    <mitre><id>T1200</id></mitre>
-  </rule>
-
-</group>
-```
+Installing the Wazuh Manager directly on the local Ubuntu VM hit a hardware wall: the 2GB VM sits below Wazuh's recommended minimum, and the installer's own pre-flight check flagged this before installation proceeded.
 
 <p align="center">
-  <img src="screenshots/Exhibit4_custom_rules_xml.png" alt="Exhibit 4 - custom rules XML" width="850"><br>
-  <em>Exhibit 4 — Custom rules in <code>local_rules.xml</code></em>
+  <img src="screenshots/ss-07-wazuh-preflight-check-fail.PNG" alt="Exhibit 7 - Pre-flight check failure" width="850"><br>
+  <em>Exhibit 7 — Wazuh installer pre-flight check flags the 2GB VM as below the recommended minimum</em>
 </p>
 
-### Step 6 — Trigger Rule 100001 with a real account-creation event ✅
+### Step 8 — Bypass attempt with the `-i` flag ✅
 
-```bash
-sudo adduser test_user
-```
+Re-ran the installer with the documented `-i` flag to bypass the check and proceed anyway. Even past that check, the install still risked failing at the memory-intensive Indexer stage.
 
 <p align="center">
-  <img src="screenshots/Exhibit5_adduser_command.png" alt="Exhibit 5 - adduser command" width="850"><br>
-  <em>Exhibit 5 — Creating a new local user on the monitored endpoint</em>
+  <img src="screenshots/ss-08-wazuh-install-i-flag-bypass.PNG" alt="Exhibit 8 - Install -i flag bypass" width="850"><br>
+  <em>Exhibit 8 — Installer re-run with <code>-i</code> to bypass the pre-flight check</em>
 </p>
 
-### Step 7 — Confirm Rule 100001 fires on the dashboard ✅
+### Step 9 — Pivot to Wazuh Cloud and log in ✅
 
-<p align="center">
-  <img src="screenshots/Exhibit7_rule100001_alert.png" alt="Exhibit 7 - Rule 100001 alert" width="850"><br>
-  <em>Exhibit 7 — Rule <code>100001</code> alert on the Wazuh dashboard</em>
-</p>
-
-### Step 8 — Trigger Rule 100002 with a real SSH brute-force burst ✅
-
-```bash
-for i in {1..10}; do ssh -o ConnectTimeout=2 -o PubkeyAuthentication=no wronguser@localhost; done
-```
-
-<p align="center">
-  <img src="screenshots/Exhibit6_ssh_bruteforce_trigger.png" alt="Exhibit 6 - SSH brute force trigger" width="850"><br>
-  <em>Exhibit 6 — Ten failed SSH attempts in a short burst</em>
-</p>
-
-### Step 9 — Confirm Rule 100002 fires on the dashboard ✅
-
-<p align="center">
-  <img src="screenshots/Exhibit8_rule100002_alert.png" alt="Exhibit 8 - Rule 100002 alert" width="850"><br>
-  <em>Exhibit 8 — Rule <code>100002</code> alert on the Wazuh dashboard</em>
-</p>
-
-### 🎯 Module 2 Result
-
-Both rules fired correctly against real triggered traffic, and each is mapped to a MITRE ATT&CK technique.
-
-| Rule ID | Detects | MITRE Technique | Status |
-|:---:|---|---|:---:|
-| `100001` | Local user account creation | [T1136.001](https://attack.mitre.org/techniques/T1136/001/) — Create Account: Local Account | ✅ Tested & firing |
-| `100002` | SSH brute-force | [T1110.001](https://attack.mitre.org/techniques/T1110/001/) — Brute Force: Password Guessing | ✅ Tested & firing |
-| `100003` | External storage insertion | [T1200](https://attack.mitre.org/techniques/T1200/) — Hardware Additions | ⏳ Drafted, not tested |
+Rather than keep fighting the local hardware limit, I used Wazuh Cloud's free trial instead — hosting the Manager, Indexer, and Dashboard on Wazuh's own infrastructure while keeping the Ubuntu VM as the monitored endpoint. This is a deliberate, documented substitution, not a separate unrelated tool.
 
 > [!NOTE]
-> **Tuning note:** `wazuh-logtest` showed that the SSH failure logs match parent rule **5710** (invalid user), not **5716** as first assumed. Rule 100002 was corrected. Using `<same_source_ip />` with `frequency="5"` and `timeframe="120"` means the rule only fires on a real burst from one source inside 2 minutes. This separates automated brute force from a normal mistyped password.
+> The brief's static-IP requirement assumes a self-hosted Manager. Since the Manager is cloud-hosted here, agents point at Wazuh Cloud's domain instead of a local static IP, so this specific requirement doesn't apply the same way.
+
+<p align="center">
+  <img src="screenshots/ss-09-wazuh-cloud-dashboard-login.PNG" alt="Exhibit 9 - Wazuh Cloud dashboard login" width="850"><br>
+  <em>Exhibit 9 — Logged into the Wazuh Cloud dashboard with the admin account; no agents registered yet, confirming the instance was live before any endpoint connected</em>
+</p>
 
 ---
 
-## 📝 Results Summary
+<a id="day-5-6"></a>
+## 🟢 Day 5-6 — Agent Deployment & Alert Testing 📝
 
-| Module | Tooling | Key Finding |
+**Objective:** Deploy agents on both the Ubuntu VM and a second endpoint, and generate one real, verifiable alert end to end.
+
+> [!NOTE]
+> No screenshots were captured/retained for these two days in the source report. The steps below are documented from my own notes (marked 📝) rather than left out.
+
+### Deploying the first agent 📝
+
+Used the dashboard's "Deploy new agent" wizard, selected the DEB amd64 package to match the Ubuntu VM, and brought the agent up with:
+
+```
+sudo systemctl daemon-reload
+sudo systemctl enable wazuh-agent
+sudo systemctl start wazuh-agent
+```
+
+The agent (`Ubuntu-server`, `192.168.92.132`) registered successfully and showed **Active**. Once connected, the Overview dashboard began showing real telemetry — **99 medium** and **110 low** severity alerts within 24 hours.
+
+### Deploying the second agent — Windows Host 📝
+
+The brief requires two connected agents. Since the Windows 10 VM was skipped per the approved hardware plan, the agent was deployed directly on the host Windows machine instead, using the dashboard's Windows deployment wizard to generate a PowerShell install command (run as Administrator). Both agents — `Ubuntu-server` and `Windows-Host` — then showed **Active** at the same time.
+
+### Generating a real failed-login alert 📝
+
+Getting a genuine authentication-failure event took a few attempts:
+
+| Attempt | Result |
+|---|---|
+| `ssh invaliduser@localhost` | Refused outright — no SSH session reached the auth layer |
+| `su invaliduser` / `su malaika` | Failed with "user does not exist" — not a real auth failure, neither was a valid account |
+| `su root` with a wrong password | ✅ Worked — produced a genuine logged Authentication failure |
+
+This showed up under Threat Hunting filtered to *Authentication failure*: **2 events recorded**, mapped under Top 10 MITRE ATT&CK to **Password Guessing** — confirming the alert pipeline correctly classified the activity, not just logged it.
+
+Checked the general Threat Hunting overview with no filters applied: **669 total events** in the last 24 hours across both agents.
+
+---
+
+<a id="day-7"></a>
+## 🟣 Day 7 — Dashboard Navigation & Alert Triage 📝
+
+**Objective:** Move from setup to analyst work — pull a genuine spread of alert types and assess each on its own merits rather than by severity level alone.
+
+> [!NOTE]
+> No screenshots were captured/retained for this day in the source report. The table below is documented from my own notes (marked 📝).
+
+Spent time in the general Threat Hunting Events view (not the File Integrity Monitoring-only tab, which only ever shows rule 550) to find a genuine spread of alert types from the Windows-Host agent. Also reviewed the Rules management page — Wazuh ships **4,513 built-in rules**, organized by group (syslog, firewall, windows, wazuh, etc.), each with its own default severity level.
+
+### 🎯 Top 10 Alert Types Triaged
+
+| Rule | Level | Description | My Assessment |
+|:---:|:---:|---|---|
+| 550 | 7 | Integrity checksum changed (most frequent) | Routine — FIM flagging file content changes, likely logs/system files updating on their own |
+| 553 | 7 | File deleted | Worth a closer look, but repetition alongside 550 suggests routine log rotation, not tampering |
+| 554 | 5 | File added to the system | Routine — lower severity than deletion, consistent with normal activity |
+| 61104 | 3 | Service startup type changed | Low severity, but worth knowing which service before dismissing — can be used to disable security tools |
+| **60602** | **9** | **Windows application error event** | **Real concern — the standout. Level 9 is meaningfully higher than everything else; this is the one I'd investigate first** |
+| 60642 | 3 | Software protection service scheduled successfully | Routine — Windows' own licensing/activation service |
+| 60798 | 3 | Database engine attached a database | Routine — part of a Windows service starting up |
+| 60805 | 3 | Database engine starting a new instance | Routine — same startup sequence |
+| 60807 | 3 | Database engine initiating recovery steps | Routine — normal recovery after a service restart |
+| 60808 | 3 | Database engine replaying log file (`wins\j50.log`) | Routine — final step of the same startup/recovery sequence |
+
+🎯 **Result:** Severity level alone didn't tell the full story — several Level 7 events were routine background noise, while the single Level 9 event stood out precisely because it was rare, not because it was the highest number on the page.
+
+---
+
+<a id="coverage-snapshot"></a>
+## 🌟 Coverage Snapshot
+
+| 🛡️ Area | ✅ Status | 📌 Detail |
 |---|---|---|
-| File Integrity Monitoring | `syscheck`, Wazuh Dashboard | Full add / modify / delete lifecycle captured with correct rule IDs |
-| Custom Rule Engineering | `local_rules.xml`, `wazuh-logtest` | Two rules written, tuned on real traffic, and mapped to MITRE ATT&CK |
+| VM Build | Complete | One Ubuntu Server 22.04.5 VM, dual adapters, snapshot taken |
+| SIEM Deployment | Substituted, complete | Local install blocked by RAM; Wazuh Cloud used instead |
+| Agent Coverage | Complete (2/2 approved) | Ubuntu-server + Windows-Host, both Active |
+| Alert Verification | Complete | Real failed-login alert generated and correctly classified |
+| Alert Triage | Complete | Top 10 alert types reviewed and individually assessed |
+| Kali Linux VM | Deferred | Blocked on a RAM upgrade, per the approved plan |
+
+### 🧾 What the Evidence Proves
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}, 'flowchart': {'nodeSpacing': 24, 'rankSpacing': 34, 'padding': 8}}}%%
+flowchart LR
+    D2["🔵 Day 2<br/>VM Build"]:::d2 --> P1["✅ Proven<br/>dual-adapter connectivity"]:::ok
+    D34["🟠 Day 3-4<br/>Wazuh Setup"]:::d34 --> P2["✅ Proven<br/>cloud SIEM live"]:::ok
+    D34 --> N2["❌ Not attempted<br/>fully local install"]:::bad
+    D56["🟢 Day 5-6<br/>Agents"]:::d56 --> P3["✅ Proven<br/>real alert, correctly classified"]:::ok
+    D7["🟣 Day 7<br/>Triage"]:::d7 --> P4["✅ Proven<br/>10 alert types assessed"]:::ok
+    classDef d2 fill:#117864,stroke:#083D33,stroke-width:2px,color:#FFFFFF
+    classDef d34 fill:#B9770E,stroke:#6E4409,stroke-width:2px,color:#FFFFFF
+    classDef d56 fill:#1E8449,stroke:#0E4A28,stroke-width:2px,color:#FFFFFF
+    classDef d7 fill:#76448A,stroke:#432752,stroke-width:2px,color:#FFFFFF
+    classDef ok fill:#1E8449,stroke:#0E4A28,stroke-width:2px,color:#FFFFFF
+    classDef bad fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
+    linkStyle default stroke:#2C3E50,stroke-width:2px
+```
 
 ---
 
+<a id="troubleshooting-pipeline"></a>
+## 🧭 Troubleshooting Pipeline
+
+How a hardware ceiling becomes a documented, working substitution
+
+```mermaid
+flowchart TB
+    Try["🧪 ATTEMPT PER THE BRIEF"]:::tryClass
+    Check["🔎 HIT A HARDWARE OR CONFIG LIMIT?"]:::checkClass
+    Doc["📝 DOCUMENT WHAT FAILED AND WHY"]:::docClass
+    Alt["🔧 FIND A DELIBERATE SUBSTITUTE"]:::altClass
+    Verify["✅ VERIFY THE SUBSTITUTE ACTUALLY WORKS"]:::verClass
+    Report["📷 CAPTURE EVIDENCE AND REPORT"]:::repClass
+
+    Try --> Check
+    Check -->|YES| Doc --> Alt --> Verify --> Report
+    Check -->|NO| Report
+
+    classDef tryClass fill:#2C3E70,stroke:#131B3A,stroke-width:4px,color:#FFFFFF,font-weight:bold
+    classDef checkClass fill:#B7950B,stroke:#6B5807,stroke-width:4px,color:#FFFFFF,font-weight:bold
+    classDef docClass fill:#943126,stroke:#571C16,stroke-width:4px,color:#FFFFFF,font-weight:bold
+    classDef altClass fill:#76448A,stroke:#432752,stroke-width:4px,color:#FFFFFF,font-weight:bold
+    classDef verClass fill:#117864,stroke:#083D33,stroke-width:4px,color:#FFFFFF,font-weight:bold
+    classDef repClass fill:#1E8449,stroke:#0E4A28,stroke-width:4px,color:#FFFFFF,font-weight:bold
+
+    linkStyle default stroke:#2C3E50,stroke-width:3px
+```
+
+---
+
+<a id="command-reference"></a>
+## 🧰 Command Reference
+
+| # | Command | Used In | Purpose |
+|:---:|---|---|---|
+| 1 | `sudo ip link set ens37 up` | Day 2 | Bring the missing second adapter up manually after a rebuild |
+| 2 | `sudo dhclient ens37` | Day 2 | Request a DHCP address on the re-added adapter |
+| 3 | `ping -c 4 8.8.8.8` | Day 2 | Verify outbound internet access via the NAT adapter |
+| 4 | `sh wazuh-install.sh -i` | Day 3-4 | Bypass the installer's pre-flight hardware check |
+| 5 | `sudo systemctl daemon-reload` | Day 5-6 | Reload systemd unit files after agent install |
+| 6 | `sudo systemctl enable wazuh-agent` | Day 5-6 | Enable the Wazuh agent service on boot |
+| 7 | `sudo systemctl start wazuh-agent` | Day 5-6 | Start the Wazuh agent service |
+| 8 | `su root` (wrong password) | Day 5-6 | Deliberately trigger a genuine, loggable authentication failure |
+
+---
+
+<a id="project-summary"></a>
+## 📝 Project Summary
+
+| Phase | Tooling | Key Outcome |
+|---|---|---|
+| VM Lab Build | VMware Workstation, Ubuntu Server 22.04.5 LTS | One working VM, dual-adapter networking confirmed, rollback snapshot taken |
+| SIEM Deployment | Wazuh Cloud v4.14.5 | Local install blocked by hardware; cloud pivot verified live before any agent connected |
+| Agent Coverage | Wazuh Agent (Linux + Windows) | Two agents Active simultaneously; 669 total events/24h across both |
+| Alert Verification | `su`, Threat Hunting, MITRE ATT&CK module | Real Authentication failure generated and correctly mapped to Password Guessing |
+| Alert Triage | Threat Hunting Events view, Rules management page | 10 distinct alert types individually assessed, not just sorted by severity |
+
+---
+
+<a id="challenges-fixes"></a>
 ## ⚠️ Challenges & Fixes
 
 | ❌ Challenge | ✅ Fix |
 |---|---|
-| The SSH brute-force rule assumed parent rule 5716 and never fired | Used `wazuh-logtest` to find the real parent rule (5710) and corrected the chain |
-| Loose matching could give false positives from unrelated logins happening at the same time | Added `<same_source_ip />` next to `frequency` and `timeframe` so only a burst from one source counts |
-| The USB-insertion rule had no matching endpoint to test on | Marked it clearly as untested instead of presenting it as verified |
+| Hardware (4GB RAM total) below the brief's 3-VM, 4GB-each minimum | Raised with program support before starting; scope reduced to one VM plus the host as a second agent, approved in writing |
+| VM rebuild dropped the second network adapter | Re-added the adapter in VMware settings, then manually brought it up with `ip link set up` and `dhclient` |
+| Local Wazuh install blocked by a 2GB RAM pre-flight check, and still risky at the Indexer stage even after bypassing it | Used Wazuh Cloud's free trial instead — same Manager/Indexer/Dashboard stack, no local RAM ceiling |
+| A supplied "install Wazuh" command was a fake placeholder (`echo "exit 0" > wazuh-install.sh`) | Caught before it caused confusion — running it produced no real install output |
+| `ssh invaliduser@localhost` and `su` against non-existent users did not produce a real authentication-failure event | Used `su root` with a deliberately wrong password against a real local account instead |
+| Ended up with two VMs by accident after a confused rebuild | Deleted both through File Explorer (VMware's own right-click delete didn't remove the underlying files) and rebuilt clean |
 
 ---
 
+<a id="scope-limitations"></a>
+## 🚧 Scope & Limitations
+
+- **Single VM, not three:** Hardware (4GB total RAM) could not run three concurrent VMs at 4GB+ each as the brief specifies. Approved plan built one Ubuntu Server VM only.
+- **Kali Linux VM deferred:** Blocked on a RAM upgrade, not yet built at the time of this report.
+- **Windows agent, not a Windows 10 VM:** The host Windows machine was used directly as the second agent, per the approved plan.
+- **Cloud SIEM, not a local install:** The local Wazuh install hit its own pre-flight hardware check and remained risky at the Indexer stage even past that check. Wazuh Cloud's free trial was used instead — a deliberate, documented substitution, not a separate tool chosen for convenience.
+- **VMware, not VirtualBox:** The brief specifies VirtualBox; VMware Workstation was used and confirmed acceptable, which is also why the Host-only IP range (`192.168.92.x`) differs from VirtualBox's typical `192.168.56.x`.
+- **No screenshots for Days 5–7:** Steps for agent deployment, the failed-login alert, and alert triage are documented from notes (📝) rather than screenshots, which were not captured/retained in the source report for those days.
+- **Static IP requirement does not directly apply:** Because the Manager is cloud-hosted, agents point at Wazuh Cloud's domain rather than a fixed local IP.
+
+These gaps are stated directly instead of hidden, so the results reflect what was actually built and verified.
+
+---
+
+<a id="what-i-learned"></a>
 ## 🧠 What I Learned
 
-- **Decoders come first.** A rule cannot read a raw log. The decoder must turn it into fields before any rule logic can run.
-- **Parent rules save work.** Chaining with `if_sid` / `if_matched_sid` lets a new rule reuse fields that are already parsed.
-- **`frequency` needs `timeframe`.** Without a time limit, a rule can fire on events that are days apart. The two must work together to describe a real rate.
-- **Valid syntax does not mean a working rule.** The only proof is to generate real traffic and check the alert every time.
+- **A hardware limit is a decision point, not a dead end.** Choosing a documented substitution (Wazuh Cloud, one VM, host-as-agent) over repeatedly forcing a failing local setup was the single biggest factor in the week.
+- **A pre-flight check failing early is more honest than a crash later.** The installer flagging the 2GB VM before the Indexer stage was a signal to pivot, not a bug to fight through.
+- **Not every "failure" is a real event.** `ssh` to an invalid user and `su` to a non-existent account don't generate the same alert as a real authentication failure against a valid account — getting a genuine Level-9-style event took trial and error.
+- **Severity level and frequency don't always point the same way.** A Level 7 alert firing constantly turned out to be routine noise, while a single Level 9 event stood out precisely because it was rare.
+- **The FIM tab is not the whole picture.** It only ever shows rule 550; the general Threat Hunting Events view was needed to see the full spread of alert types.
 
 ---
 
-## 📁 Repository Structure
+<a id="skills-demonstrated"></a>
+## 🛠️ Skills Demonstrated
+
+- Building and networking a VM lab under real hardware constraints (VMware Workstation, dual-adapter NAT/Host-only design)
+- Diagnosing and fixing VM networking issues (`ip link`, `dhclient`) after a rebuild
+- Recognizing a hardware ceiling early via a pre-flight check and choosing a documented, working substitution
+- Deploying Wazuh agents on both Linux and Windows endpoints and verifying Active status
+- Generating and verifying a real, MITRE-ATT&CK-mapped authentication-failure alert end to end
+- Triaging alerts by reading rule descriptions and context, not just severity level
+- Writing a transparent report that states every deviation from a brief and the reason for it
+
+---
+
+<a id="screenshot-index"></a>
+## 🖼️ Screenshot Index
+
+| # | File | Shows |
+|:---:|---|---|
+| 1 | `ss-01-vm-creation-hardware-config.PNG` | VMware VM creation: Ubuntu Server 22.04.5, 2048 MB RAM, 2 CPU cores |
+| 2 | `ss-02-profile-configuration.PNG` | Guest profile configuration during VM creation |
+| 3 | `ss-03-network-config-during-install.PNG` | NAT + Host-only adapters configured during install |
+| 4 | `ss-04-ip-address-confirmation.PNG` | `ip a` confirming both interfaces up with addresses |
+| 5 | `ss-05-connectivity-test-ping.PNG` | `ping -c 4 8.8.8.8` — 0% packet loss |
+| 6 | `ss-06-snapshot-ubuntu-working-day2.PNG` | VMware snapshot `Ubuntu-Working-Day2` |
+| 7 | `ss-07-wazuh-preflight-check-fail.PNG` | Wazuh installer pre-flight check flags the 2GB VM |
+| 8 | `ss-08-wazuh-install-i-flag-bypass.PNG` | Installer re-run with `-i` to bypass the check |
+| 9 | `ss-09-wazuh-cloud-dashboard-login.PNG` | Wazuh Cloud dashboard login, no agents registered yet |
+
+---
+
+<a id="repo-structure"></a>
+## 📁 Repo Structure
 
 ```text
-project-04-fim-custom-detection-rules/
-├── README.md
-└── screenshots/
-    ├── Exhibit1_FIM_syscheck_config.png
-    ├── Exhibit2_agent_active_status.png
-    ├── Exhibit3_FIM_all_alerts.png
-    ├── Exhibit4_custom_rules_xml.png
-    ├── Exhibit5_adduser_command.png
-    ├── Exhibit6_ssh_bruteforce_trigger.png
-    ├── Exhibit7_rule100001_alert.png
-    └── Exhibit8_rule100002_alert.png
+project-01-home-soc-lab-setup/
+|-- README.md
+`-- screenshots/
+    |-- ss-01-vm-creation-hardware-config.PNG
+    |-- ss-02-profile-configuration.PNG
+    |-- ss-03-network-config-during-install.PNG
+    |-- ss-04-ip-address-confirmation.PNG
+    |-- ss-05-connectivity-test-ping.PNG
+    |-- ss-06-snapshot-ubuntu-working-day2.PNG
+    |-- ss-07-wazuh-preflight-check-fail.PNG
+    |-- ss-08-wazuh-install-i-flag-bypass.PNG
+    `-- ss-09-wazuh-cloud-dashboard-login.PNG
 ```
 
 <div align="center">
 
-🛡️ **Wazuh** · 🐧 **Ubuntu** · 🎯 **MITRE ATT&CK** · 🔍 **Detection Engineering**
+🛡️ **[Wazuh](https://wazuh.com)** · 🖥️ **[VMware Workstation](https://www.vmware.com/products/workstation-pro.html)** · 🐧 **[Ubuntu Server](https://ubuntu.com/server)** · 🧭 **[MITRE ATT&CK](https://attack.mitre.org)** · 🧭 **[Troubleshooting Pipeline](#troubleshooting-pipeline)**
 
 </div>
