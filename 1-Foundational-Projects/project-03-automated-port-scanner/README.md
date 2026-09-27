@@ -116,8 +116,11 @@ flowchart LR
     PY["🐍 scanner.py<br/>Python 3.14"]:::py --> LIB["📦 python-nmap<br/>bridge library"]:::lib
     LIB --> NMAP["🔍 Nmap<br/>scan engine"]:::nmap
     NMAP --> NPCAP["🧩 Npcap<br/>packet driver"]:::drv
-    NMAP --> TARGET["🎯 127.0.0.1<br/>localhost"]:::target
-    LIB -.->|"invalid flag ⇒<br/>XML parse error"| NMAP
+    NPCAP --> TARGET["🎯 127.0.0.1<br/>localhost"]:::target
+    PY -.->|"❌ hidden .txt<br/>extension"| PY
+    NMAP -.->|"❌ downloaded,<br/>not installed"| LIB
+    LIB -.->|"❌ invalid flag ⇒<br/>XML parse error"| NMAP
+    TARGET -.->|"✅ clean scan<br/>returned"| PY
     classDef py fill:#1A5276,stroke:#0B2E43,stroke-width:2px,color:#FFFFFF
     classDef lib fill:#76448A,stroke:#432752,stroke-width:2px,color:#FFFFFF
     classDef nmap fill:#B9770E,stroke:#6E4409,stroke-width:2px,color:#FFFFFF
@@ -125,7 +128,7 @@ flowchart LR
     classDef target fill:#5D6D7E,stroke:#2C3844,stroke-width:2px,color:#FFFFFF
     linkStyle default stroke:#2C3E50,stroke-width:2px
 ```
-<p align="center"><em>The script calls python-nmap, which drives Nmap through Npcap against the target — the dashed line marks exactly where an invalid scan flag broke XML parsing in Module 5.</em></p>
+<p align="center"><em>The script calls python-nmap, which drives Nmap through Npcap to the target — each dashed line marks exactly where one of the three errors hit, and the final dashed line loops back to confirm the clean result.</em></p>
 
 ---
 
@@ -147,11 +150,11 @@ flowchart LR
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '15px'}, 'timeline': {'disableMulticolor': false}}}%%
 timeline
     title Setup to Clean Scan — one script, three errors, one fix each
-    Stage 1 — Setup : Install Python & python-nmap : Write scanner.py
-    Stage 2 — File Error : Hidden .txt extension found : Renamed to scanner.py
+    Stage 1 — Setup & Script : Install Python & python-nmap : Write scanner.py : Hidden .txt extension found
+    Stage 2 — Fix Filename : Renamed to scanner.py : Re-ran script
     Stage 3 — Install Error : Nmap downloaded, not installed : Installed as admin, fresh CMD
     Stage 4 — Flag Error : Invalid flag broke XML parsing : Swapped in -sV -Pn --unprivileged
-    Stage 5 — Verify : Clean scan against 127.0.0.1
+    Stage 5 — Verify : Clean scan against 127.0.0.1 : Host up, no errors
 ```
 <p align="center"><em>A Mermaid timeline instead of a flowchart — five stages read left to right, each pairing the error found with the fix that resolved it.</em></p>
 
