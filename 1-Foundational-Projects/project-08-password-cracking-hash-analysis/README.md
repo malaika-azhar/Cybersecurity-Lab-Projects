@@ -2,17 +2,17 @@
 
 # 🔓 Password Cracking & Hash Analysis
 
-**Project 08 of 10 — Foundational Projects**
+**Project 08 of 10 — Foundational Projects — Password Security & Hash Analysis**
 
-Password Security & Hash Analysis
+Three Password Hashes Identified and Cracked with John the Ripper — Dictionary-Based Recovery Against a Real Leaked-Password Wordlist, and How Fast Weak Passwords Actually Fall
 
+![John the Ripper](https://img.shields.io/badge/John_the_Ripper-Dictionary_Attack-DA3B3B?style=for-the-badge)
+![TryHackMe](https://img.shields.io/badge/Lab-TryHackMe_Crack_the_Hash-212C42?style=for-the-badge&logo=tryhackme&logoColor=white)
+![rockyou](https://img.shields.io/badge/Wordlist-rockyou.txt-943126?style=for-the-badge)
+![Difficulty](https://img.shields.io/badge/Difficulty-Foundational-6f42c1?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
-![Type](https://img.shields.io/badge/Type-Password_Security-blue?style=for-the-badge)
-![John the Ripper](https://img.shields.io/badge/Tool-John_the_Ripper-DA3B3B?style=for-the-badge)
-![TryHackMe](https://img.shields.io/badge/Lab-TryHackMe-212C42?style=for-the-badge&logo=tryhackme&logoColor=white)
-![Cost](https://img.shields.io/badge/Cost-Free_%26_Open--Source-2ea44f?style=for-the-badge)
 
-Three password hashes identified and cracked with John the Ripper inside TryHackMe's "Crack the Hash" room — dictionary-based recovery against a real leaked-password wordlist, and a direct look at how fast weak, common passwords actually fall.
+Eight steps run end-to-end inside TryHackMe's "Crack the Hash" room — identify each hash's algorithm, then run a dictionary attack with a real breach-derived wordlist and record the actual recovery time. All three hashes fell in under a second each.
 
 </div>
 
@@ -22,178 +22,309 @@ Three password hashes identified and cracked with John the Ripper inside TryHack
 
 1. [At a Glance](#at-a-glance)
 2. [Project Background](#project-background)
-3. [Environment](#environment)
-4. [Project Flow](#project-flow)
-5. [Cracking Walkthrough](#cracking-walkthrough)
-6. [Results Table](#results-table)
-7. [Findings Summary](#findings-summary)
-8. [Challenges & Fixes](#challenges-fixes)
-9. [Scope & Limitations](#scope-limitations)
-10. [Key Lesson](#key-lesson)
-11. [Skills Demonstrated](#skills-demonstrated)
-12. [Screenshot Index](#screenshot-index)
-13. [Repo Structure](#repo-structure)
+3. [Tools & Technologies](#tools-technologies)
+4. [Environment](#environment)
+5. [Cracking Pipeline Map](#cracking-pipeline-map)
+6. [Investigation Challenges](#investigation-challenges)
+7. [Cracking Timeline](#cracking-timeline)
+8. [Module 1 — Start the Room](#module-1)
+9. [Module 2 — Identify Hash 1](#module-2)
+10. [Module 3 — Crack Hash 1](#module-3)
+11. [Module 4 — Identify Hash 2](#module-4)
+12. [Module 5 — Crack Hash 2](#module-5)
+13. [Module 6 — Identify Hash 3](#module-6)
+14. [Module 7 — Run the Crack Command for Hash 3](#module-7)
+15. [Module 8 — Confirm Hash 3 Cracked](#module-8)
+16. [Coverage Snapshot](#coverage-snapshot)
+17. [Results Table](#results-table)
+18. [Challenges & Fixes](#challenges-fixes)
+19. [Scope & Limitations](#scope-limitations)
+20. [What I Learned](#what-i-learned)
+21. [Skills Demonstrated](#skills-demonstrated)
+22. [Screenshot Index](#screenshot-index)
+23. [Repo Structure](#repo-structure)
 
 ---
 
 <a id="at-a-glance"></a>
 ## 📊 At a Glance
 
-| 🧩 Phases | 🖼️ Screenshots | 🔑 Hashes Cracked | ⏱️ Avg. Crack Time |
+<div align="center">
+
+| 🧩 Modules | 🔑 Hashes Cracked | ⏱️ Avg. Crack Time | 🖼️ Screenshots |
 |:---:|:---:|:---:|:---:|
-| **8** | **8** | **3 / 3** | **< 1 second each** |
+| **8** | **3 / 3** | **< 1 second each** | **8** |
+
+</div>
 
 ---
 
 <a id="project-background"></a>
 ## 📖 Project Background
 
-Three password hashes identified and cracked using **John the Ripper** inside TryHackMe's "Crack the Hash" room, to practice dictionary-based password recovery and see firsthand how quickly weak, common passwords fall to a basic wordlist attack.
+This project identifies and cracks three password hashes using **John the Ripper** inside TryHackMe's "Crack the Hash" room, to practice dictionary-based password recovery and see firsthand how quickly weak, common passwords fall to a basic wordlist attack.
+
+| Module Group | Focus |
+|---|---|
+| 🚀 **Setup (Module 1)** | Start the room and AttackBox |
+| 🔎 **Hash 1 (Modules 2–3)** | Identify and crack an MD5 hash |
+| 🔎 **Hash 2 (Modules 4–5)** | Identify and crack a second MD5 hash |
+| 🔎 **Hash 3 (Modules 6–8)** | Identify, run the crack command, and confirm a SHA-1 hash |
+
+---
+
+<a id="tools-technologies"></a>
+## 🛠️ Tools & Technologies
+
+| Tool | Purpose |
+|------|---------|
+| 🚀 TryHackMe AttackBox | Pre-configured Linux environment for the room |
+| 🔎 `hashid` | Identifying a hash's algorithm before attempting to crack it |
+| 🔨 John the Ripper | Dictionary-based password cracking |
+| 📖 `rockyou.txt` | Real leaked-breach password wordlist |
 
 ---
 
 <a id="environment"></a>
 ## 🖧 Environment
 
+![Tool](https://img.shields.io/badge/John_the_Ripper-rockyou.txt-DA3B3B?style=flat-square)
+
 | Item | Value |
 |---|---|
-| **Lab Source** | TryHackMe — "Crack the Hash" room |
-| **Hash Identification** | `hashid` / hash-identifier |
-| **Cracking Tool** | John the Ripper |
-| **Wordlist** | `rockyou.txt` (real leaked-breach passwords) |
-| **Hashes Analyzed** | 3 (2× MD5, 1× SHA-1) |
+| Lab Source | TryHackMe — "Crack the Hash" room |
+| Hash Identification | `hashid` / hash-identifier |
+| Cracking Tool | John the Ripper |
+| Wordlist | `rockyou.txt` (real leaked-breach passwords) |
+| Hashes Analyzed | 3 (2× MD5, 1× SHA-1) |
 
 ---
 
-<a id="project-flow"></a>
-## ⏱️ Project Flow
+<a id="cracking-pipeline-map"></a>
+## 🗺️ Cracking Pipeline Map
 
 ```mermaid
-%%{init: { 'theme': 'base', 'themeVariables': {
-  'activeTaskBkgColor':'#1A5276', 'activeTaskBorderColor':'#0B2E43',
-  'doneTaskBkgColor':'#117864', 'doneTaskBorderColor':'#083D33',
-  'critBkgColor':'#943126', 'critBorderColor':'#571C16',
-  'sectionBkgColor':'#D6DBDF', 'altSectionBkgColor':'#EAECEE',
-  'taskTextColor':'#FFFFFF', 'taskTextOutsideColor':'#1B2631',
-  'taskTextLightColor':'#FFFFFF',
-  'titleColor':'#1B2A4A', 'fontSize':'16px'
-}}}%%
-gantt
-    title Project Flow — Identify to Crack, x3
-    dateFormat YYYY-MM-DD
-    axisFormat %b %d
-    section Hash 1 (MD5)
-    Identify & Crack                     :done, 2026-01-01, 1d
-    section Hash 2 (MD5)
-    Identify & Crack                     :done, 2026-01-01, 1d
-    section Hash 3 (SHA-1)
-    Identify & Crack                     :active, 2026-01-01, 1d
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '16px'}, 'flowchart': {'nodeSpacing': 34, 'rankSpacing': 46, 'padding': 12}}}%%
+flowchart LR
+    H1["🔑 Hash 1<br/>48bb6e86...aed4"]:::h1 --> ID1["🔎 hashid<br/>→ MD5"]:::id
+    H2["🔑 Hash 2<br/>202cb962...34b70"]:::h2 --> ID2["🔎 hashid<br/>→ MD5"]:::id
+    H3["🔑 Hash 3<br/>5baa61e4...68fd8"]:::h3 --> ID3["🔎 hashid<br/>→ SHA-1"]:::id
+    ID1 --> JOHN["🔨 John the Ripper<br/>+ rockyou.txt"]:::john
+    ID2 --> JOHN
+    ID3 --> JOHN
+    JOHN -.->|"✅ easy"| H1
+    JOHN -.->|"✅ 123"| H2
+    JOHN -.->|"✅ password"| H3
+    classDef h1 fill:#1A5276,stroke:#0B2E43,stroke-width:2px,color:#FFFFFF
+    classDef h2 fill:#76448A,stroke:#432752,stroke-width:2px,color:#FFFFFF
+    classDef h3 fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
+    classDef id fill:#B9770E,stroke:#6E4409,stroke-width:2px,color:#FFFFFF
+    classDef john fill:#117864,stroke:#083D33,stroke-width:2px,color:#FFFFFF
+    linkStyle default stroke:#2C3E50,stroke-width:2px
 ```
-<p align="center"><em>Colors distinguish each hash's cracking path — all three cracked.</em></p>
+<p align="center"><em>All three hashes funnel through the same identification step and the same John the Ripper + rockyou.txt attack — the dashed lines show each one falling to a common, predictable password.</em></p>
 
 ---
 
-<a id="cracking-walkthrough"></a>
-## 🔵 Cracking Walkthrough
+<a id="investigation-challenges"></a>
+## 🐛 Investigation Challenges
 
-**Objective:** Identify each hash's algorithm before attempting to crack it, then run a dictionary attack with a real breach-derived wordlist and record the actual recovery time.
+| # | Challenge | Type |
+|---|-------|------|
+| 1 | Needed to know the hash algorithm before choosing a crack strategy | Identification gap |
+| 2 | Risk of assuming a "stronger" hash (SHA-1) meant a harder crack | Algorithm strength vs. password strength assumption |
+
+---
+
+<a id="cracking-timeline"></a>
+## 🔎 Cracking Timeline
 
 ```mermaid
-flowchart TD
-    A["🚀 Start room<br/>+ AttackBox"] --> B["🔎 Identify Hash 1<br/>— MD5"]
-    B --> C["🔨 Crack Hash 1<br/>— 'easy'"]
-    C --> D["🔎 Identify Hash 2<br/>— MD5"]
-    D --> E["🔨 Crack Hash 2<br/>— '123'"]
-    E --> F["🔎 Identify Hash 3<br/>— SHA-1"]
-    F --> G["🔨 Crack Hash 3<br/>— 'password'"]
-
-    classDef work fill:#e8f1fb,stroke:#005EB8,stroke-width:2px,color:#000
-    classDef done fill:#eef7ee,stroke:#2ea44f,stroke-width:2px,color:#000
-    class A,B,D,F work
-    class C,E,G done
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '15px'}, 'timeline': {'disableMulticolor': false}}}%%
+timeline
+    title Room Start to Three Cracked Hashes — identify, crack, repeat
+    Stage 1 — Setup : Room + AttackBox started
+    Stage 2 — Hash 1 (MD5) : Identified via hashid : Cracked — "easy"
+    Stage 3 — Hash 2 (MD5) : Identified via hashid : Cracked — "123"
+    Stage 4 — Hash 3 (SHA-1) : Identified via hashid : Crack command run
+    Stage 5 — Confirmed : Cracked — "password" : 0 left
 ```
+<p align="center"><em>A Mermaid timeline instead of a flowchart — five stages read left to right, pairing each hash's identification with its crack result.</em></p>
 
-### Phase 1 — Starting the Room ✅
-Started the TryHackMe "Crack the Hash" room and AttackBox.
+---
+
+<a id="module-1"></a>
+## 🚀 Module 1 — Start the Room
+
+**Objective:** Launch the TryHackMe room and AttackBox.
+
+### Step 1 — Start the Room ✅
+
+```
+Start TryHackMe "Crack the Hash" room + AttackBox
+```
 
 <p align="center">
-  <img src="screenshots/SS1_Room_Started.PNG" alt="Phase 1 - Room Started" width="850"><br>
-  <em>Phase 1 — TryHackMe room and AttackBox started</em>
+  <img src="screenshots/SS1_Room_Started.PNG" alt="Exhibit 1 - Room Started" width="850"><br>
+  <em>Exhibit 1 — TryHackMe room and AttackBox started</em>
 </p>
 
-### Phase 2 — Hash 1: Identification ✅
-Identified the first hash's format.
+---
 
-```text
+<a id="module-2"></a>
+## 🔎 Module 2 — Identify Hash 1
+
+**Objective:** Determine Hash 1's algorithm before attempting to crack it.
+
+### Step 2 — Run hashid on Hash 1 ✅
+
+```
 48bb6e862e54f2a795ffc4e541caed4d
+
+hashid <hash>
+→ Identified as MD5 (raw-md5)
 ```
 
-Identified as **MD5** (`raw-md5`).
-
 <p align="center">
-  <img src="screenshots/SS2_Hash1_Identify.PNG" alt="Phase 2 - Hash 1 Identify" width="850"><br>
-  <em>Phase 2 — Hash 1 identified as MD5</em>
+  <img src="screenshots/SS2_Hash1_Identify.PNG" alt="Exhibit 2 - Hash 1 Identify" width="850"><br>
+  <em>Exhibit 2 — Hash 1 identified as MD5</em>
 </p>
 
-### Phase 3 — Hash 1: Cracking ✅
-Ran John the Ripper against the hash with the `rockyou.txt` wordlist. Cracked password: **`easy`**, recovered in under a second.
+---
+
+<a id="module-3"></a>
+## 🔨 Module 3 — Crack Hash 1
+
+**Objective:** Run John the Ripper against Hash 1 with `rockyou.txt`.
+
+### Step 3 — Crack Hash 1 ✅
+
+```
+john --format=raw-md5 --wordlist=rockyou.txt hash1.txt
+
+→ Cracked password: easy
+→ Recovered in under a second
+```
 
 <p align="center">
-  <img src="screenshots/SS3_Hash1_Cracked.PNG" alt="Phase 3 - Hash 1 Cracked" width="850"><br>
-  <em>Phase 3 — Hash 1 cracked: password 'easy'</em>
+  <img src="screenshots/SS3_Hash1_Cracked.PNG" alt="Exhibit 3 - Hash 1 Cracked" width="850"><br>
+  <em>Exhibit 3 — Hash 1 cracked: password 'easy'</em>
 </p>
 
-### Phase 4 — Hash 2: Identification ✅
+---
 
-```text
+<a id="module-4"></a>
+## 🔎 Module 4 — Identify Hash 2
+
+**Objective:** Determine Hash 2's algorithm.
+
+### Step 4 — Run hashid on Hash 2 ✅
+
+```
 202cb962ac59075b964b07152d234b70
+
+hashid <hash>
+→ Identified as MD5 (raw-md5)
 ```
 
-Identified as **MD5** (`raw-md5`).
-
 <p align="center">
-  <img src="screenshots/SS4_Hash2_Identify.PNG" alt="Phase 4 - Hash 2 Identify" width="850"><br>
-  <em>Phase 4 — Hash 2 identified as MD5</em>
+  <img src="screenshots/SS4_Hash2_Identify.PNG" alt="Exhibit 4 - Hash 2 Identify" width="850"><br>
+  <em>Exhibit 4 — Hash 2 identified as MD5</em>
 </p>
 
-### Phase 5 — Hash 2: Cracking ✅
-Cracked password: **`123`**, recovered in under a second.
+---
+
+<a id="module-5"></a>
+## 🔨 Module 5 — Crack Hash 2
+
+**Objective:** Run John the Ripper against Hash 2 with `rockyou.txt`.
+
+### Step 5 — Crack Hash 2 ✅
+
+```
+john --format=raw-md5 --wordlist=rockyou.txt hash2.txt
+
+→ Cracked password: 123
+→ Recovered in under a second
+```
 
 <p align="center">
-  <img src="screenshots/SS5_Hash2_Cracked.PNG" alt="Phase 5 - Hash 2 Cracked" width="850"><br>
-  <em>Phase 5 — Hash 2 cracked: password '123'</em>
+  <img src="screenshots/SS5_Hash2_Cracked.PNG" alt="Exhibit 5 - Hash 2 Cracked" width="850"><br>
+  <em>Exhibit 5 — Hash 2 cracked: password '123'</em>
 </p>
 
-### Phase 6 — Hash 3: Identification ✅
+---
 
-```text
+<a id="module-6"></a>
+## 🔎 Module 6 — Identify Hash 3
+
+**Objective:** Determine Hash 3's algorithm.
+
+### Step 6 — Run hashid on Hash 3 ✅
+
+```
 5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8
+
+hashid <hash>
+→ Identified as SHA-1 (raw-sha1)
 ```
 
-Identified as **SHA-1** (`raw-sha1`).
-
 <p align="center">
-  <img src="screenshots/SS6_Hash3_Identify.PNG" alt="Phase 6 - Hash 3 Identify" width="850"><br>
-  <em>Phase 6 — Hash 3 identified as SHA-1</em>
+  <img src="screenshots/SS6_Hash3_Identify.PNG" alt="Exhibit 6 - Hash 3 Identify" width="850"><br>
+  <em>Exhibit 6 — Hash 3 identified as SHA-1</em>
 </p>
 
-### Phase 7 — Hash 3: Cracking Command ✅
-Ran John the Ripper against the SHA-1 hash with the `rockyou.txt` wordlist.
+---
+
+<a id="module-7"></a>
+## 🔨 Module 7 — Run the Crack Command for Hash 3
+
+**Objective:** Run John the Ripper against the SHA-1 hash.
+
+### Step 7 — Run the Crack Command ✅
+
+```
+john --format=raw-sha1 --wordlist=rockyou.txt hash3.txt
+```
 
 <p align="center">
-  <img src="screenshots/SS7_Hash3_Crack_Command.PNG" alt="Phase 7 - Hash 3 Crack Command" width="850"><br>
-  <em>Phase 7 — John the Ripper running against Hash 3 with rockyou.txt</em>
+  <img src="screenshots/SS7_Hash3_Crack_Command.PNG" alt="Exhibit 7 - Hash 3 Crack Command" width="850"><br>
+  <em>Exhibit 7 — John the Ripper running against Hash 3 with rockyou.txt</em>
 </p>
 
-### Phase 8 — Hash 3: Cracked ✅
-Cracked password: **`password`**, confirmed with `0 left` (no remaining uncracked hashes in this batch).
+---
+
+<a id="module-8"></a>
+## ✅ Module 8 — Confirm Hash 3 Cracked
+
+**Objective:** Verify the final hash cracked successfully.
+
+### Step 8 — Confirm the Result ✅
+
+```
+→ Cracked password: password
+→ Confirmed with "0 left" — no remaining uncracked
+  hashes in this batch
+```
 
 <p align="center">
-  <img src="screenshots/SS8_Hash3_Cracked.PNG" alt="Phase 8 - Hash 3 Cracked" width="850"><br>
-  <em>Phase 8 — Hash 3 cracked: password 'password', 0 left</em>
+  <img src="screenshots/SS8_Hash3_Cracked.PNG" alt="Exhibit 8 - Hash 3 Cracked" width="850"><br>
+  <em>Exhibit 8 — Hash 3 cracked: password 'password', 0 left</em>
 </p>
 
-🎯 **Result:** All 3 hashes identified and cracked, each in under a second, confirming how little algorithm strength matters against a predictable password.
+---
+
+<a id="coverage-snapshot"></a>
+## 🌟 Coverage Snapshot
+
+| 🛡️ Layer | ✅ Status | 📌 Detail |
+|---|---|---|
+| Room started | Live | AttackBox launched (Exhibit 1) |
+| Hash 1 identified & cracked | Proven | MD5 → `easy` (Exhibits 2–3) |
+| Hash 2 identified & cracked | Proven | MD5 → `123` (Exhibits 4–5) |
+| Hash 3 identified | Proven | SHA-1 confirmed (Exhibit 6) |
+| Hash 3 crack run | Proven | John the Ripper executed (Exhibit 7) |
+| Hash 3 confirmed cracked | Proven | `password`, 0 left (Exhibit 8) |
 
 ---
 
@@ -205,17 +336,6 @@ Cracked password: **`password`**, confirmed with `0 left` (no remaining uncracke
 | `48bb6e862e54f2a795ffc4e541caed4d` | MD5 | `easy` | < 1 second |
 | `202cb962ac59075b964b07152d234b70` | MD5 | `123` | < 1 second |
 | `5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8` | SHA-1 | `password` | < 1 second |
-
----
-
-<a id="findings-summary"></a>
-## 🌟 Findings Summary
-
-| 🛡️ Layer | ✅ Status | 📌 Detail |
-|---|---|---|
-| Hash identification | Confirmed | 2× MD5, 1× SHA-1 — correctly typed before cracking |
-| Dictionary attack | Fully effective | `rockyou.txt` cracked all 3 hashes, 0 left uncracked |
-| Algorithm strength vs. password strength | Decoupled | SHA-1 (stronger algorithm) cracked just as fast as MD5 — password predictability was the real factor |
 
 ---
 
@@ -232,16 +352,19 @@ Cracked password: **`password`**, confirmed with `0 left` (no remaining uncracke
 <a id="scope-limitations"></a>
 ## 🚧 Scope & Limitations
 
-- **Wordlist attack only:** No brute-force, rule-based mangling, or mask attacks attempted — `rockyou.txt` alone was sufficient here.
-- **Unsalted hashes:** All three hashes were plain MD5/SHA-1 with no salt, which is why cracking was near-instant; salted hashes behave very differently.
-- **Lab environment:** Hashes provided by a TryHackMe training room, not pulled from a live breach or engagement.
+- **Wordlist attack only:** no brute-force, rule-based mangling, or mask attacks attempted — `rockyou.txt` alone was sufficient here.
+- **Unsalted hashes:** all three hashes were plain MD5/SHA-1 with no salt, which is why cracking was near-instant; salted hashes behave very differently.
+- **Lab environment:** hashes provided by a TryHackMe training room, not pulled from a live breach or engagement.
 
 ---
 
-<a id="key-lesson"></a>
-## 🧠 Key Lesson
+<a id="what-i-learned"></a>
+## 🧠 What I Learned
 
-All three passwords cracked in under a second — not because the hashing algorithm was weak, but because the underlying passwords were extremely common. `rockyou.txt` is built from real leaked password breaches, so any password that's ever shown up in a major leak gets caught almost instantly. **Crack speed has nothing to do with hash algorithm strength and everything to do with how predictable the password itself is.** A strong hash protecting a weak password is still a weak password.
+- **Crack speed has nothing to do with hash algorithm strength and everything to do with password predictability.** SHA-1 is considered stronger than MD5, but Hash 3 cracked just as fast as the two MD5 hashes — because the password itself (`password`) was common, not because the algorithm was weak.
+- **`rockyou.txt` is effective because it's real breach data, not a generic dictionary.** Any password that's ever appeared in a major leak gets caught almost instantly against it.
+- **Identifying the hash type first isn't optional.** Running `hashid` before cracking avoided wasted attempts with the wrong format flag.
+- **A strong hash protecting a weak password is still a weak password.** The algorithm is only one half of the defense — the other half is whether the password itself resists a wordlist at all.
 
 ---
 
