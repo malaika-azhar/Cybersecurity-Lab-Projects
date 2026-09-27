@@ -2,17 +2,17 @@
 
 # 🐧 Linux Log Analysis & Forensics — SOC Investigation
 
-**Project 07 of 10 — Foundational Projects**
+**Project 07 of 10 — Foundational Projects — Linux Forensics & Log Analysis**
 
-Linux Forensics & Log Analysis
+A Compromised Linux Host Investigated Using Nothing but Its Own Built-In Logs — Brute Force, Backdoor Account, Tool Download, and Internal Network Scan Reconstructed by Correlating Four Log Sources
 
+![Linux](https://img.shields.io/badge/Linux_CLI-grep_%2F_cat_%2F_head-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+![auditd](https://img.shields.io/badge/auditd-ausearch-6f42c1?style=for-the-badge)
+![No SIEM](https://img.shields.io/badge/No_SIEM-Raw_Log_Correlation-943126?style=for-the-badge)
+![Difficulty](https://img.shields.io/badge/Difficulty-Foundational-6f42c1?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
-![Type](https://img.shields.io/badge/Type-Linux_Forensics-blue?style=for-the-badge)
-![Linux](https://img.shields.io/badge/Platform-Linux_CLI-FCC624?style=for-the-badge&logo=linux&logoColor=black)
-![auditd](https://img.shields.io/badge/Tool-auditd-6f42c1?style=for-the-badge)
-![Cost](https://img.shields.io/badge/Cost-Free_%26_Open--Source-2ea44f?style=for-the-badge)
 
-A compromised Linux machine investigated using nothing but its own built-in log files — no SIEM, no EDR dashboard. The full attacker timeline reconstructed by correlating four separate log sources, each holding only a fragment of the story.
+Seven steps run end-to-end against a compromised Linux machine, no SIEM or EDR dashboard involved. The full attacker timeline is reconstructed by correlating four separate log sources — each holding only a fragment of the story on its own.
 
 </div>
 
@@ -22,174 +22,300 @@ A compromised Linux machine investigated using nothing but its own built-in log 
 
 1. [At a Glance](#at-a-glance)
 2. [Project Background](#project-background)
-3. [Environment](#environment)
-4. [Project Flow](#project-flow)
-5. [Investigation Walkthrough](#investigation-walkthrough)
-6. [Findings Summary](#findings-summary)
-7. [Attack Timeline](#attack-timeline)
-8. [Challenges & Fixes](#challenges-fixes)
-9. [Scope & Limitations](#scope-limitations)
-10. [Key Lesson](#key-lesson)
-11. [Skills Demonstrated](#skills-demonstrated)
-12. [Screenshot Index](#screenshot-index)
-13. [Repo Structure](#repo-structure)
+3. [Tools & Technologies](#tools-technologies)
+4. [Environment](#environment)
+5. [Log Correlation Map](#log-correlation-map)
+6. [Investigation Challenges](#investigation-challenges)
+7. [Investigation Timeline](#investigation-timeline)
+8. [Module 1 — Connect & Escalate to Root](#module-1)
+9. [Module 2 — Analyze Syslog](#module-2)
+10. [Module 3 — Check NTP Time Sync](#module-3)
+11. [Module 4 — Investigate Auth Log for Brute Force](#module-4)
+12. [Module 5 — Find the Backdoor User](#module-5)
+13. [Module 6 — Check Package Manager Logs](#module-6)
+14. [Module 7 — Analyze Auditd Records](#module-7)
+15. [Coverage Snapshot](#coverage-snapshot)
+16. [Attack Timeline](#attack-timeline)
+17. [Log Source Summary](#log-source-summary)
+18. [Challenges & Fixes](#challenges-fixes)
+19. [Scope & Limitations](#scope-limitations)
+20. [What I Learned](#what-i-learned)
+21. [Skills Demonstrated](#skills-demonstrated)
+22. [Screenshot Index](#screenshot-index)
+23. [Repo Structure](#repo-structure)
 
 ---
 
 <a id="at-a-glance"></a>
 ## 📊 At a Glance
 
-| 🧩 Phases | 🖼️ Screenshots | 📜 Log Sources Correlated | 🎯 Attack Stages Reconstructed |
+<div align="center">
+
+| 🧩 Modules | 📜 Log Sources Correlated | 🎯 Attack Stages Reconstructed | 🖼️ Screenshots |
 |:---:|:---:|:---:|:---:|
-| **7** | **7** | **4** | **4** |
+| **7** | **4** | **4** | **7** |
+
+</div>
 
 ---
 
 <a id="project-background"></a>
 ## 📖 Project Background
 
-A compromised Linux machine investigated using only its **built-in log files** — no SIEM, no EDR dashboard — to reconstruct the attacker's full timeline: how they got in, what they did once inside, and what tools they used to move further.
+This project investigates a compromised Linux machine using only its **built-in log files** — no SIEM, no EDR dashboard — to reconstruct the attacker's full timeline: how they got in, what they did once inside, and what tools they used to move further. This is core Linux host forensics: the kind of investigation a SOC analyst runs directly on a server after a suspected breach, using nothing but plaintext logs and audit records.
 
-This is core Linux host forensics: the kind of investigation a SOC analyst runs directly on a server after a suspected breach, using nothing but plaintext logs and audit records.
+| Module Group | Focus |
+|---|---|
+| 🔑 **Baseline (Modules 1–3)** | Connect, establish root access, confirm system health and trusted timestamps |
+| 🚨 **Breach Evidence (Modules 4–5)** | Find the brute-force entry point and the backdoor account it created |
+| 🔎 **Tooling Evidence (Modules 6–7)** | Trace the installed tool and the internal network scan it was used for |
+
+---
+
+<a id="tools-technologies"></a>
+## 🛠️ Tools & Technologies
+
+| Tool | Purpose |
+|------|---------|
+| 🔑 SSH + `sudo su` | Remote access and root escalation |
+| ⌨️ `grep` / `cat` / `head` | Filtering and reading plaintext log files |
+| 📋 `syslog` | Baseline system health and NTP time sync |
+| 🔐 `auth.log` | Authentication events — brute force, user/group changes |
+| 📦 `dpkg.log` | Debian package manager — software installation history |
+| 🔎 `auditd` / `ausearch` | File access, process execution, and network activity audit records |
 
 ---
 
 <a id="environment"></a>
 ## 🖧 Environment
 
+![Platform](https://img.shields.io/badge/Linux-Host_Forensics-FCC624?style=flat-square&logo=linux&logoColor=black)
+
 | Item | Value |
 |---|---|
-| **Access Method** | SSH, escalated to root (`sudo su`) |
-| **Core Tools** | Linux CLI (`grep`, `cat`, `head`) |
-| **Audit Tool** | `auditd` / `ausearch` |
-| **Log Sources** | `syslog`, `auth.log`, `dpkg.log`, `auditd` records |
-| **Attacker IP** | `10.14.94.82` |
-| **Backdoor Account** | `xerxes` (added to `sudo` group) |
+| Access Method | SSH, escalated to root (`sudo su`) |
+| Core Tools | Linux CLI (`grep`, `cat`, `head`) |
+| Audit Tool | `auditd` / `ausearch` |
+| Log Sources | `syslog`, `auth.log`, `dpkg.log`, `auditd` records |
+| Attacker IP | `10.14.94.82` |
+| Backdoor Account | `xerxes` (added to `sudo` group) |
 
 ---
 
-<a id="project-flow"></a>
-## ⏱️ Project Flow
+<a id="log-correlation-map"></a>
+## 🗺️ Log Correlation Map
 
 ```mermaid
-%%{init: { 'theme': 'base', 'themeVariables': {
-  'activeTaskBkgColor':'#1A5276', 'activeTaskBorderColor':'#0B2E43',
-  'doneTaskBkgColor':'#117864', 'doneTaskBorderColor':'#083D33',
-  'critBkgColor':'#943126', 'critBorderColor':'#571C16',
-  'sectionBkgColor':'#D6DBDF', 'altSectionBkgColor':'#EAECEE',
-  'taskTextColor':'#FFFFFF', 'taskTextOutsideColor':'#1B2631',
-  'taskTextLightColor':'#FFFFFF',
-  'titleColor':'#1B2A4A', 'fontSize':'16px'
-}}}%%
-gantt
-    title Project Flow — Access to Full Timeline
-    dateFormat YYYY-MM-DD
-    axisFormat %b %d
-    section Baseline
-    Connect, Syslog & NTP Check          :done, 2026-01-01, 1d
-    section Breach Evidence
-    Auth Log — Brute Force & Backdoor    :crit, 2026-01-01, 1d
-    section Tooling Evidence
-    dpkg & auditd — Tools & Network Scan :active, 2026-01-02, 1d
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '16px'}, 'flowchart': {'nodeSpacing': 34, 'rankSpacing': 46, 'padding': 12}}}%%
+flowchart LR
+    SYS["📋 syslog<br/>+ NTP baseline"]:::sys --> AUTH["🔐 auth.log<br/>brute force + backdoor"]:::auth
+    AUTH --> DPKG["📦 dpkg.log<br/>unzip installed"]:::dpkg
+    DPKG --> AUD["🔎 auditd<br/>file access + scan"]:::aud
+    AUTH -.->|"🚨 10.14.94.82<br/>brute force"| AUTH
+    AUTH -.->|"🚪 xerxes added<br/>to sudo"| DPKG
+    AUD -.->|"🌐 naabu scan<br/>192.168.50.0/24"| AUD
+    classDef sys fill:#5D6D7E,stroke:#2C3844,stroke-width:2px,color:#FFFFFF
+    classDef auth fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
+    classDef dpkg fill:#B9770E,stroke:#6E4409,stroke-width:2px,color:#FFFFFF
+    classDef aud fill:#76448A,stroke:#432752,stroke-width:2px,color:#FFFFFF
+    linkStyle default stroke:#2C3E50,stroke-width:2px
 ```
-<p align="center"><em>Colors distinguish each investigation stage — all stages complete.</em></p>
+<p align="center"><em>Each log source hands off to the next — syslog sets the trusted baseline, auth.log shows the break-in and backdoor, dpkg.log shows the tool install, and auditd ties it to the actual network scan.</em></p>
 
 ---
 
-<a id="investigation-walkthrough"></a>
-## 🔵 Investigation Walkthrough
+<a id="investigation-challenges"></a>
+## 🐛 Investigation Challenges
 
-**Objective:** Reconstruct a full attacker timeline by correlating multiple Linux log sources — no single log tells the whole story on its own.
+| # | Challenge | Type |
+|---|-------|------|
+| 1 | No single log contained the full attack story | Evidence fragmentation across 4 sources |
+| 2 | Needed to trust the timeline's timestamps | Required verifying NTP sync before relying on log times |
+| 3 | Attacker activity mixed in with routine system noise (e.g. SSM agent errors) | Signal-to-noise filtering |
+
+---
+
+<a id="investigation-timeline"></a>
+## 🔎 Investigation Timeline
 
 ```mermaid
-flowchart TD
-    A["🔑 SSH in,<br/>escalate to root"] --> B["📋 Baseline: syslog<br/>+ NTP time sync"]
-    B --> C["🚨 auth.log: brute force<br/>from 10.14.94.82"]
-    C --> D["🚪 auth.log: backdoor user<br/>'xerxes' added to sudo"]
-    D --> E["📦 dpkg.log: unzip<br/>installed"]
-    E --> F["🔎 auditd: file access,<br/>tool download, network scan"]
-
-    classDef work fill:#e8f1fb,stroke:#005EB8,stroke-width:2px,color:#000
-    classDef alert fill:#fdeaea,stroke:#C8102E,stroke-width:2px,color:#000
-    classDef done fill:#eef7ee,stroke:#2ea44f,stroke-width:2px,color:#000
-    class A,B work
-    class C,D alert
-    class E,F done
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '15px'}, 'timeline': {'disableMulticolor': false}}}%%
+timeline
+    title Root Access to Full Timeline — one host, four log sources
+    Stage 1 — Baseline : SSH in, escalate to root : syslog health check : NTP sync confirmed
+    Stage 2 — Breach Found : auth.log — brute force from 10.14.94.82
+    Stage 3 — Backdoor Found : auth.log — xerxes added to sudo group
+    Stage 4 — Tooling Found : dpkg.log — unzip installed
+    Stage 5 — Scan Confirmed : auditd — naabu downloaded, scan run on 192.168.50.0/24
 ```
-
-### Phase 1 — Machine Connection & Root Access ✅
-Connected to the target machine via SSH and ran `sudo su` to get root access, needed to read the protected log files.
-
-<p align="center">
-  <img src="screenshots/SS1_Linux_Logs_Connection.PNG" alt="Phase 1 - Linux Logs Connection" width="850"><br>
-  <em>Phase 1 — SSH connection and root access established</em>
-</p>
-
-### Phase 2 — Syslog Analysis ✅
-Ran `cat /var/log/syslog | head -n 20` to check overall system health. Found Amazon SSM agent access errors — system-level noise, not directly malicious, but useful baseline context.
-
-<p align="center">
-  <img src="screenshots/SS2_Syslog_Analysis.PNG" alt="Phase 2 - Syslog Analysis" width="850"><br>
-  <em>Phase 2 — System health check via syslog</em>
-</p>
-
-### Phase 3 — NTP Time Sync Check ✅
-Checked time synchronization logs to confirm the system clock source — important for trusting timestamps in the rest of the investigation. The logs confirmed the machine contacted `ntp.ubuntu.com` to sync its clock.
-
-<p align="center">
-  <img src="screenshots/SS3_Syslog_Timesync.PNG" alt="Phase 3 - Timesyncd Logs" width="850"><br>
-  <em>Phase 3 — NTP time sync source confirmed</em>
-</p>
-
-### Phase 4 — Auth Log Investigation: Brute Force Attack Found ✅
-Checked `/var/log/auth.log` for authentication activity. Found the attacker's entry point: IP `10.14.94.82` running automated password-guessing attempts against `root`, `admin`, and `support` accounts.
-
-<p align="center">
-  <img src="screenshots/SS4_Auth_Failed_Logins.PNG" alt="Phase 4 - Auth Failed Logins" width="850"><br>
-  <em>Phase 4 — Brute force attempts from 10.14.94.82</em>
-</p>
-
-### Phase 5 — Backdoor User Creation Found ✅
-Filtered `auth.log` for `useradd`/`usermod` events. Found that after breaking in, the attacker created a new account (`xerxes`) and added it to the `sudo` group — a backdoor with full admin rights.
-
-<p align="center">
-  <img src="screenshots/SS5_Auth_Sudo_User.PNG" alt="Phase 5 - Auth Sudo User" width="850"><br>
-  <em>Phase 5 — Backdoor user xerxes added to sudo group</em>
-</p>
-
-### Phase 6 — Malicious Software Installation Check ✅
-Checked `/var/log/dpkg.log` (Debian package manager logs). Found the attacker installed `unzip` (version `6.0-28ubuntu4.1`) — used to extract a downloaded archive.
-
-<p align="center">
-  <img src="screenshots/SS6_Package_Manager_Logs.PNG" alt="Phase 6 - Package Manager Logs" width="850"><br>
-  <em>Phase 6 — unzip installation found in dpkg logs</em>
-</p>
-
-### Phase 7 — Auditd Analysis: Hacker Tools & Network Scan ✅
-Used `ausearch` to dig into audit-level events:
-
-- A sensitive file, `secret.thm`, was opened at `08/13/25 18:36:54`
-- The attacker used `wget` to download `naabu_2.3.5_linux_amd64.zip` from GitHub — a network scanning tool
-- That tool was then used to scan the internal network range `192.168.50.0/24`
-
-<p align="center">
-  <img src="screenshots/SS7_Auditd_Analysis.PNG" alt="Phase 7 - Auditd Analysis" width="850"><br>
-  <em>Phase 7 — File access timestamp, tool download, and network scan range</em>
-</p>
-
-🎯 **Result:** A full attacker timeline reconstructed purely from correlated log evidence — brute force, backdoor account, tool download, and internal network scan.
+<p align="center"><em>A Mermaid timeline instead of a flowchart — five stages read left to right, from establishing root access to confirming the internal network scan.</em></p>
 
 ---
 
-<a id="findings-summary"></a>
-## 🌟 Findings Summary
+<a id="module-1"></a>
+## 🔑 Module 1 — Connect & Escalate to Root
 
-| 📜 Log Source | 🔍 What It Revealed |
-|---|---|
-| `auth.log` | Brute-force entry point (`10.14.94.82`) and backdoor account (`xerxes`) |
-| `dpkg.log` | Installation of `unzip` — tool used to extract a downloaded archive |
-| `auditd` / `ausearch` | Sensitive file access, `wget` tool download, and internal network scan |
-| `syslog` / NTP | Baseline system health and trusted timestamp source |
+**Objective:** Establish access to the target machine with the permissions needed to read protected logs.
+
+### Step 1 — SSH In & Escalate ✅
+
+```
+ssh <target>
+sudo su
+
+→ Root access established — needed to read protected log files
+```
+
+<p align="center">
+  <img src="screenshots/SS1_Linux_Logs_Connection.PNG" alt="Exhibit 1 - Linux Logs Connection" width="850"><br>
+  <em>Exhibit 1 — SSH connection and root access established</em>
+</p>
+
+---
+
+<a id="module-2"></a>
+## 📋 Module 2 — Analyze Syslog
+
+**Objective:** Check overall system health as a baseline before hunting for malicious activity.
+
+### Step 2 — Review Syslog ✅
+
+```
+cat /var/log/syslog | head -n 20
+
+→ Found Amazon SSM agent access errors —
+  system-level noise, not directly malicious,
+  but useful baseline context
+```
+
+<p align="center">
+  <img src="screenshots/SS2_Syslog_Analysis.PNG" alt="Exhibit 2 - Syslog Analysis" width="850"><br>
+  <em>Exhibit 2 — System health check via syslog</em>
+</p>
+
+---
+
+<a id="module-3"></a>
+## ⏱️ Module 3 — Check NTP Time Sync
+
+**Objective:** Confirm the system clock source before trusting any log timestamps.
+
+### Step 3 — Verify Time Sync ✅
+
+```
+Check time synchronization logs
+
+→ Confirmed machine contacted ntp.ubuntu.com to sync its clock
+→ Timestamps in the rest of the investigation can be trusted
+```
+
+<p align="center">
+  <img src="screenshots/SS3_Syslog_Timesync.PNG" alt="Exhibit 3 - Timesyncd Logs" width="850"><br>
+  <em>Exhibit 3 — NTP time sync source confirmed</em>
+</p>
+
+---
+
+<a id="module-4"></a>
+## 🚨 Module 4 — Investigate Auth Log for Brute Force
+
+**Objective:** Find the attacker's entry point.
+
+### Step 4 — Search Auth Log ✅
+
+```
+grep <pattern> /var/log/auth.log
+
+→ Attacker entry point: 10.14.94.82
+→ Automated password-guessing attempts against
+  root, admin, and support accounts
+```
+
+<p align="center">
+  <img src="screenshots/SS4_Auth_Failed_Logins.PNG" alt="Exhibit 4 - Auth Failed Logins" width="850"><br>
+  <em>Exhibit 4 — Brute force attempts from 10.14.94.82</em>
+</p>
+
+---
+
+<a id="module-5"></a>
+## 🚪 Module 5 — Find the Backdoor User
+
+**Objective:** Determine what the attacker did immediately after breaking in.
+
+### Step 5 — Filter for Account Changes ✅
+
+```
+grep -E "useradd|usermod" /var/log/auth.log
+
+→ New account created: xerxes
+→ Added to the sudo group — backdoor with full admin rights
+```
+
+<p align="center">
+  <img src="screenshots/SS5_Auth_Sudo_User.PNG" alt="Exhibit 5 - Auth Sudo User" width="850"><br>
+  <em>Exhibit 5 — Backdoor user xerxes added to sudo group</em>
+</p>
+
+---
+
+<a id="module-6"></a>
+## 📦 Module 6 — Check Package Manager Logs
+
+**Objective:** Find what software the attacker installed.
+
+### Step 6 — Review dpkg.log ✅
+
+```
+cat /var/log/dpkg.log
+
+→ unzip (version 6.0-28ubuntu4.1) installed
+→ Used to extract a downloaded archive
+```
+
+<p align="center">
+  <img src="screenshots/SS6_Package_Manager_Logs.PNG" alt="Exhibit 6 - Package Manager Logs" width="850"><br>
+  <em>Exhibit 6 — unzip installation found in dpkg logs</em>
+</p>
+
+---
+
+<a id="module-7"></a>
+## 🔎 Module 7 — Analyze Auditd Records
+
+**Objective:** Correlate file access, tool download, and network activity via audit records.
+
+### Step 7 — Run ausearch ✅
+
+```
+ausearch <options>
+
+→ Sensitive file "secret.thm" opened at 08/13/25 18:36:54
+→ wget used to download naabu_2.3.5_linux_amd64.zip (GitHub)
+   — a network scanning tool
+→ That tool used to scan the internal network range
+   192.168.50.0/24
+```
+
+<p align="center">
+  <img src="screenshots/SS7_Auditd_Analysis.PNG" alt="Exhibit 7 - Auditd Analysis" width="850"><br>
+  <em>Exhibit 7 — File access timestamp, tool download, and network scan range</em>
+</p>
+
+---
+
+<a id="coverage-snapshot"></a>
+## 🌟 Coverage Snapshot
+
+| 🛡️ Layer | ✅ Status | 📌 Detail |
+|---|---|---|
+| Root access established | Live | SSH + `sudo su` confirmed (Exhibit 1) |
+| System baseline reviewed | Proven | syslog health check completed (Exhibit 2) |
+| Timestamp trust confirmed | Proven | NTP sync source verified (Exhibit 3) |
+| Brute force identified | Proven | `10.14.94.82` found in auth.log (Exhibit 4) |
+| Backdoor account found | Proven | `xerxes` added to sudo (Exhibit 5) |
+| Tool installation found | Proven | `unzip` in dpkg.log (Exhibit 6) |
+| Network scan confirmed | Proven | `naabu` download + scan range in auditd (Exhibit 7) |
 
 ---
 
@@ -220,6 +346,18 @@ sequenceDiagram
 
 ---
 
+<a id="log-source-summary"></a>
+## 📟 Log Source Summary
+
+| Log Source | What It Revealed |
+|---|---|
+| `syslog` / NTP | Baseline system health and trusted timestamp source |
+| `auth.log` | Brute-force entry point (`10.14.94.82`) and backdoor account (`xerxes`) |
+| `dpkg.log` | Installation of `unzip` — tool used to extract a downloaded archive |
+| `auditd` / `ausearch` | Sensitive file access, `wget` tool download, and internal network scan |
+
+---
+
 <a id="challenges-fixes"></a>
 ## ⚠️ Challenges & Fixes
 
@@ -234,16 +372,19 @@ sequenceDiagram
 <a id="scope-limitations"></a>
 ## 🚧 Scope & Limitations
 
-- **Post-compromise, log-based only:** No memory forensics or disk imaging — investigation is limited to what the existing log files captured.
-- **Single host:** Covers one compromised Linux machine, not a multi-host lateral-movement investigation.
-- **No SIEM/EDR correlation:** Deliberately done via raw CLI log analysis, distinct from the SIEM/dashboard-based triage in other projects.
+- **Post-compromise, log-based only:** no memory forensics or disk imaging — investigation is limited to what the existing log files captured.
+- **Single host:** covers one compromised Linux machine, not a multi-host lateral-movement investigation.
+- **No SIEM/EDR correlation:** deliberately done via raw CLI log analysis, distinct from the SIEM/dashboard-based triage in other projects.
 
 ---
 
-<a id="key-lesson"></a>
-## 🧠 Key Lesson
+<a id="what-i-learned"></a>
+## 🧠 What I Learned
 
-No single log told the full story. `auth.log` showed the break-in and the backdoor account, `dpkg.log` showed the tool installation, and `auditd` showed the file access and network scan — each one only a fragment. The actual attacker timeline (brute force → backdoor account → tool download → internal network scan) only became clear by correlating evidence across all of them. Real Linux host forensics is rarely a single log lookup; it's piecing together a timeline from multiple sources.
+- **No single log tells the full story.** `auth.log` showed the break-in and the backdoor account, `dpkg.log` showed the tool installation, and `auditd` showed the file access and network scan — each one only a fragment. The actual timeline only became clear by correlating evidence across all of them.
+- **Timestamps are only as trustworthy as their sync source.** Confirming NTP sync before relying on log timestamps is a small step that protects the credibility of the entire timeline.
+- **Routine noise and real evidence sit in the same log.** SSM agent errors in syslog looked similar in volume to genuinely relevant events — filtering with `grep`/`head` was necessary to separate the two.
+- **A backdoor account is a concrete, durable finding.** Unlike a single IP or hash, `xerxes` being added to `sudo` is direct evidence of persistence that has to be manually removed, not just blocked.
 
 ---
 
