@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🪟 Windows Event Log Analysis
+# 🔐 Windows Event Log Analysis
 
 **Project 22 of 29 — Blue Team Internship Portfolio**
 
