@@ -2,19 +2,20 @@
 
 # 🌐 Cisco Infrastructure & Secure Routing
 
-**Project 02 of 10 — Foundational Projects**
+**Project 02 of 10 — Foundational Projects — Network Infrastructure & Security**
 
-Network Infrastructure & Security
+Router & Switch Configuration, Static IP Assignment, and Access Control List Hardening on a 3-PC Small Company Network — Cisco Packet Tracer Build, ACL Bypass Discovery, and Default-Deny Fix
 
+![Cisco](https://img.shields.io/badge/Cisco_Packet_Tracer-Network_Build-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white)
+![Router](https://img.shields.io/badge/Router-2911-0078D6?style=for-the-badge)
+![ACL](https://img.shields.io/badge/ACL-Default--Deny_Hardening-943126?style=for-the-badge)
+![Difficulty](https://img.shields.io/badge/Difficulty-Foundational-6f42c1?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
-![Type](https://img.shields.io/badge/Type-Network_Infrastructure-blue?style=for-the-badge)
-![Cisco](https://img.shields.io/badge/Tool-Cisco_Packet_Tracer-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white)
-![Cost](https://img.shields.io/badge/Cost-Free_%26_Open--Source-2ea44f?style=for-the-badge)
 
-A small company network built in Cisco Packet Tracer — router and switch configured, static IPs assigned to three end devices, and an Access Control List deployed to restrict one host's access. A real ACL misconfiguration was caught mid-build, diagnosed, and fixed — not staged, found through testing.
+Nine steps run end-to-end in Cisco Packet Tracer, building a small company network from a blank workspace to a hardened, verified firewall: router and switch placement, interface activation, static IP assignment, a baseline connectivity test, a first Access Control List that looked right but wasn't, the bypass that testing exposed, and the default-deny rule that closed the gap.
 
 > [!NOTE]
-> This is the foundational networking lab in this portfolio. **Project 10** (VLAN Segmentation & Inter-VLAN Routing) builds directly on this same setup, adding VLANs, VTP synchronization, and advanced security hardening.
+> **Project 10** in this portfolio builds directly on this same topology, adding VLAN segmentation, VTP synchronization, and further security hardening.
 
 </div>
 
@@ -24,124 +25,201 @@ A small company network built in Cisco Packet Tracer — router and switch confi
 
 1. [At a Glance](#at-a-glance)
 2. [Project Background](#project-background)
-3. [Environment](#environment)
-4. [Project Flow](#project-flow)
-5. [Build Process](#build-process)
-6. [Findings Summary](#findings-summary)
-7. [What I Got Wrong](#what-i-got-wrong)
-8. [Challenges & Fixes](#challenges-fixes)
-9. [Scope & Limitations](#scope-limitations)
-10. [Key Lesson](#key-lesson)
-11. [Skills Demonstrated](#skills-demonstrated)
-12. [Screenshot Index](#screenshot-index)
-13. [Repo Structure](#repo-structure)
+3. [Tools & Technologies](#tools-technologies)
+4. [Lab Environment](#lab-environment)
+5. [Network Build Map](#network-build-map)
+6. [Simulated Issues](#simulated-issues)
+7. [Build & Harden Timeline](#build-harden-timeline)
+8. [Module 1 — Open the Workspace](#module-1)
+9. [Module 2 — Design the Network Topology](#module-2)
+10. [Module 3 — Configure the Router Interface](#module-3)
+11. [Module 4 — Assign Static IPs to PCs](#module-4)
+12. [Module 5 — Test Baseline Connectivity](#module-5)
+13. [Module 6 — Deploy the First ACL Rule](#module-6)
+14. [Module 7 — Investigate the ACL Bypass](#module-7)
+15. [Module 8 — Harden the ACL](#module-8)
+16. [Module 9 — Final Verification](#module-9)
+17. [Coverage Snapshot](#coverage-snapshot)
+18. [Command Summary](#command-summary)
+19. [Challenges & Fixes](#challenges-fixes)
+20. [Scope & Limitations](#scope-limitations)
+21. [What I Learned](#what-i-learned)
+22. [Skills Demonstrated](#skills-demonstrated)
+23. [Screenshot Index](#screenshot-index)
+24. [Repo Structure](#repo-structure)
 
 ---
 
 <a id="at-a-glance"></a>
 ## 📊 At a Glance
 
-| 🧩 Phases | 🖼️ Screenshots | 🖥️ End Devices | 🔒 ACL Rules Written |
+<div align="center">
+
+| 🖥️ End Devices | 🧩 Modules | 🔒 ACL Rules Written | 🖼️ Screenshots |
 |:---:|:---:|:---:|:---:|
-| **9** | **9** | **3** | **2 (1 flawed, 1 fixed)** |
+| **3 (PC0, PC1, PC2)** | **9** | **2 (1 flawed, 1 fixed)** | **9** |
+
+</div>
 
 ---
 
 <a id="project-background"></a>
 ## 📖 Project Background
 
-A small company network topology built end-to-end in **Cisco Packet Tracer**: router and switch configured, static IPs assigned to three PCs, then an **Access Control List (ACL)** deployed to restrict a specific host's access. The goal was to practice both basic network setup and firewall rule configuration — including catching and fixing a real misconfiguration along the way rather than presenting only a clean, working result.
+This project starts where a real small-business network build starts — an empty workspace — and works forward through the same order an IT tech would follow on-site: place and cable the hardware, bring the router interface up, hand out static addressing, prove the network works before touching security, then deploy an Access Control List. The ACL didn't work as assumed on the first pass, and rather than presenting only a clean end state, the bypass was found through testing a host that wasn't the explicit target, diagnosed, and closed with a default-deny rule — then re-verified independently.
 
----
-
-<a id="environment"></a>
-## 🖧 Environment
-
-| Item | Value |
+| Module Group | Focus |
 |---|---|
-| **Simulation Tool** | Cisco Packet Tracer |
-| **Router** | Cisco 2911 |
-| **Switch** | Cisco 2960 |
-| **End Devices** | 3× PC (PC0, PC1, PC2) |
-| **Cabling** | Copper Straight-Through |
-| **Router Interface** | GigabitEthernet 0/0 — `192.168.1.1/24` |
+| 🖧 **Build (Modules 1–2)** | Workspace setup, device placement, and cabling |
+| ⚙️ **Addressing (Modules 3–4)** | Router interface activation, static IP assignment across 3 PCs |
+| ✅ **Baseline Test (Module 5)** | Confirm connectivity before any security rule exists |
+| 🔒 **First ACL & Bypass (Modules 6–7)** | Deploy a host-specific ACL, then discover it doesn't restrict the network the way it looks like it should |
+| 🔧 **Hardening & Verification (Modules 8–9)** | Replace with a default-deny rule, re-test the same host that bypassed it |
+
+> [!NOTE]
+> The bypass in Module 7 was not staged — it was found by testing a host that wasn't the ACL's explicit target, which is exactly the gap a real firewall audit is meant to catch.
 
 ---
 
-<a id="project-flow"></a>
-## ⏱️ Project Flow
+<a id="tools-technologies"></a>
+## 🛠️ Tools & Technologies
 
-```mermaid
-%%{init: { 'theme': 'base', 'themeVariables': {
-  'activeTaskBkgColor':'#1A5276', 'activeTaskBorderColor':'#0B2E43',
-  'doneTaskBkgColor':'#117864', 'doneTaskBorderColor':'#083D33',
-  'critBkgColor':'#943126', 'critBorderColor':'#571C16',
-  'sectionBkgColor':'#D6DBDF', 'altSectionBkgColor':'#EAECEE',
-  'taskTextColor':'#FFFFFF', 'taskTextOutsideColor':'#1B2631',
-  'taskTextLightColor':'#FFFFFF',
-  'titleColor':'#1B2A4A', 'fontSize':'16px'
-}}}%%
-gantt
-    title Project Flow — Topology to Hardened ACL
-    dateFormat YYYY-MM-DD
-    axisFormat %b %d
-    section Build
-    Topology, Router & Static IPs        :done, 2026-01-01, 1d
-    section First ACL
-    Deploy Rule & Discover Bypass        :crit, 2026-01-02, 1d
-    section Fix
-    Harden ACL & Re-Verify               :active, 2026-01-02, 1d
-```
-<p align="center"><em>Colors distinguish each build stage — all stages complete.</em></p>
+| Tool | Purpose |
+|------|---------|
+| 🖧 Cisco Packet Tracer | Network simulation environment |
+| 🔀 Cisco 2911 Router | Interface configuration, static routing, ACL enforcement |
+| 🔌 Cisco 2960 Switch | End-device connectivity |
+| ⌨️ Router CLI | Interface activation, `enable secret`, ACL configuration |
+| 🖥️ PC Desktop IP Configuration | Static IP, subnet mask, and gateway assignment |
+| 🔎 Command Prompt (`ping`) | Connectivity and ACL-scope verification |
 
 ---
 
-<a id="build-process"></a>
-## 🔵 Build Process
+<a id="lab-environment"></a>
+## 🖧 Lab Environment
+
+![Device](https://img.shields.io/badge/Cisco_Packet_Tracer-Simulated_Topology-1BA0D7?style=flat-square&logo=cisco&logoColor=white)
+
+| Item | Detail |
+|------|--------|
+| Router | Cisco 2911 |
+| Switch | Cisco 2960 |
+| End Devices | 3× PC (PC0, PC1, PC2) |
+| Cabling | Copper Straight-Through |
+| Router Interface | GigabitEthernet 0/0 — `192.168.1.1/24` |
+
+---
+
+<a id="network-build-map"></a>
+## 🗺️ Network Build Map
 
 ```mermaid
-flowchart TD
-    A["🖧 Place router, switch<br/>and 3 PCs"] --> B["⚙️ Activate router<br/>interface (no shutdown)"]
-    B --> C["🧾 Assign static IPs<br/>to all 3 PCs"]
-    C --> D["✅ Confirm baseline<br/>connectivity"]
-    D --> E["🔒 Deploy first ACL<br/>(deny PC2 + permit any)"]
-    E --> F["🚨 Bypass found —<br/>PC1 still gets through"]
-    F --> G["🔧 Replace with<br/>default-deny ACL"]
-    G --> H["✅ Re-verify — traffic<br/>blocked as intended"]
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '15px'}, 'flowchart': {'nodeSpacing': 24, 'rankSpacing': 40, 'padding': 10}}}%%
+flowchart TB
+    START(("🖧<br/>Empty workspace")):::top
+    START --> TOPO["🧩 Place router,<br/>switch & 3 PCs"]:::step
+    TOPO --> IFACE["⚙️ Activate router<br/>interface (no shutdown)"]:::step
+    IFACE --> IPS["🧾 Assign static IPs<br/>to all 3 PCs"]:::step
+    IPS --> BASE["✅ Confirm baseline<br/>connectivity"]:::step
+    BASE --> ACL1["🔒 Deploy first ACL<br/>(deny PC2 + permit any)"]:::step
+    ACL1 --> BYPASS["🚨 Bypass found —<br/>PC1 still gets through"]:::alert
+    BYPASS --> ACL2["🔧 Replace with<br/>default-deny ACL"]:::step
+    ACL2 --> ROOT(("🎯<br/>Verified secure")):::bottom
 
-    classDef alert fill:#fdeaea,stroke:#C8102E,stroke-width:2px,color:#000
-    classDef work fill:#e8f1fb,stroke:#005EB8,stroke-width:2px,color:#000
-    classDef done fill:#eef7ee,stroke:#2ea44f,stroke-width:2px,color:#000
-    class A,B,C work
-    class D,H done
-    class E,F,G alert
+    classDef top fill:#2C3E50,stroke:#16202A,stroke-width:2px,color:#FFFFFF
+    classDef step fill:#1A5276,stroke:#0B2E43,stroke-width:2px,color:#FFFFFF
+    classDef alert fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
+    classDef bottom fill:#117864,stroke:#083D33,stroke-width:2px,color:#FFFFFF
+    linkStyle default stroke:#5D6D7E,stroke-width:2px
+```
+<p align="center"><em>Each build stage feeds the next — the ACL bypass is flagged in red because it's the one stage that didn't behave as assumed on the first pass.</em></p>
+
+---
+
+<a id="simulated-issues"></a>
+## 🐛 Simulated Issues
+
+| # | Issue | Type |
+|---|-------|------|
+| 1 | Router-switch link showing red lights after cabling | Inactive interface |
+| 2 | First ACL only blocked its named host | ACL scope misconfiguration (default-allow gap) |
+| 3 | Untested host (PC1) passing traffic that should have been restricted | Firewall bypass, found through testing |
+
+---
+
+<a id="build-harden-timeline"></a>
+## 🔧 Build & Harden Timeline
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '15px'}, 'timeline': {'disableMulticolor': false}}}%%
+timeline
+    title Empty Workspace to Verified ACL — one topology, five stages
+    Stage 1 — Build : Place devices : Cable connections : Activate router interface
+    Stage 2 — Addressing : Static IPs on PC0, PC1, PC2
+    Stage 3 — Baseline Test : Ping router from PC0 — 4/4 success
+    Stage 4 — First ACL : Deploy deny-PC2 rule : Discover PC1 bypass
+    Stage 5 — Harden & Verify : Replace with default-deny : Re-test PC1 — blocked
+```
+<p align="center"><em>A Mermaid timeline instead of a flowchart — five stages read left to right, from an empty workspace to a hardened, re-verified ACL.</em></p>
+
+---
+
+<a id="module-1"></a>
+## 🖧 Module 1 — Open the Workspace
+
+**Objective:** Open Cisco Packet Tracer to a blank workspace, ready to place devices.
+
+### Step 1 — Open Packet Tracer ✅
+
+```
+Launch Cisco Packet Tracer
+→ Confirm a blank, empty workspace
+→ Ready to place router, switch, and end devices
 ```
 
-### Phase 1 — Workspace Setup ✅
-Opened Cisco Packet Tracer to a blank workspace, ready to place devices.
-
 <p align="center">
-  <img src="screenshots/1_Cisco_Packet_Tracer_Workspace.PNG" alt="Phase 1 - Packet Tracer Workspace" width="850"><br>
-  <em>Phase 1 — Blank Packet Tracer workspace</em>
+  <img src="screenshots/1_Cisco_Packet_Tracer_Workspace.PNG" alt="Exhibit 1 - Packet Tracer Workspace" width="850"><br>
+  <em>Exhibit 1 — Blank Packet Tracer workspace</em>
 </p>
 
-### Phase 2 — Network Topology Design ✅
-Placed the core devices and connected them:
+---
 
-- **1 Router** (2911 model) — controls the network
-- **1 Switch** (2960 model) — connects the end devices
-- **3 PCs** (PC0, PC1, PC2)
+<a id="module-2"></a>
+## 🖧 Module 2 — Design the Network Topology
 
-Connected everything with Copper Straight-Through cables: each PC to a separate switch port, and the switch to the router's GigabitEthernet 0/0 port. At this stage the router-switch link showed **red link lights** — router was not yet active.
+**Objective:** Place the core devices, cable them, and confirm the physical layer is up.
+
+### Step 2 — Place & Cable Devices ✅
+
+```
+Place:
+  1× Router (Cisco 2911)
+  1× Switch (Cisco 2960)
+  3× PC (PC0, PC1, PC2)
+
+Connect with Copper Straight-Through cables:
+  Each PC → a separate switch port
+  Switch → Router GigabitEthernet 0/0
+
+→ At this stage: router-switch link shows RED link lights
+   (router interface not yet active)
+```
 
 <p align="center">
-  <img src="screenshots/2_Network_Topology_Design.PNG" alt="Phase 2 - Network Topology Design" width="850"><br>
-  <em>Phase 2 — Router, switch, and 3 PCs connected</em>
+  <img src="screenshots/2_Network_Topology_Design.PNG" alt="Exhibit 2 - Network Topology Design" width="850"><br>
+  <em>Exhibit 2 — Router, switch, and 3 PCs connected; link lights still red</em>
 </p>
 
-### Phase 3 — Router Configuration ✅
+---
 
-```text
+<a id="module-3"></a>
+## ⚙️ Module 3 — Configure the Router Interface
+
+**Objective:** Activate the router's interface and assign it an IP address.
+
+### Step 3 — Configure Router Interface ✅
+
+```
 enable
 configure terminal
 interface gigabitEthernet 0/0
@@ -152,15 +230,28 @@ exit
 show ip route
 ```
 
-`no shutdown` activated the interface — link lights turned green immediately. `show ip route` confirmed the network as directly connected in the routing table.
+```
+→ "no shutdown" activates the interface — link lights turn GREEN immediately
+→ "show ip route" confirms the network as directly connected
+```
 
 <p align="center">
-  <img src="screenshots/3_Router_IP_and_Routing_Table.PNG" alt="Phase 3 - Router IP and Routing Table" width="850"><br>
-  <em>Phase 3 — Router interface activated, routing table verified</em>
+  <img src="screenshots/3_Router_IP_and_Routing_Table.PNG" alt="Exhibit 3 - Router IP and Routing Table" width="850"><br>
+  <em>Exhibit 3 — Router interface activated, routing table verified</em>
 </p>
 
-### Phase 4 — Static IP Assignment on PCs ✅
-Assigned static IPs to each PC through Desktop > IP Configuration:
+---
+
+<a id="module-4"></a>
+## 🧾 Module 4 — Assign Static IPs to PCs
+
+**Objective:** Assign static addressing to all three end devices.
+
+### Step 4 — Assign Static IPs ✅
+
+```
+PC → Desktop → IP Configuration → Static
+```
 
 | Device | IP Address | Subnet Mask | Gateway |
 |---|---|---|---|
@@ -169,22 +260,42 @@ Assigned static IPs to each PC through Desktop > IP Configuration:
 | PC2 | 192.168.1.30 | 255.255.255.0 | 192.168.1.1 |
 
 <p align="center">
-  <img src="screenshots/4_PC_IP_Configuration.PNG" alt="Phase 4 - PC IP Configuration" width="850"><br>
-  <em>Phase 4 — Static IP configuration on all 3 PCs</em>
+  <img src="screenshots/4_PC_IP_Configuration.PNG" alt="Exhibit 4 - PC IP Configuration" width="850"><br>
+  <em>Exhibit 4 — Static IP configuration on all 3 PCs</em>
 </p>
 
-### Phase 5 — Connectivity Test ✅
-Opened PC0's Command Prompt and ran `ping 192.168.1.1`. Got 4 successful replies — confirmed the network was fully functional before adding any security rules.
+---
+
+<a id="module-5"></a>
+## ✅ Module 5 — Test Baseline Connectivity
+
+**Objective:** Confirm the network works fully before adding any security rules.
+
+### Step 5 — Ping the Router from PC0 ✅
+
+```
+PC0 → Command Prompt
+ping 192.168.1.1
+
+→ Reply from 192.168.1.1: bytes=32 time<1ms TTL=255  (×4)
+→ 4/4 successful replies — network fully functional pre-firewall
+```
 
 <p align="center">
-  <img src="screenshots/5_Ping_Success_Test.PNG" alt="Phase 5 - Ping Success Test" width="850"><br>
-  <em>Phase 5 — Initial connectivity test, pre-firewall</em>
+  <img src="screenshots/5_Ping_Success_Test.PNG" alt="Exhibit 5 - Ping Success Test" width="850"><br>
+  <em>Exhibit 5 — Initial connectivity test, pre-firewall</em>
 </p>
 
-### Phase 6 — First Firewall Rule ✅
-Went back to the router CLI to add a password and a basic ACL intended to block PC2 (`192.168.1.30`):
+---
 
-```text
+<a id="module-6"></a>
+## 🔒 Module 6 — Deploy the First ACL Rule
+
+**Objective:** Add a router password and a firewall rule intended to block PC2.
+
+### Step 6 — Deploy First ACL ✅
+
+```
 enable
 configure terminal
 enable secret MySecurePass123
@@ -195,24 +306,50 @@ ip access-group 10 in
 ```
 
 <p align="center">
-  <img src="screenshots/6_Router_First_Firewall_Rules.PNG" alt="Phase 6 - Router First Firewall Rules" width="850"><br>
-  <em>Phase 6 — First ACL rule blocking PC2</em>
+  <img src="screenshots/6_Router_First_Firewall_Rules.PNG" alt="Exhibit 6 - Router First Firewall Rules" width="850"><br>
+  <em>Exhibit 6 — First ACL rule blocking PC2</em>
 </p>
 
-### Phase 7 — Error: Firewall Bypass ❌
-Tested the rule from PC1 (`192.168.1.20`), expecting it to behave like a locked-down network. Ran `ping 192.168.1.1` from PC1 — **it succeeded.**
+---
 
-**Why:** The ACL only explicitly denied PC2 (`192.168.1.30`). The line `access-list 10 permit any` meant every other host — including PC1 — was allowed straight through. The rule did exactly what it was written to do; the mistake was assuming it would restrict the network more broadly than it actually did.
+<a id="module-7"></a>
+## 🚨 Module 7 — Investigate the ACL Bypass
+
+**Objective:** Test a host that wasn't the ACL's explicit target, to confirm the rule's real scope.
+
+### Step 7 — Test PC1 (Not the Named Target) ❌
+
+```
+PC1 → Command Prompt
+ping 192.168.1.1
+
+→ Reply from 192.168.1.1: bytes=32 time<1ms TTL=255  (×4)
+→ UNEXPECTED: ping succeeded — PC1 was never explicitly denied
+```
+
+```
+Root cause:
+  "access-list 10 deny host 192.168.1.30" only denies PC2.
+  "access-list 10 permit any" allows every other host — PC1 included.
+  The rule did exactly what it was written to do; the assumption that
+  it would restrict the network more broadly was the actual error.
+```
 
 <p align="center">
-  <img src="screenshots/7_PC1_Firewall_Bypass_Ping_Success.PNG" alt="Phase 7 - PC1 Firewall Bypass" width="850"><br>
-  <em>Phase 7 — Bypass discovered: PC1 ping succeeds unexpectedly</em>
+  <img src="screenshots/7_PC1_Firewall_Bypass_Ping_Success.PNG" alt="Exhibit 7 - PC1 Firewall Bypass" width="850"><br>
+  <em>Exhibit 7 — Bypass discovered: PC1 ping succeeds unexpectedly</em>
 </p>
 
-### Phase 8 — Fix: Hardened ACL ✅
-Returned to the router CLI, removed the old rule, and replaced it with a default-deny rule to close the gap:
+---
 
-```text
+<a id="module-8"></a>
+## 🔧 Module 8 — Harden the ACL
+
+**Objective:** Replace the host-specific rule with a default-deny rule to close the gap.
+
+### Step 8 — Replace with Default-Deny ✅
+
+```
 enable
 configure terminal
 no access-list 10
@@ -222,71 +359,96 @@ ip access-group 10 in
 ```
 
 <p align="center">
-  <img src="screenshots/8_Router_Firewall_Fix_Commands.PNG" alt="Phase 8 - Router Firewall Fix Commands" width="850"><br>
-  <em>Phase 8 — Hardened ACL with default-deny rule</em>
+  <img src="screenshots/8_Router_Firewall_Fix_Commands.PNG" alt="Exhibit 8 - Router Firewall Fix Commands" width="850"><br>
+  <em>Exhibit 8 — Hardened ACL with default-deny rule</em>
 </p>
-
-### Phase 9 — Final Verification ✅
-Re-tested from PC1 with `ping 192.168.1.1` a third time. This time it failed with `Destination host unreachable` — confirming the hardened rule now blocked traffic as intended.
-
-<p align="center">
-  <img src="screenshots/9_Firewall_Block_Success.PNG" alt="Phase 9 - Firewall Block Success" width="850"><br>
-  <em>Phase 9 — Final verification: ping blocked as intended</em>
-</p>
-
-🎯 **Result:** Baseline connectivity confirmed, a real ACL scope error caught through testing (not assumed), and the fix independently re-verified.
 
 ---
 
-<a id="findings-summary"></a>
-## 🌟 Findings Summary
+<a id="module-9"></a>
+## ✅ Module 9 — Final Verification
+
+**Objective:** Re-test the same host that previously bypassed the ACL, to confirm the fix.
+
+### Step 9 — Re-test PC1 ✅
+
+```
+PC1 → Command Prompt
+ping 192.168.1.1
+
+→ Request timed out. / Destination host unreachable.
+→ Confirmed: hardened rule now blocks traffic as intended
+```
+
+<p align="center">
+  <img src="screenshots/9_Firewall_Block_Success.PNG" alt="Exhibit 9 - Firewall Block Success" width="850"><br>
+  <em>Exhibit 9 — Final verification: ping blocked as intended</em>
+</p>
+
+---
+
+<a id="coverage-snapshot"></a>
+## 🌟 Coverage Snapshot
 
 | 🛡️ Layer | ✅ Status | 📌 Detail |
 |---|---|---|
-| Baseline connectivity | Verified | PC0 → router, 4/4 replies before any ACL |
-| First ACL (`deny PC2` + `permit any`) | Flawed | PC1 (untested host) bypassed the rule |
-| Hardened ACL (`deny any`) | Verified | PC1 re-test failed as intended — gap closed |
+| Workspace & topology | Live | Router, switch, 3 PCs placed and cabled (Exhibit 1–2) |
+| Router interface | Proven | GigabitEthernet 0/0 activated, routing table verified (Exhibit 3) |
+| Static addressing | Proven | All 3 PCs assigned static IP/mask/gateway (Exhibit 4) |
+| Baseline connectivity | Proven | PC0 → router, 4/4 replies pre-firewall (Exhibit 5) |
+| First ACL deployed | Proven | Host-specific deny rule applied inbound (Exhibit 6) |
+| Bypass identified | Proven | PC1 (untested host) passed traffic unexpectedly (Exhibit 7) |
+| ACL hardened | Proven | Default-deny rule replaces host-specific rule (Exhibit 8) |
+| Fix re-verified | Proven | PC1 re-test confirms traffic now blocked (Exhibit 9) |
 
 ---
 
-<a id="what-i-got-wrong"></a>
-## ⚠️ What I Got Wrong
+<a id="command-summary"></a>
+## 📟 Command Summary
 
-- Assumed an ACL that denied one specific host (PC2) would tighten security for the whole network. It didn't — `permit any` at the end of the list meant every other host, including PC1, stayed fully open.
-- Only tested the host expected to fail (PC2 was never re-tested directly in this sequence) instead of also testing a host that should have still been allowed, which is what exposed the gap.
+| Command | Purpose |
+|---------|---------|
+| `interface gigabitEthernet 0/0` | Enter the router's Gig 0/0 interface configuration |
+| `ip address 192.168.1.1 255.255.255.0` | Assign the router interface's IP and subnet mask |
+| `no shutdown` | Activate the interface (turns link lights green) |
+| `show ip route` | Confirm the network is directly connected |
+| `enable secret <password>` | Set the router's privileged-mode password |
+| `access-list 10 deny host <ip>` | Deny a specific host in a numbered standard ACL |
+| `access-list 10 permit any` | Permit all other traffic (leaves a default-allow gap) |
+| `access-list 10 deny any` | Default-deny — blocks all traffic not otherwise permitted |
+| `ip access-group 10 in` | Apply ACL 10 to inbound traffic on an interface |
+| `no access-list 10` | Remove an existing numbered ACL |
+| `ping <ip>` | Test connectivity / verify ACL scope from a PC |
 
 ---
 
 <a id="challenges-fixes"></a>
 ## ⚠️ Challenges & Fixes
 
-| ❌ Challenge | ✅ Fix |
+| ❌ Challenge | ✅ Solution |
 |---|---|
-| First ACL blocked only the named host, left everything else open by default | Replaced with `access-list 10 deny any` for a true default-deny posture |
 | Router-switch link showed red lights after cabling | Ran `no shutdown` on GigabitEthernet 0/0 to activate the interface |
-| Initial testing only covered the host expected to fail | Added a second test on a host that should still pass, to confirm actual rule scope |
+| First ACL blocked only the named host, left everything else open by default | Replaced with `access-list 10 deny any` for a true default-deny posture |
+| Initial testing only covered the host expected to fail (PC2) | Added a second test on PC1 — a host that should still have passed — which exposed the real scope of the rule |
 
 ---
 
 <a id="scope-limitations"></a>
 ## 🚧 Scope & Limitations
 
-- **Simulated environment only:** Built and tested in Cisco Packet Tracer, not on physical hardware.
-- **Single subnet:** No VLAN segmentation in this project — that's covered separately in Project 10.
-- **Basic ACL only:** Standard numbered ACL (source-based); no extended ACL, NAT, or routing protocol configuration included.
+- **Simulated environment only:** built and tested in Cisco Packet Tracer, not on physical hardware.
+- **Single subnet:** no VLAN segmentation in this project — that's covered separately in Project 10.
+- **Basic ACL only:** standard numbered ACL (source-based); no extended ACL, NAT, or routing protocol configuration included.
 
 ---
 
-<a id="key-lesson"></a>
-## 🧠 Key Lesson
+<a id="what-i-learned"></a>
+## 🧠 What I Learned
 
-ACLs are explicit, not assumed. Every host not specifically denied is implicitly permitted unless a default-deny rule is added. **Testing only the host you expect to block isn't enough** — you also need to test a host that should still pass, to confirm the rule's actual scope matches your intended scope. This is one of the most common real-world firewall misconfigurations: admins block the few things they thought of and leave everything else open by default.
-
----
-
-## 🌍 Real-World Application
-
-This is the exact failure mode behind many real network security incidents — a firewall or ACL that looks restrictive on paper but has an overly broad default-allow behavior underneath. Network engineers and SOC analysts both need to verify ACL/firewall scope by testing edge cases, not just the obvious target, before trusting a rule is doing what it's supposed to.
+- **ACLs are explicit, not assumed.** Every host not specifically denied is implicitly permitted unless a default-deny rule is added — the first ACL did exactly what it was written to do, not what it looked like it should do.
+- **Testing only the host you expect to block isn't enough.** The bypass only surfaced because PC1 — a host that should have still passed — was tested alongside PC2. Testing solely the intended target would have missed the gap entirely.
+- **Interface activation is easy to overlook.** Red link lights after cabling are a physical-layer symptom with a one-line fix (`no shutdown`) — worth checking before assuming a deeper connectivity problem.
+- **Verification has to touch the host that exposed the problem, not just the one the rule was written for.** Re-testing PC1 specifically — not PC2 — is what confirms the fix actually closed the gap.
 
 ---
 
