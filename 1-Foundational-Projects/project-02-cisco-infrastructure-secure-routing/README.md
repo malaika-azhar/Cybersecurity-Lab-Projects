@@ -114,25 +114,21 @@ This project starts where a real small-business network build starts — an empt
 ## 🗺️ Network Build Map
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '15px'}, 'flowchart': {'nodeSpacing': 24, 'rankSpacing': 40, 'padding': 10}}}%%
-flowchart TB
-    START(("🖧<br/>Empty workspace")):::top
-    START --> TOPO["🧩 Place router,<br/>switch & 3 PCs"]:::step
-    TOPO --> IFACE["⚙️ Activate router<br/>interface (no shutdown)"]:::step
-    IFACE --> IPS["🧾 Assign static IPs<br/>to all 3 PCs"]:::step
-    IPS --> BASE["✅ Confirm baseline<br/>connectivity"]:::step
-    BASE --> ACL1["🔒 Deploy first ACL<br/>(deny PC2 + permit any)"]:::step
-    ACL1 --> BYPASS["🚨 Bypass found —<br/>PC1 still gets through"]:::alert
-    BYPASS --> ACL2["🔧 Replace with<br/>default-deny ACL"]:::step
-    ACL2 --> ROOT(("🎯<br/>Verified secure")):::bottom
-
-    classDef top fill:#2C3E50,stroke:#16202A,stroke-width:2px,color:#FFFFFF
-    classDef step fill:#1A5276,stroke:#0B2E43,stroke-width:2px,color:#FFFFFF
-    classDef alert fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
-    classDef bottom fill:#117864,stroke:#083D33,stroke-width:2px,color:#FFFFFF
-    linkStyle default stroke:#5D6D7E,stroke-width:2px
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '16px'}, 'flowchart': {'nodeSpacing': 34, 'rankSpacing': 46, 'padding': 12}}}%%
+flowchart LR
+    PC0["🖥️ PC0<br/>192.168.1.10"]:::pc --> SW["🔌 Switch 2960"]:::sw
+    PC1["🖥️ PC1<br/>192.168.1.20"]:::pc --> SW
+    PC2["🖥️ PC2<br/>192.168.1.30"]:::pc --> SW
+    SW --> RT["🔀 Router 2911<br/>192.168.1.1"]:::rt
+    RT --> ACL["🔒 ACL 10<br/>inbound on Gig 0/0"]:::acl
+    ACL -.->|"bypass found,<br/>then hardened"| PC1
+    classDef pc fill:#1A5276,stroke:#0B2E43,stroke-width:2px,color:#FFFFFF
+    classDef sw fill:#76448A,stroke:#432752,stroke-width:2px,color:#FFFFFF
+    classDef rt fill:#B9770E,stroke:#6E4409,stroke-width:2px,color:#FFFFFF
+    classDef acl fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
+    linkStyle default stroke:#2C3E50,stroke-width:2px
 ```
-<p align="center"><em>Each build stage feeds the next — the ACL bypass is flagged in red because it's the one stage that didn't behave as assumed on the first pass.</em></p>
+<p align="center"><em>All three PCs reach the router through the switch; ACL 10 sits inbound on the router's Gig 0/0 and is what governs whether PC1's traffic actually gets through.</em></p>
 
 ---
 
