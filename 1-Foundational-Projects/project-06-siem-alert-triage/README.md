@@ -2,17 +2,17 @@
 
 # 🚨 SIEM Alert Triage — SOC Simulator
 
-**Project 06 of 10 — Foundational Projects**
+**Project 06 of 10 — Foundational Projects — SIEM & Alert Triage**
 
-SIEM & Alert Triage
+Two Phishing-Pattern Alerts, Same Surface Presentation, Triaged to Opposite Verdicts Using Splunk Log Evidence — A False Positive Backed by Ticket History, and a True Positive Backed by a Confirmed Firewall Click-Through
 
-![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
-![Type](https://img.shields.io/badge/Type-SIEM_%26_Alert_Triage-blue?style=for-the-badge)
-![Splunk](https://img.shields.io/badge/SIEM-Splunk-000000?style=for-the-badge&logo=splunk&logoColor=white)
+![Splunk](https://img.shields.io/badge/Splunk-SIEM_Investigation-000000?style=for-the-badge&logo=splunk&logoColor=white)
 ![TryHackMe](https://img.shields.io/badge/Lab-TryHackMe_SOC_Simulator-212C42?style=for-the-badge&logo=tryhackme&logoColor=white)
-![Cost](https://img.shields.io/badge/Cost-Free_%26_Open--Source-2ea44f?style=for-the-badge)
+![Phishing](https://img.shields.io/badge/Scenario-Phishing_Triage-943126?style=for-the-badge)
+![Difficulty](https://img.shields.io/badge/Difficulty-Foundational-6f42c1?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
 
-Two phishing-pattern alerts, same surface presentation — "email with external link" — triaged to opposite verdicts using nothing but SIEM log evidence: a False Positive backed by internal ticket history, and a True Positive backed by a confirmed firewall click-through.
+Nine steps run end-to-end inside TryHackMe's SOC Simulator, triaging two alerts that look identical on the surface — "email with external link" — to opposite, evidence-backed verdicts: one closed as a False Positive on internal ticket history, one escalated as a True Positive on a confirmed firewall click-through.
 
 </div>
 
@@ -22,230 +22,369 @@ Two phishing-pattern alerts, same surface presentation — "email with external 
 
 1. [At a Glance](#at-a-glance)
 2. [Project Background](#project-background)
-3. [Environment](#environment)
-4. [Project Flow](#project-flow)
-5. [Triage Walkthrough](#triage-walkthrough)
-6. [Findings Summary](#findings-summary)
-7. [Verdict Comparison](#verdict-comparison)
-8. [Challenges & Fixes](#challenges-fixes)
-9. [Scope & Limitations](#scope-limitations)
-10. [Key Lesson](#key-lesson)
-11. [Skills Demonstrated](#skills-demonstrated)
-12. [Screenshot Index](#screenshot-index)
-13. [Repo Structure](#repo-structure)
+3. [Tools & Technologies](#tools-technologies)
+4. [Environment](#environment)
+5. [Triage Map](#triage-map)
+6. [Investigation Challenges](#investigation-challenges)
+7. [Triage Timeline](#triage-timeline)
+8. [Module 1 — Open the Simulator](#module-1)
+9. [Module 2 — Review the Alert Queue](#module-2)
+10. [Module 3 — Assign the Alert](#module-3)
+11. [Module 4 — Review Alert Details](#module-4)
+12. [Module 5 — Investigate Domain History](#module-5)
+13. [Module 6 — File the Case Report (Alert 1)](#module-6)
+14. [Module 7 — Open the Second Alert](#module-7)
+15. [Module 8 — Confirm the Click](#module-8)
+16. [Module 9 — File the Case Report (Alert 2)](#module-9)
+17. [Coverage Snapshot](#coverage-snapshot)
+18. [Verdict Comparison](#verdict-comparison)
+19. [Challenges & Fixes](#challenges-fixes)
+20. [Scope & Limitations](#scope-limitations)
+21. [What I Learned](#what-i-learned)
+22. [Skills Demonstrated](#skills-demonstrated)
+23. [Screenshot Index](#screenshot-index)
+24. [Repo Structure](#repo-structure)
 
 ---
 
 <a id="at-a-glance"></a>
 ## 📊 At a Glance
 
-| 🧩 Phases | 🖼️ Screenshots | 🎫 Alerts Triaged | ⚖️ Verdicts |
+<div align="center">
+
+| 🧩 Modules | 🎫 Alerts Triaged | ⚖️ Verdicts | 🖼️ Screenshots |
 |:---:|:---:|:---:|:---:|
-| **9** | **12** | **2** | **1 False Positive · 1 True Positive** |
+| **9** | **2** | **1 False Positive · 1 True Positive** | **12** |
+
+</div>
 
 ---
 
 <a id="project-background"></a>
 ## 📖 Project Background
 
-Worked as a Tier 1 SOC Analyst inside TryHackMe's **SOC Simulator** (Scenario 1 — Introduction to Phishing). The job: investigate incoming alerts using SIEM logs and decide, with evidence, whether each one was a **True Positive** (real threat) or a **False Positive** (false alarm) — then document the verdict and any required action.
+This project works as a Tier 1 SOC Analyst inside TryHackMe's **SOC Simulator** (Scenario 1 — Introduction to Phishing). The job: investigate incoming alerts using SIEM logs and decide, with evidence, whether each one is a **True Positive** (real threat) or a **False Positive** (false alarm) — then document the verdict and any required action.
+
+| Module Group | Focus |
+|---|---|
+| 📋 **Intake (Modules 1–4)** | Load the simulator, review the queue, assign and open Alert 8818 |
+| 🔎 **Alert 1 Investigation (Modules 5–6)** | Pivot to Splunk domain history, file the False Positive verdict |
+| 🎫 **Alert 2 Investigation (Modules 7–9)** | Open the typosquat alert, confirm the click via firewall logs, file the True Positive verdict |
+
+---
+
+<a id="tools-technologies"></a>
+## 🛠️ Tools & Technologies
+
+| Tool | Purpose |
+|------|---------|
+| 🚨 TryHackMe SOC Simulator | Alert queue, case assignment, and reporting interface |
+| 🪵 Splunk | SIEM log search for domain and event history |
+| 🧱 Firewall Logs | Confirming whether a malicious link was actually clicked |
+| 📝 Case Report | Documenting verdict, escalation, and remediation |
 
 ---
 
 <a id="environment"></a>
 ## 🖧 Environment
 
+![Simulator](https://img.shields.io/badge/TryHackMe-SOC_Simulator-212C42?style=flat-square&logo=tryhackme&logoColor=white)
+
 | Item | Value |
 |---|---|
-| **Simulator** | TryHackMe SOC Simulator |
-| **Scenario** | Scenario 1 — Introduction to Phishing |
-| **SIEM** | Splunk |
-| **Alerts in Queue** | 5 pending |
-| **Alerts Triaged** | 2 (8818, 8817) |
+| Simulator | TryHackMe SOC Simulator |
+| Scenario | Scenario 1 — Introduction to Phishing |
+| SIEM | Splunk |
+| Alerts in Queue | 5 pending |
+| Alerts Triaged | 2 (8818, 8817) |
 
 ---
 
-<a id="project-flow"></a>
-## ⏱️ Project Flow
+<a id="triage-map"></a>
+## 🗺️ Triage Map
 
 ```mermaid
-%%{init: { 'theme': 'base', 'themeVariables': {
-  'activeTaskBkgColor':'#1A5276', 'activeTaskBorderColor':'#0B2E43',
-  'doneTaskBkgColor':'#117864', 'doneTaskBorderColor':'#083D33',
-  'critBkgColor':'#943126', 'critBorderColor':'#571C16',
-  'sectionBkgColor':'#D6DBDF', 'altSectionBkgColor':'#EAECEE',
-  'taskTextColor':'#FFFFFF', 'taskTextOutsideColor':'#1B2631',
-  'taskTextLightColor':'#FFFFFF',
-  'titleColor':'#1B2A4A', 'fontSize':'16px'
-}}}%%
-gantt
-    title Project Flow — Alert Queue to Filed Verdicts
-    dateFormat YYYY-MM-DD
-    axisFormat %b %d
-    section Alert 1
-    Assign, Investigate & File (FP)      :done, 2026-01-01, 1d
-    section Alert 2
-    Assign, Investigate & File (TP)      :crit, 2026-01-02, 1d
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '16px'}, 'flowchart': {'nodeSpacing': 34, 'rankSpacing': 46, 'padding': 12}}}%%
+flowchart LR
+    Q["📋 Alert Queue<br/>5 pending"]:::queue --> A1["🎫 Alert 8818<br/>hrconnex.thm"]:::a1
+    Q --> A2["🎫 Alert 8817<br/>m1crosoftsupport.co"]:::a2
+    A1 --> SPLUNK1["🪵 Splunk:<br/>domain history"]:::splunk
+    A2 --> SPLUNK2["🪵 Splunk +<br/>firewall log"]:::splunk
+    SPLUNK1 -.->|"✅ internal ticket<br/>found"| FP["False Positive"]:::fp
+    SPLUNK2 -.->|"🚨 click allowed<br/>10.20.2.25"| TP["True Positive"]:::tp
+    classDef queue fill:#5D6D7E,stroke:#2C3844,stroke-width:2px,color:#FFFFFF
+    classDef a1 fill:#1A5276,stroke:#0B2E43,stroke-width:2px,color:#FFFFFF
+    classDef a2 fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
+    classDef splunk fill:#76448A,stroke:#432752,stroke-width:2px,color:#FFFFFF
+    classDef fp fill:#117864,stroke:#083D33,stroke-width:2px,color:#FFFFFF
+    classDef tp fill:#B9770E,stroke:#6E4409,stroke-width:2px,color:#FFFFFF
+    linkStyle default stroke:#2C3E50,stroke-width:2px
 ```
-<p align="center"><em>Colors distinguish each alert's triage path — both filed.</em></p>
+<p align="center"><em>Both alerts start from the same queue with the same surface pattern — the dashed lines show exactly what SIEM evidence sent each one to its opposite verdict.</em></p>
 
 ---
 
-<a id="triage-walkthrough"></a>
-## 🔵 Triage Walkthrough
+<a id="investigation-challenges"></a>
+## 🐛 Investigation Challenges
 
-**Objective:** Pivot from "this looks suspicious" to a documented, evidence-backed verdict using SIEM log data — not the surface appearance of the alert.
+| # | Challenge | Type |
+|---|-------|------|
+| 1 | Both alerts looked identical at the surface level ("external link email") | Surface pattern indistinguishable without log evidence |
+| 2 | Alert 8817's sender domain used a subtle typosquat ("1" for "i") | Visual deception in the sender display name |
+| 3 | Needed proof the phishing link was actually clicked, not just received | Evidence gap between alert and impact |
+
+---
+
+<a id="triage-timeline"></a>
+## 🔎 Triage Timeline
 
 ```mermaid
-flowchart TD
-    A["📋 Open alert queue<br/>— 5 pending"] --> B["🎫 Assign alert 8818<br/>(external link email)"]
-    B --> C["🔎 Splunk: search<br/>domain history"]
-    C --> D["✅ Internal ticket found<br/>→ False Positive"]
-    A --> E["🎫 Assign alert 8817<br/>(typosquat domain)"]
-    E --> F["🔎 Splunk + firewall log<br/>search"]
-    F --> G["🚨 Click confirmed, allowed<br/>→ True Positive"]
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '15px'}, 'timeline': {'disableMulticolor': false}}}%%
+timeline
+    title Alert Queue to Filed Verdicts — two alerts, opposite outcomes
+    Stage 1 — Intake : Simulator loaded : Queue reviewed — 5 pending : Alert 8818 assigned
+    Stage 2 — Alert 1 Evidence : Domain hrconnex.thm searched : Internal ticket found
+    Stage 3 — Alert 1 Verdict : Filed as False Positive
+    Stage 4 — Alert 2 Evidence : Domain m1crosoftsupport.co searched : Firewall log — click allowed
+    Stage 5 — Alert 2 Verdict : Filed as True Positive : Isolation + password reset
+```
+<p align="center"><em>A Mermaid timeline instead of a flowchart — five stages read left to right, pairing each alert's evidence with the verdict it produced.</em></p>
 
-    classDef work fill:#e8f1fb,stroke:#005EB8,stroke-width:2px,color:#000
-    classDef done fill:#eef7ee,stroke:#2ea44f,stroke-width:2px,color:#000
-    classDef alert fill:#fdeaea,stroke:#C8102E,stroke-width:2px,color:#000
-    class A,B,C,E,F work
-    class D done
-    class G alert
+---
+
+<a id="module-1"></a>
+## 📋 Module 1 — Open the Simulator
+
+**Objective:** Launch the SOC Simulator and confirm the scenario loaded correctly.
+
+### Step 1 — Load Scenario 1 ✅
+
+```
+Launch TryHackMe SOC Simulator
+→ Confirm Scenario 1 (Introduction to Phishing) loaded correctly
 ```
 
-### Phase 1 — Opening the Simulator ✅
-Launched the SOC Simulator and confirmed Scenario 1 (Introduction to Phishing) loaded correctly.
-
 <p align="center">
-  <img src="screenshots/SS1_Introduction_to_Phishing_Dashboard.PNG" alt="Phase 1 - Dashboard" width="850"><br>
-  <em>Phase 1 — SOC Simulator loaded, Scenario 1 ready</em>
+  <img src="screenshots/SS1_Introduction_to_Phishing_Dashboard.PNG" alt="Exhibit 1 - Dashboard" width="850"><br>
+  <em>Exhibit 1 — SOC Simulator loaded, Scenario 1 ready</em>
 </p>
 
-### Phase 2 — Reviewing the Alert Queue ✅
-Opened the alert queue — 5 pending alerts waiting. Picked up the first one:
+---
 
-- **Alert ID:** 8818
-- **Alert Rule:** Inbound Email Containing Suspicious External Link
-- **Severity:** Medium
+<a id="module-2"></a>
+## 📋 Module 2 — Review the Alert Queue
 
-<p align="center">
-  <img src="screenshots/SS2_Introduction_to_Phishing_Alert_Queue.PNG" alt="Phase 2 - Alert Queue" width="850"><br>
-  <em>Phase 2 — Alert queue, 5 pending alerts</em>
-</p>
+**Objective:** Review the pending alert queue and pick up the first case.
 
-### Phase 3 — Assigning the Alert ✅
-Assigned Alert 8818 to myself to begin the investigation.
+### Step 2 — Open the Queue ✅
 
-<p align="center">
-  <img src="screenshots/SS3_Assigned_Alert.PNG" alt="Phase 3 - Assigned Alert" width="850"><br>
-  <em>Phase 3 — Alert 8818 assigned for investigation</em>
-</p>
+```
+Alert queue — 5 pending alerts waiting
 
-### Phase 4 — Reviewing Alert Details ✅
-Opened the raw email data:
-
-| Field | Value |
-|---|---|
-| Sender | `onboarding@hrconnex.thm` |
-| Recipient | `j.garcia@thetrydaily.thm` |
-| Subject | Action Required: Finalize Your Onboarding Profile |
-| Link | `https://hrconnex.thm` |
-
-On the surface, this looked like a generic phishing pattern — an email with an external link. Not enough on its own to call a verdict either way.
+Picked up first alert:
+  Alert ID: 8818
+  Alert Rule: Inbound Email Containing Suspicious External Link
+  Severity: Medium
+```
 
 <p align="center">
-  <img src="screenshots/SS4_Alert_Details.PNG" alt="Phase 4 - Alert Details" width="850"><br>
-  <em>Phase 4 — Raw email data for Alert 8818</em>
+  <img src="screenshots/SS2_Introduction_to_Phishing_Alert_Queue.PNG" alt="Exhibit 2 - Alert Queue" width="850"><br>
+  <em>Exhibit 2 — Alert queue, 5 pending alerts</em>
 </p>
 
-### Phase 5 — SIEM Investigation: Domain History ✅
-Searched `hrconnex.thm` in Splunk to check for prior activity tied to this domain.
+---
+
+<a id="module-3"></a>
+## 🎫 Module 3 — Assign the Alert
+
+**Objective:** Assign Alert 8818 to begin the investigation.
+
+### Step 3 — Assign to Self ✅
+
+```
+Assign Alert 8818 to self → begin investigation
+```
 
 <p align="center">
-  <img src="screenshots/SS5_SIEM_Search.PNG" alt="Phase 5 - SIEM Search" width="850"><br>
-  <em>Phase 5 — Splunk search for hrconnex.thm</em>
+  <img src="screenshots/SS3_Assigned_Alert.PNG" alt="Exhibit 3 - Assigned Alert" width="850"><br>
+  <em>Exhibit 3 — Alert 8818 assigned for investigation</em>
 </p>
 
+---
+
+<a id="module-4"></a>
+## 📄 Module 4 — Review Alert Details
+
+**Objective:** Read the raw email data before drawing any conclusion.
+
+### Step 4 — Read the Raw Email Data ✅
+
+```
+Sender:    onboarding@hrconnex.thm
+Recipient: j.garcia@thetrydaily.thm
+Subject:   Action Required: Finalize Your Onboarding Profile
+Link:      https://hrconnex.thm
+
+→ On the surface: a generic phishing pattern
+  (email with external link) — not enough on its own
+  to call a verdict either way
+```
+
+<p align="center">
+  <img src="screenshots/SS4_Alert_Details.PNG" alt="Exhibit 4 - Alert Details" width="850"><br>
+  <em>Exhibit 4 — Raw email data for Alert 8818</em>
+</p>
+
+---
+
+<a id="module-5"></a>
+## 🔎 Module 5 — Investigate Domain History
+
+**Objective:** Pivot to SIEM log evidence to check the domain's history.
+
+### Step 5 — Search Splunk for the Domain ✅
+
+```
+Splunk search: hrconnex.thm
+```
+
+<p align="center">
+  <img src="screenshots/SS5_SIEM_Search.PNG" alt="Exhibit 5 - SIEM Search" width="850"><br>
+  <em>Exhibit 5 — Splunk search for hrconnex.thm</em>
+</p>
+
+```
 Found two internal emails:
+  - Employee h.harris filed an IT ticket explaining that
+    new hire j.garcia hadn't received the onboarding link
+    from the company's third-party HR provider, hrconnex.thm
 
-- An employee (`h.harris`) had filed an IT ticket explaining that a new hire (`j.garcia`) hadn't received the onboarding link from the company's third-party HR provider, `hrconnex.thm`.
-- This confirmed the domain and email were legitimate, business-approved communication — not phishing.
-
-<p align="center">
-  <img src="screenshots/SS6_SIEM_Results.PNG" alt="Phase 5 - SIEM Results" width="850"><br>
-  <em>Phase 5 — Internal ticket history confirming legitimacy</em>
-</p>
-
-### Phase 6 — Filing the Case Report (Alert 1) ✅
-Filled out the case report and marked Alert 8818 as a **False Positive** — a legitimate HR onboarding email, confirmed by internal ticket history.
+→ Confirms the domain and email are legitimate,
+  business-approved communication — not phishing
+```
 
 <p align="center">
-  <img src="screenshots/SS7_Filling_Case_Report.PNG" alt="Phase 6 - Filling Case Report" width="850"><br>
-  <em>Phase 6 — Case report being completed for Alert 8818</em>
+  <img src="screenshots/SS6_SIEM_Results.PNG" alt="Exhibit 5 (results) - SIEM Results" width="850"><br>
+  <em>Exhibit 5 (results) — Internal ticket history confirming legitimacy</em>
 </p>
-<p align="center">
-  <img src="screenshots/SS8_Case_Report_Submitted.PNG" alt="Phase 6 - Case Report Submitted" width="850"><br>
-  <em>Phase 6 — False Positive verdict submitted</em>
-</p>
-
-### Phase 7 — Second Alert: Typosquat Phishing Domain ✅
-Opened the next alert:
-
-| Field | Value |
-|---|---|
-| Alert ID | 8817 |
-| Sender | `no-reply@m1crosoftsupport.co` (note the "1" replacing the "i" — a typosquatting domain) |
-| Subject | Unusual Sign-In Activity on Your Microsoft Account |
-| Link | `https://m1crosoftsupport.co` |
-
-<p align="center">
-  <img src="screenshots/SS9_Second_Alert_Details.PNG" alt="Phase 7 - Second Alert Details" width="850"><br>
-  <em>Phase 7 — Alert 8817: typosquat phishing domain details</em>
-</p>
-
-### Phase 8 — SIEM Investigation: Confirming the Click ✅
-Searched the fake domain in Splunk and found 2 related events.
-
-<p align="center">
-  <img src="screenshots/SS10_SIEM_Phishing_Search.PNG" alt="Phase 8 - SIEM Phishing Search" width="850"><br>
-  <em>Phase 8 — Splunk search for m1crosoftsupport.co</em>
-</p>
-
-Checked the firewall logs directly and found an employee had actually clicked the link:
-
-- **Source IP:** `10.20.2.25` (internal employee machine)
-- **Firewall Action:** `allowed`
-
-This confirmed the click went through — a real **True Positive**.
-
-<p align="center">
-  <img src="screenshots/SS11_SIEM_Phishing_Proof.PNG" alt="Phase 8 - SIEM Phishing Proof" width="850"><br>
-  <em>Phase 8 — Firewall log confirming the malicious click</em>
-</p>
-
-### Phase 9 — Filing the Case Report (Alert 2) ✅
-Submitted the final case report:
-
-- **Verdict:** True Positive
-- **Escalate:** Yes
-- **Remediation:** Isolate the affected machine (`10.20.2.25`) from the network, force a password reset for the employee
-
-<p align="center">
-  <img src="screenshots/SS12_True_Positive_Submitted.PNG" alt="Phase 9 - True Positive Submitted" width="850"><br>
-  <em>Phase 9 — True Positive verdict, escalation, and remediation steps</em>
-</p>
-
-🎯 **Result:** Two alerts, identical surface pattern, opposite evidence-backed verdicts — one closed, one escalated with concrete remediation steps.
 
 ---
 
-<a id="findings-summary"></a>
-## 🌟 Findings Summary
+<a id="module-6"></a>
+## ✅ Module 6 — File the Case Report (Alert 1)
 
-| 🎫 Alert | 🔍 Domain | 📌 Evidence | ⚖️ Verdict |
-|---|---|---|---|
-| 8818 | `hrconnex.thm` | Internal IT ticket confirms expected HR onboarding email | False Positive |
-| 8817 | `m1crosoftsupport.co` | Firewall log shows `allowed` click from `10.20.2.25` | True Positive |
+**Objective:** Document the verdict for Alert 8818.
+
+### Step 6 — Submit the Verdict ✅
+
+```
+Case report: Alert 8818
+Verdict: False Positive
+Reason: Legitimate HR onboarding email, confirmed by
+        internal ticket history
+```
+
+<p align="center">
+  <img src="screenshots/SS7_Filling_Case_Report.PNG" alt="Exhibit 6 - Filling Case Report" width="850"><br>
+  <em>Exhibit 6 — Case report being completed for Alert 8818</em>
+</p>
+<p align="center">
+  <img src="screenshots/SS8_Case_Report_Submitted.PNG" alt="Exhibit 6 (submitted) - Case Report Submitted" width="850"><br>
+  <em>Exhibit 6 (submitted) — False Positive verdict submitted</em>
+</p>
+
+---
+
+<a id="module-7"></a>
+## 🎫 Module 7 — Open the Second Alert
+
+**Objective:** Open Alert 8817 and read its details before investigating.
+
+### Step 7 — Read Alert 8817 ✅
+
+```
+Alert ID: 8817
+Sender:   no-reply@m1crosoftsupport.co
+          (note the "1" replacing the "i" — a typosquatting domain)
+Subject:  Unusual Sign-In Activity on Your Microsoft Account
+Link:     https://m1crosoftsupport.co
+```
+
+<p align="center">
+  <img src="screenshots/SS9_Second_Alert_Details.PNG" alt="Exhibit 7 - Second Alert Details" width="850"><br>
+  <em>Exhibit 7 — Alert 8817: typosquat phishing domain details</em>
+</p>
+
+---
+
+<a id="module-8"></a>
+## 🚨 Module 8 — Confirm the Click
+
+**Objective:** Determine whether the phishing link was actually clicked.
+
+### Step 8 — Search Splunk & Firewall Logs ✅
+
+```
+Splunk search: m1crosoftsupport.co
+→ 2 related events found
+```
+
+<p align="center">
+  <img src="screenshots/SS10_SIEM_Phishing_Search.PNG" alt="Exhibit 8 - SIEM Phishing Search" width="850"><br>
+  <em>Exhibit 8 — Splunk search for m1crosoftsupport.co</em>
+</p>
+
+```
+Checked firewall logs directly:
+  Source IP: 10.20.2.25 (internal employee machine)
+  Firewall Action: allowed
+
+→ Confirms the click went through — a real True Positive
+```
+
+<p align="center">
+  <img src="screenshots/SS11_SIEM_Phishing_Proof.PNG" alt="Exhibit 8 (proof) - SIEM Phishing Proof" width="850"><br>
+  <em>Exhibit 8 (proof) — Firewall log confirming the malicious click</em>
+</p>
+
+---
+
+<a id="module-9"></a>
+## ✅ Module 9 — File the Case Report (Alert 2)
+
+**Objective:** Document the verdict, escalation, and remediation for Alert 8817.
+
+### Step 9 — Submit the Verdict & Remediation ✅
+
+```
+Case report: Alert 8817
+Verdict:     True Positive
+Escalate:    Yes
+Remediation: Isolate 10.20.2.25 from the network,
+             force a password reset for the employee
+```
+
+<p align="center">
+  <img src="screenshots/SS12_True_Positive_Submitted.PNG" alt="Exhibit 9 - True Positive Submitted" width="850"><br>
+  <em>Exhibit 9 — True Positive verdict, escalation, and remediation steps</em>
+</p>
+
+---
+
+<a id="coverage-snapshot"></a>
+## 🌟 Coverage Snapshot
+
+| 🛡️ Layer | ✅ Status | 📌 Detail |
+|---|---|---|
+| Simulator loaded | Live | Scenario 1 confirmed ready (Exhibit 1) |
+| Alert queue reviewed | Proven | 5 pending alerts, Alert 8818 picked up (Exhibit 2) |
+| Alert 1 assigned | Proven | Alert 8818 assigned to self (Exhibit 3) |
+| Alert 1 details reviewed | Proven | Raw email data read, surface pattern noted (Exhibit 4) |
+| Alert 1 evidence found | Proven | Internal ticket confirms legitimacy (Exhibit 5) |
+| Alert 1 verdict filed | Proven | False Positive submitted (Exhibit 6) |
+| Alert 2 opened | Proven | Typosquat domain identified (Exhibit 7) |
+| Alert 2 click confirmed | Proven | Firewall log shows `allowed` (Exhibit 8) |
+| Alert 2 verdict filed | Proven | True Positive, escalation + remediation submitted (Exhibit 9) |
 
 ---
 
@@ -297,15 +436,18 @@ flowchart LR
 ## 🚧 Scope & Limitations
 
 - **Simulated SOC environment:** TryHackMe's SOC Simulator, not a live production SIEM queue.
-- **Two of five alerts triaged:** Only Alerts 8818 and 8817 are documented here; the remaining 3 in the queue were not part of this scope.
-- **Single scenario:** Covers Scenario 1 (Introduction to Phishing) only.
+- **Two of five alerts triaged:** only Alerts 8818 and 8817 are documented here; the remaining 3 in the queue were not part of this scope.
+- **Single scenario:** covers Scenario 1 (Introduction to Phishing) only.
 
 ---
 
-<a id="key-lesson"></a>
-## 🧠 Key Lesson
+<a id="what-i-learned"></a>
+## 🧠 What I Learned
 
-Both alerts started with the exact same surface-level pattern — "email with external link." The verdict came down entirely to what the SIEM logs and firewall data showed, not how the email looked. Alert 1's domain had internal ticket history backing it as legitimate; Alert 2's domain showed a firewall log confirming the user actually clicked through. Surface impressions are a starting point, not a verdict — the SIEM pivot is what actually decides True Positive vs False Positive.
+- **Surface impressions are a starting point, not a verdict.** Both alerts began with the exact same pattern — "email with external link" — and only diverged once SIEM and firewall evidence came in.
+- **A domain string deserves closer reading than a sender display name.** Alert 8817's typosquat (`m1crosoftsupport.co`) only stood out once the raw domain was checked character by character.
+- **"Received" and "clicked" are different levels of evidence.** Confirming a phishing email existed wasn't enough — the firewall log showing the click was `allowed` is what actually justified a True Positive and escalation.
+- **Internal ticket history is legitimate evidence, not just a convenient excuse.** Alert 8818's internal HR ticket gave a concrete, verifiable reason the traffic was expected — not just an assumption that it "looked fine."
 
 ---
 
