@@ -2,7 +2,7 @@
 
 # 🛡️ Wazuh File Integrity Monitoring & Custom Detection Rules
 
-**Project 04 of 29 — Advanced Cyber Projects**
+**Project 02 of 29 — Advanced Cyber Projects**
 
 SIEM Detection Engineering (Wazuh)
 

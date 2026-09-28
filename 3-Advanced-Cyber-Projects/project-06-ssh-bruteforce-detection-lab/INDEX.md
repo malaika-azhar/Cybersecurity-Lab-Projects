@@ -3,7 +3,7 @@
 
 # 🔓 Project 08 — Index
 ### SSH BruteForce Detection Lab
-**Project 04 of 29 — Blue Team Internship Portfolio**
+**Project 06 of 29 — Blue Team Internship Portfolio**
 
 ![Wazuh](https://img.shields.io/badge/Wazuh_Rules_Engine-3AAFDA?style=for-the-badge)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu_Server-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)

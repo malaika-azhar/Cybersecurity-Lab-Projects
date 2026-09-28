@@ -3,7 +3,7 @@
 
 # 🔐 Project 22 — Index
 ### Windows Event Log Analysis
-**Project 11 of 29 — Blue Team Internship Portfolio**
+**Project 14 of 29 — Blue Team Internship Portfolio**
 
 ![Windows](https://img.shields.io/badge/Windows_Security.evtx-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 ![EZTools](https://img.shields.io/badge/EvtxECmd-EZ_Tools-2E4053?style=for-the-badge)

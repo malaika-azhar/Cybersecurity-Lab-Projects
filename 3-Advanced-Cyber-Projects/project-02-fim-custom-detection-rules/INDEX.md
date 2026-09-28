@@ -3,7 +3,7 @@
 
 # 🛡️ Project 04 — Index
 ### Wazuh File Integrity Monitoring & Custom Detection Rules
-**Project 04 of 29 — Advanced Cyber Projects**
+**Project 02 of 29 — Advanced Cyber Projects**
 
 ![Wazuh](https://img.shields.io/badge/SIEM-Wazuh-005EB8?style=for-the-badge&logo=wazuh&logoColor=white)
 ![Ubuntu](https://img.shields.io/badge/Endpoint-Ubuntu_Server-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
