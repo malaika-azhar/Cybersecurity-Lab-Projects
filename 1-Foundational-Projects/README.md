@@ -28,42 +28,52 @@ cybersecurity-lab-projects/
 ├── 1-Foundational-Projects/
 │   ├── project-01-phishing-email-investigation/
 │   │   ├── README.md
+│   │   ├── INDEX.md
 │   │   └── screenshots/
 │   │
 │   ├── project-02-cisco-infrastructure-secure-routing/
 │   │   ├── README.md
+│   │   ├── INDEX.md
 │   │   └── screenshots/
 │   │
 │   ├── project-03-automated-port-scanner/
 │   │   ├── README.md
+│   │   ├── INDEX.md
 │   │   └── screenshots/
 │   │
 │   ├── project-04-threat-framework-mapping-wannacry/
 │   │   ├── README.md
+│   │   ├── INDEX.md
 │   │   └── screenshots/
 │   │
 │   ├── project-05-network-forensics-wireshark/
 │   │   ├── README.md
+│   │   ├── INDEX.md
 │   │   └── screenshots/
 │   │
 │   ├── project-06-siem-alert-triage/
 │   │   ├── README.md
+│   │   ├── INDEX.md
 │   │   └── screenshots/
 │   │
 │   ├── project-07-linux-log-analysis-forensics/
 │   │   ├── README.md
+│   │   ├── INDEX.md
 │   │   └── screenshots/
 │   │
 │   ├── project-08-password-cracking-hash-analysis/
 │   │   ├── README.md
+│   │   ├── INDEX.md
 │   │   └── screenshots/
 │   │
 │   ├── project-09-vulnerability-assessment-report/
 │   │   ├── README.md
+│   │   ├── INDEX.md
 │   │   └── screenshots/
 │   │
 │   └── project-10-vlan-segmentation-intervlan-routing/
 │       ├── README.md
+│       ├── INDEX.md
 │       └── screenshots/
 │
 ├── LICENSE
