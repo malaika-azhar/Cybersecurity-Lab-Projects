@@ -3,7 +3,7 @@
 
 # 🌐 Project 26 — Index
 ### Browser Forensics & LNK Analysis
-**Project 26 of 29 — Advanced Cyber Projects**
+**Project 17 of 29 — Advanced Cyber Projects**
 
 ![Chrome](https://img.shields.io/badge/Browser-Chrome-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)
 ![LECmd](https://img.shields.io/badge/Tool-LECmd-1E8449?style=for-the-badge)

@@ -2,7 +2,7 @@
 
 # 🦈 Network Traffic Analysis (Wireshark)
 
-**Project 13 of 29 — Blue Team Internship Portfolio**
+**Project 10 of 29 — Blue Team Internship Portfolio**
 
 OSI/TCP-IP Fundamentals · Live Packet Capture · Normal vs Suspicious Traffic
 

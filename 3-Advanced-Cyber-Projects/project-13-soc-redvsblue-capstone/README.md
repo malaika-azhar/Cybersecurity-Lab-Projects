@@ -2,7 +2,7 @@
 
 # ⚔️ SOC Red vs Blue Capstone
 
-**Project 20 of 29 — Blue Team Internship Portfolio**
+**Project 13 of 29 — Blue Team Internship Portfolio**
 
 Insider Threat Simulation · FIM Threat Hunting · Custom Detection Engineering · NIST IR
 

@@ -3,7 +3,7 @@
 
 # 📊 Project 12 — Index
 ### Custom SOC Dashboard Design
-**Project 12 of 29 — Advanced Cyber Projects**
+**Project 09 of 29 — Advanced Cyber Projects**
 
 ![Wazuh](https://img.shields.io/badge/SIEM-Wazuh-005EB8?style=for-the-badge&logo=wazuh&logoColor=white)
 ![OpenSearch](https://img.shields.io/badge/Dashboards-OpenSearch-005EB8?style=for-the-badge&logo=opensearch&logoColor=white)

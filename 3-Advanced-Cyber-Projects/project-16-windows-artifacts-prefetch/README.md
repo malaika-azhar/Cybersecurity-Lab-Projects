@@ -2,7 +2,7 @@
 
 # 🗂️ Windows Artifacts — Prefetch, Thumbcache & Recycle Bin
 
-**Project 25 of 29 — Blue Team Internship Portfolio**
+**Project 16 of 29 — Blue Team Internship Portfolio**
 
 PECmd Execution Profiling · Context-Based Suspicion Review · Deletion-Record Recovery
 

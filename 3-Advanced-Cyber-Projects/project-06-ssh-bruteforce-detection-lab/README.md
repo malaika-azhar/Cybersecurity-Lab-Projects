@@ -2,7 +2,7 @@
 
 # 🔓 SSH BruteForce Detection Lab
 
-**Project 08 of 29 — Blue Team Internship Portfolio**
+**Project 06 of 29 — Blue Team Internship Portfolio**
 
 Custom Wazuh Rule Engineering · SSH Attack Simulation · Detection Verification
 
