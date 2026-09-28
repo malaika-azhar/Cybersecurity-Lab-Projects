@@ -2,7 +2,7 @@
 
 # 🔐 Windows Event Log Analysis
 
-**Project 14 of 29 — Blue Team Internship Portfolio**
+**Project 11 of 29 — Blue Team Internship Portfolio**
 
 EvtxECmd Parsing · Logon Type Baseline · Privilege & Service-Account Noise
 

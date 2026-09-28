@@ -2,7 +2,7 @@
 
 # 🕵️ Insider Threat Detection System
 
-**Project 12 of 29 — Advanced Cyber Projects**
+**Project 09 of 29 — Advanced Cyber Projects**
 
 Full Attack-and-Defend Simulation (Kali + Wazuh + CyberChef)
 
