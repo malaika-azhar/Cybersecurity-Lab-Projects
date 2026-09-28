@@ -3,7 +3,7 @@
 
 # 🦈 Project 13 — Index
 ### Network Traffic Analysis (Wireshark)
-**Project 10 of 29 — Blue Team Internship Portfolio**
+**Project 10 of 18 — Blue Team Internship Portfolio**
 
 ![Wireshark](https://img.shields.io/badge/Wireshark-1679A7?style=for-the-badge&logo=wireshark&logoColor=white)
 ![ARP](https://img.shields.io/badge/ARP-C6501F?style=for-the-badge)

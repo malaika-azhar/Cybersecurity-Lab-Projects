@@ -2,7 +2,7 @@
 
 # 🕵️ Mantooth Investigation & Registry Analysis Methodology
 
-**Project 18 of 29 — Blue Team Internship Portfolio**
+**Project 18 of 18 — Blue Team Internship Portfolio**
 
 Autopsy Case Work · Fraud-Case Artefact Triage · Windows Artefact Hunting · Registry Methodology
 

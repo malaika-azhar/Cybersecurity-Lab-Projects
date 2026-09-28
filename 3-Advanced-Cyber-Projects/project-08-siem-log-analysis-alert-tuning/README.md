@@ -2,7 +2,7 @@
 
 # 📊 SIEM Log Analysis & Alert Tuning
 
-**Project 08 of 29 — Blue Team Internship Portfolio**
+**Project 08 of 18 — Blue Team Internship Portfolio**
 
 Multi-Source Log Correlation · Simulated Windows Telemetry · Analyst Reporting
 

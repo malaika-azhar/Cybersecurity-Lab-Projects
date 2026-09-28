@@ -2,7 +2,7 @@
 
 # 🛡️ Home SOC Lab Setup
 
-**Project 01 of 29 — Blue Team Internship Portfolio**
+**Project 01 of 18 — Blue Team Internship Portfolio**
 
 SOC Foundations · Network Traffic Basics · Wazuh SIEM Deployment
 

@@ -3,7 +3,7 @@
 
 # 🕵️ Project 24 — Index
 ### DFIR Foundations — Disk Imaging & File Systems
-**Project 15 of 29 — Advanced Cyber Projects**
+**Project 15 of 18 — Advanced Cyber Projects**
 
 ![Kali](https://img.shields.io/badge/Host-Kali_Linux-557C94?style=for-the-badge&logo=kalilinux&logoColor=white)
 ![EnCase](https://img.shields.io/badge/Image_Format-EnCase_E01-6C3483?style=for-the-badge)

@@ -2,7 +2,7 @@
 
 # 🌐 Browser Forensics & LNK Analysis
 
-**Project 17 of 29 — Advanced Cyber Projects**
+**Project 17 of 18 — Advanced Cyber Projects**
 
 Chrome Artifact Review & Windows Shortcut Forensics (LECmd)
 

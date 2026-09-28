@@ -3,7 +3,7 @@
 
 # 🗂️ Project 25 — Index
 ### Windows Artifacts — Prefetch, Thumbcache & Recycle Bin
-**Project 16 of 29 — Blue Team Internship Portfolio**
+**Project 16 of 18 — Blue Team Internship Portfolio**
 
 ![Windows](https://img.shields.io/badge/Windows_Prefetch-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 ![EZTools](https://img.shields.io/badge/PECmd-EZ_Tools-2E4053?style=for-the-badge)

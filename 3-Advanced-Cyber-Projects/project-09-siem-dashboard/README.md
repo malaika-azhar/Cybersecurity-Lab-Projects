@@ -2,7 +2,7 @@
 
 # 📊 Custom SOC Dashboard Design
 
-**Project 09 of 29 — Advanced Cyber Projects**
+**Project 09 of 18 — Advanced Cyber Projects**
 
 Panel-per-Question Dashboard Engineering (Wazuh)
 

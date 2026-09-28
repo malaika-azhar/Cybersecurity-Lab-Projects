@@ -3,7 +3,7 @@
 
 # 🕵️ Project 19 — Index
 ### Insider Threat Detection System
-**Project 12 of 29 — Advanced Cyber Projects**
+**Project 12 of 18 — Advanced Cyber Projects**
 
 ![Wazuh](https://img.shields.io/badge/SIEM-Wazuh-005EB8?style=for-the-badge&logo=wazuh&logoColor=white)
 ![Kali](https://img.shields.io/badge/Red_Team-Kali_Linux-557C94?style=for-the-badge&logo=kalilinux&logoColor=white)

@@ -3,7 +3,7 @@
 
 # 🔍 Project 07 — Index
 ### Port Scan Detection Lab
-**Project 05 of 29 — Advanced Cyber Projects**
+**Project 05 of 18 — Advanced Cyber Projects**
 
 ![Suricata](https://img.shields.io/badge/IDS-Suricata-CC0000?style=for-the-badge&logo=suricata&logoColor=white)
 ![Kali](https://img.shields.io/badge/Attacker-Kali_Linux-557C94?style=for-the-badge&logo=kalilinux&logoColor=white)

@@ -3,7 +3,7 @@
 
 # ⚔️ Project 20 — Index
 ### SOC Red vs Blue Capstone
-**Project 13 of 29 — Blue Team Internship Portfolio**
+**Project 13 of 18 — Blue Team Internship Portfolio**
 
 ![Wazuh](https://img.shields.io/badge/Wazuh_Cloud-3AAFDA?style=for-the-badge)
 ![Kali](https://img.shields.io/badge/Kali_Linux-557C94?style=for-the-badge&logo=kalilinux&logoColor=white)

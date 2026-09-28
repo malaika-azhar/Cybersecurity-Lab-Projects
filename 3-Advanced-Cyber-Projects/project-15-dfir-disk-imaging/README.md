@@ -2,7 +2,7 @@
 
 # 🕵️ DFIR Foundations — Disk Imaging & File Systems
 
-**Project 15 of 29 — Advanced Cyber Projects**
+**Project 15 of 18 — Advanced Cyber Projects**
 
 Forensic Acquisition, NTFS Internals & Sleuth Kit Triage
 

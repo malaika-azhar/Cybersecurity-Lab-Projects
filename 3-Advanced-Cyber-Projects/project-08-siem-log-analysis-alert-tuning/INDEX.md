@@ -3,7 +3,7 @@
 
 # 📊 Project 11 — Index
 ### SIEM Log Analysis & Alert Tuning
-**Project 08 of 29 — Blue Team Internship Portfolio**
+**Project 08 of 18 — Blue Team Internship Portfolio**
 
 ![Wazuh](https://img.shields.io/badge/Wazuh_Threat_Hunting-3AAFDA?style=for-the-badge)
 ![Linux](https://img.shields.io/badge/Linux_auth.log-FCC624?style=for-the-badge&logo=linux&logoColor=black)

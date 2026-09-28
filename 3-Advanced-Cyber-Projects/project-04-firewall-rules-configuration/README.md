@@ -2,7 +2,7 @@
 
 # 🔥 Firewall Rules Configuration on pfSense
 
-**Project 04 of 29 — Advanced Cyber Projects**
+**Project 04 of 18 — Advanced Cyber Projects**
 
 Firewall Rule Engineering (pfSense + Wazuh)
 
