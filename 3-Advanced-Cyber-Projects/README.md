@@ -1,20 +1,22 @@
 <div align="center">
 
-# 🛡️ Home SOC Lab Setup
+# 🛡️ Advanced Cyber Projects
 
-**Project 01 of 18 — Blue Team Internship Portfolio**
+**Blue Team Internship Portfolio — 18 Projects**
 
-SOC Foundations · Network Traffic Basics · Wazuh SIEM Deployment
+SOC Operations · Detection Engineering · Digital Forensics & Incident Response
 
-![VMware](https://img.shields.io/badge/VMware_Workstation-607078?style=for-the-badge&logo=vmware&logoColor=white)
-![Ubuntu](https://img.shields.io/badge/Ubuntu_Server_22.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
-![Wazuh](https://img.shields.io/badge/Wazuh_Cloud_4.14.5-3AAFDA?style=for-the-badge)
-![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/malaika-azhar-tech)
+![Projects](https://img.shields.io/badge/Projects-18-1A5276?style=for-the-badge)
+![Tracks](https://img.shields.io/badge/Tracks-2-5B2C6F?style=for-the-badge)
+![Screenshots](https://img.shields.io/badge/Screenshots-130-F39C12?style=for-the-badge)
+![SIEM](https://img.shields.io/badge/SIEM-Wazuh-005EB8?style=for-the-badge)
+![IDS](https://img.shields.io/badge/IDS-Suricata-EF3B2D?style=for-the-badge)
+![Firewall](https://img.shields.io/badge/Firewall-pfSense-212121?style=for-the-badge)
 ![MITRE](https://img.shields.io/badge/MITRE_ATT%26CK-C6501F?style=for-the-badge)
-![Cost](https://img.shields.io/badge/Cost-Free-2EA043?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-orange?style=for-the-badge)
 
-A defensive lab built from scratch on hardware that did not meet the brief's own minimum spec — one Ubuntu Server VM, a cloud-hosted Wazuh SIEM in place of a failed local install, and two live agents generating a real, verified failed-login alert. Every deviation from the original brief is recorded with the reason behind it.
+> 📌 **Note:** This folder holds the advanced, infrastructure-focused work — SIEM detection engineering, network defense, malware analysis, and digital forensics — building on the concepts practised in [`1-Foundational-Projects`](../1-Foundational-Projects). Each project's own README states its scope and limitations.
 
 </div>
 
@@ -23,516 +25,324 @@ A defensive lab built from scratch on hardware that did not meet the brief's own
 ## 📑 Table of Contents
 
 1. [At a Glance](#at-a-glance)
-2. [Project Background](#project-background)
-3. [Environment](#environment)
-4. [Project Flow](#project-flow)
-5. [Day 2 — VM Lab Setup](#day-2)
-6. [Day 3-4 — Wazuh Manager Setup](#day-3-4)
-7. [Day 5-6 — Agent Deployment & Alert Testing](#day-5-6)
-8. [Day 7 — Dashboard Navigation & Alert Triage](#day-7)
-9. [Coverage Snapshot](#coverage-snapshot)
-10. [Troubleshooting Pipeline](#troubleshooting-pipeline)
-11. [Command Reference](#command-reference)
-12. [Project Summary](#project-summary)
-13. [Challenges & Fixes](#challenges-fixes)
-14. [Scope & Limitations](#scope-limitations)
-15. [What I Learned](#what-i-learned)
-16. [Skills Demonstrated](#skills-demonstrated)
-17. [Screenshot Index](#screenshot-index)
-18. [Repo Structure](#repo-structure)
+2. [About This Folder](#about)
+3. [The Learning Path](#path)
+4. [Folder Structure](#structure)
+5. [Track Map](#tracks)
+6. [Projects Overview](#projects)
+7. [Project Highlights](#highlights)
+8. [Detection Engineering Across the Series](#detections)
+9. [Honest Reporting Across the Series](#honest-reporting)
+10. [Skills Demonstrated](#skills)
+11. [Tools & Frameworks](#tools)
+12. [Lab Environments](#environments)
+13. [Suggested Reading Paths](#reading-paths)
+14. [How to Navigate](#navigate)
+15. [Connect](#connect)
 
 ---
 
 <a id="at-a-glance"></a>
 ## 📊 At a Glance
 
-| 🖥️ VMs Built | 🔌 Agents Deployed | 🖼️ Screenshots | 📋 Alert Types Triaged | 💰 Cost |
+| 🧩 Projects | 🗂️ Tracks | 🖼️ Screenshots | 🛠️ Tools | 📐 Frameworks |
 |:---:|:---:|:---:|:---:|:---:|
-| **1** | **2** | **9** | **10** | **$0** |
+| **18** | **2** | **130** | **19** | **2** |
 
 ---
 
-<a id="project-background"></a>
-## 📖 Project Background
+<a id="about"></a>
+## 📖 About This Folder
 
-The brief called for a three-VM lab (Kali, a Wazuh Manager, and a Windows 10 target) each with 4GB+ RAM, and a fully local Wazuh install. My own hardware — an HP 255 G5, AMD A6-7310, 4GB total RAM, 128GB SSD — could not run that as written.
+A collection of **18 hands-on projects** that follow a Blue Team internship path: building a SOC lab and SIEM, writing and tuning detections, defending the network perimeter, analysing traffic and malware, simulating an insider-threat attack, and finishing with digital forensics on Windows artefacts and disk images.
 
-This was raised with program support before any build work started, and the following interim plan was approved:
+### 🎯 What These Projects Demonstrate
 
-| Plan Item | Approved Decision |
+- **Building** — a working SOC lab and cloud SIEM under real hardware limits
+- **Detecting** — custom Wazuh and Suricata rules, tested against real attack traffic and mapped to MITRE ATT&CK
+- **Defending** — a pfSense perimeter with remote logging verified end-to-end
+- **Investigating** — packet captures, malware samples, Windows event logs, disk images, and forensic artefacts
+- **Documenting** — every project records commands, evidence, and what did not go to plan
+
+### 📚 How Each Project Is Documented
+
+| File | Purpose |
 |---|---|
-| Build Scope | One VM only: Ubuntu Server, allocated 2GB RAM |
-| Windows Agent | Host Windows used as the Wazuh agent instead of a separate Windows 10 VM |
-| Kali Linux VM | Deferred until a RAM upgrade is complete |
-| Hypervisor | VMware Workstation (brief specifies VirtualBox; confirmed acceptable) |
+| `README.md` | Full write-up: objective, steps, commands, findings, challenges, and lessons learned |
+| `INDEX.md` | Quick guide to every step and screenshot in the project |
+| `screenshots/` | Numbered evidence for each step |
 
-> [!NOTE]
-> Every substitution in this report follows directly from this approved plan. Where a screenshot for a step does not exist, that step is marked 📝 and described from my own notes instead.
+### 🧱 Anatomy of a Project README
 
-<div align="center">
+Every project README follows the same layout, so any one of them can be read the same way:
 
-### 🧩 Lab Setup at a Glance
-
-<table>
-<tr>
-<td align="center" valign="top" width="42%">
-
-![Ubuntu](https://img.shields.io/badge/Endpoint-Ubuntu_Server_22.04.5-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
-
-**Monitored VM**<br>
-<sub>NAT + Host-only adapters<br>2048 MB RAM, 2 CPU cores</sub>
-
-</td>
-<td align="center" valign="middle" width="16%">
-
-**➜**<br>
-<sub>telemetry</sub>
-
-</td>
-<td align="center" valign="top" width="42%">
-
-![Wazuh](https://img.shields.io/badge/SIEM-Wazuh_Cloud_4.14.5-3AAFDA?style=for-the-badge)
-
-**Manager / Indexer / Dashboard**<br>
-<sub>Cloud-hosted, in place of a local install</sub>
-
-</td>
-</tr>
-<tr>
-<td colspan="3" align="center">
-
-**Second agent — Windows Host** (used directly, in place of a Windows 10 VM)<br>
-<sub>Deployed via the dashboard's PowerShell install command</sub>
-
-</td>
-</tr>
-</table>
-
-</div>
+| Section | What It Answers |
+|---|---|
+| **At a Glance** | The headline numbers for the project |
+| **Project Background** | Why the project exists and what it set out to do |
+| **Environment** | Platform, versions, files, and addresses used |
+| **Project Flow** | The modules in order, as a timeline |
+| **Modules** | Step-by-step work with evidence |
+| **Challenges & Fixes** | What went wrong and how it was resolved |
+| **Scope & Limitations** | What the project does and does not claim |
+| **What I Learned** | The takeaways |
+| **Skills Demonstrated** | The capabilities the project shows |
+| **Screenshot Index** | Every exhibit and what it shows |
 
 ---
 
-<a id="environment"></a>
-## 🖧 Environment
+<a id="path"></a>
+## 🛤️ The Learning Path
 
-| Item | Value |
-|---|---|
-| **Hypervisor** | VMware Workstation |
-| **Guest OS** | Ubuntu Server 22.04.5 LTS |
-| **VM Resources** | 2048 MB RAM, 2 CPU cores |
-| **NAT Adapter Range** | `192.168.48.x` |
-| **Host-Only Adapter Range** | `192.168.92.x` |
-| **Ubuntu Agent Name / IP** | `Ubuntu-server` / `192.168.92.132` |
-| **Second Agent** | `Windows-Host` (host machine, PowerShell install) |
-| **SIEM** | Wazuh Cloud v4.14.5 (Manager + Indexer + Dashboard) |
-| **Built-in Ruleset** | 4,513 rules, grouped by syslog / firewall / windows / wazuh etc. |
-| **Work Period** | Week 1, Days 1–7 |
-
-> [!IMPORTANT]
-> VMware's default Host-only range (`192.168.92.x`) differs from VirtualBox's typical `192.168.56.x` used in the brief. This is expected, not an error, since the brief assumes VirtualBox and this build used VMware per the approved plan.
-
-### 🗺️ Lab Topology
+The projects are numbered in build order. Each stage builds on the one before it.
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}, 'flowchart': {'nodeSpacing': 24, 'rankSpacing': 34, 'padding': 8}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}, 'flowchart': {'nodeSpacing': 26, 'rankSpacing': 40, 'padding': 8}}}%%
 flowchart LR
-    UB["🐧 Ubuntu Server 22.04.5<br/>192.168.92.132"]:::vm --> WZ["☁️ Wazuh Cloud 4.14.5<br/>Manager · Indexer · Dashboard"]:::siem
-    WH["🪟 Windows Host<br/>Agent 2"]:::vm --> WZ
-    NAT["🌐 NAT Adapter<br/>192.168.48.x"]:::net -.-> UB
-    HO["🔒 Host-Only Adapter<br/>192.168.92.x"]:::net -.-> UB
-    classDef vm fill:#2C3E70,stroke:#131B3A,stroke-width:2px,color:#FFFFFF
-    classDef siem fill:#117864,stroke:#083D33,stroke-width:2px,color:#FFFFFF
-    classDef net fill:#EAECEE,stroke:#707B7C,color:#3B4142,stroke-dasharray: 4 3
+    A["🧪 Build<br/>the lab & SIEM<br/>P01–P02"]:::s1 --> B["🌐 Defend<br/>the perimeter<br/>P03–P04"]:::s2
+    B --> C["🚨 Detect<br/>attacks<br/>P05–P08"]:::s3
+    C --> D["📊 Visualise<br/>& analyse<br/>P09–P11"]:::s4
+    D --> E["⚔️ Simulate<br/>an insider<br/>P12–P13"]:::s5
+    E --> F["🕵️ Investigate<br/>Windows evidence<br/>P14–P18"]:::s6
+    classDef s1 fill:#117864,stroke:#083D33,stroke-width:2px,color:#FFFFFF
+    classDef s2 fill:#1A5276,stroke:#0B2E43,stroke-width:2px,color:#FFFFFF
+    classDef s3 fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
+    classDef s4 fill:#B9770E,stroke:#6E4409,stroke-width:2px,color:#FFFFFF
+    classDef s5 fill:#C0392B,stroke:#78281F,stroke-width:2px,color:#FFFFFF
+    classDef s6 fill:#5B2C6F,stroke:#3B1A48,stroke-width:2px,color:#FFFFFF
     linkStyle default stroke:#2C3E50,stroke-width:2px
 ```
-<p align="center"><em>Two agents report into one cloud-hosted Wazuh stack. The Kali VM in the original three-VM design was deferred (see Scope & Limitations).</em></p>
+<p align="center"><em>From a working lab to forensic investigation: the SIEM and perimeter built early feed the detection, analysis, and forensics work that follows.</em></p>
 
 ---
 
-<a id="project-flow"></a>
-## ⏱️ Project Flow
-
-```mermaid
-%%{init: { 'theme': 'base', 'themeVariables': {
-  'doneTaskBkgColor':'#117864', 'doneTaskBorderColor':'#083D33',
-  'sectionBkgColor':'#D6DBDF', 'altSectionBkgColor':'#EAECEE',
-  'taskTextColor':'#FFFFFF', 'taskTextOutsideColor':'#1B2631',
-  'taskTextLightColor':'#FFFFFF',
-  'titleColor':'#1B2A4A', 'fontSize':'18px'
-}}}%%
-gantt
-    title Project Flow — Week 1, Days 1 to 7
-    dateFormat YYYY-MM-DD
-    axisFormat %b %d
-    section Foundations
-    Day 1 - Networking fundamentals (see Project 13)   :done, 2026-01-01, 1d
-    section Lab Build
-    Day 2 - VM creation and connectivity                :done, 2026-01-02, 1d
-    Day 3-4 - Wazuh Manager setup and cloud pivot        :done, 2026-01-03, 2d
-    section Detection
-    Day 5-6 - Agent deployment and alert testing         :done, 2026-01-05, 2d
-    Day 7 - Dashboard navigation and alert triage         :done, 2026-01-07, 1d
-```
-<p align="center"><em>Dates are relative day markers, not calendar dates from the original report. All seven days complete.</em></p>
-
----
-
-<a id="day-2"></a>
-## 🔵 Day 2 — VM Lab Setup
-
-**Objective:** Build the one approved VM, confirm dual-adapter networking, and take a rollback snapshot before touching Wazuh.
-
-### Step 1 — Create the VM and allocate hardware ✅
-
-Created a new VM in VMware Workstation using the Ubuntu Server 22.04.5 LTS ISO. Allocated 2048 MB RAM and 2 CPU cores, with two network adapters: one NAT (internet access), one Host-only (internal lab network).
-
-<p align="center">
-  <img src="screenshots/ss-01-vm-creation-hardware-config.PNG" alt="Exhibit 1 - VM creation and hardware configuration" width="850"><br>
-  <em>Exhibit 1 — VMware Workstation VM creation: Ubuntu Server 22.04.5 LTS, 2048 MB RAM, 2 CPU cores</em>
-</p>
-
-### Step 2 — Profile configuration ✅
-
-<p align="center">
-  <img src="screenshots/ss-02-profile-configuration.PNG" alt="Exhibit 2 - Profile configuration" width="850"><br>
-  <em>Exhibit 2 — Guest profile configuration during VM creation</em>
-</p>
-
-### Step 3 — Network configuration during install ✅
-
-<p align="center">
-  <img src="screenshots/ss-03-network-config-during-install.PNG" alt="Exhibit 3 - Network configuration during install" width="850"><br>
-  <em>Exhibit 3 — NAT + Host-only adapters configured during the Ubuntu Server install</em>
-</p>
-
-### Step 4 — IP address confirmation (post-install) ✅
-
-After a VM rebuild, only one interface initially appeared in `ip a`. The second adapter had to be re-added in VMware settings, then manually brought up inside Ubuntu:
-
-```
-sudo ip link set ens37 up
-sudo dhclient ens37
-```
-
-Both interfaces then showed correctly: one on the NAT range (`192.168.48.x`), one on the Host-only range (`192.168.92.x`).
-
-<p align="center">
-  <img src="screenshots/ss-04-ip-address-confirmation.PNG" alt="Exhibit 4 - IP address confirmation" width="850"><br>
-  <em>Exhibit 4 — <code>ip a</code> output confirming both NAT and Host-only interfaces are up with addresses</em>
-</p>
-
-### Step 5 — Connectivity test ✅
-
-```
-ping -c 4 8.8.8.8
-```
-
-Result: 4 packets transmitted, 4 received, 0% packet loss — confirming internet access through the NAT adapter.
-
-<p align="center">
-  <img src="screenshots/ss-05-connectivity-test-ping.PNG" alt="Exhibit 5 - Connectivity test" width="850"><br>
-  <em>Exhibit 5 — <code>ping -c 4 8.8.8.8</code>: 0% packet loss</em>
-</p>
-
-### Step 6 — Snapshot ✅
-
-Took a snapshot named `Ubuntu-Working-Day2` once connectivity was confirmed, as a rollback point before installing Wazuh.
-
-<p align="center">
-  <img src="screenshots/ss-06-snapshot-ubuntu-working-day2.PNG" alt="Exhibit 6 - Snapshot" width="850"><br>
-  <em>Exhibit 6 — VMware snapshot <code>Ubuntu-Working-Day2</code> taken as a pre-install rollback point</em>
-</p>
-
----
-
-<a id="day-3-4"></a>
-## 🟠 Day 3-4 — Wazuh Manager Setup
-
-**Objective:** Install the Wazuh Manager on the local VM; when hardware limits block that, document the limit and pivot to a working alternative rather than force a result that didn't happen.
-
-### Step 7 — Local install pre-flight check ✅
-
-Installing the Wazuh Manager directly on the local Ubuntu VM hit a hardware wall: the 2GB VM sits below Wazuh's recommended minimum, and the installer's own pre-flight check flagged this before installation proceeded.
-
-<p align="center">
-  <img src="screenshots/ss-07-wazuh-preflight-check-fail.PNG" alt="Exhibit 7 - Pre-flight check failure" width="850"><br>
-  <em>Exhibit 7 — Wazuh installer pre-flight check flags the 2GB VM as below the recommended minimum</em>
-</p>
-
-### Step 8 — Bypass attempt with the `-i` flag ✅
-
-Re-ran the installer with the documented `-i` flag to bypass the check and proceed anyway. Even past that check, the install still risked failing at the memory-intensive Indexer stage.
-
-<p align="center">
-  <img src="screenshots/ss-08-wazuh-install-i-flag-bypass.PNG" alt="Exhibit 8 - Install -i flag bypass" width="850"><br>
-  <em>Exhibit 8 — Installer re-run with <code>-i</code> to bypass the pre-flight check</em>
-</p>
-
-### Step 9 — Pivot to Wazuh Cloud and log in ✅
-
-Rather than keep fighting the local hardware limit, I used Wazuh Cloud's free trial instead — hosting the Manager, Indexer, and Dashboard on Wazuh's own infrastructure while keeping the Ubuntu VM as the monitored endpoint. This is a deliberate, documented substitution, not a separate unrelated tool.
-
-> [!NOTE]
-> The brief's static-IP requirement assumes a self-hosted Manager. Since the Manager is cloud-hosted here, agents point at Wazuh Cloud's domain instead of a local static IP, so this specific requirement doesn't apply the same way.
-
-<p align="center">
-  <img src="screenshots/ss-09-wazuh-cloud-dashboard-login.PNG" alt="Exhibit 9 - Wazuh Cloud dashboard login" width="850"><br>
-  <em>Exhibit 9 — Logged into the Wazuh Cloud dashboard with the admin account; no agents registered yet, confirming the instance was live before any endpoint connected</em>
-</p>
-
----
-
-<a id="day-5-6"></a>
-## 🟢 Day 5-6 — Agent Deployment & Alert Testing 📝
-
-**Objective:** Deploy agents on both the Ubuntu VM and a second endpoint, and generate one real, verifiable alert end to end.
-
-> [!NOTE]
-> No screenshots were captured/retained for these two days in the source report. The steps below are documented from my own notes (marked 📝) rather than left out.
-
-### Deploying the first agent 📝
-
-Used the dashboard's "Deploy new agent" wizard, selected the DEB amd64 package to match the Ubuntu VM, and brought the agent up with:
-
-```
-sudo systemctl daemon-reload
-sudo systemctl enable wazuh-agent
-sudo systemctl start wazuh-agent
-```
-
-The agent (`Ubuntu-server`, `192.168.92.132`) registered successfully and showed **Active**. Once connected, the Overview dashboard began showing real telemetry — **99 medium** and **110 low** severity alerts within 24 hours.
-
-### Deploying the second agent — Windows Host 📝
-
-The brief requires two connected agents. Since the Windows 10 VM was skipped per the approved hardware plan, the agent was deployed directly on the host Windows machine instead, using the dashboard's Windows deployment wizard to generate a PowerShell install command (run as Administrator). Both agents — `Ubuntu-server` and `Windows-Host` — then showed **Active** at the same time.
-
-### Generating a real failed-login alert 📝
-
-Getting a genuine authentication-failure event took a few attempts:
-
-| Attempt | Result |
-|---|---|
-| `ssh invaliduser@localhost` | Refused outright — no SSH session reached the auth layer |
-| `su invaliduser` / `su malaika` | Failed with "user does not exist" — not a real auth failure, neither was a valid account |
-| `su root` with a wrong password | ✅ Worked — produced a genuine logged Authentication failure |
-
-This showed up under Threat Hunting filtered to *Authentication failure*: **2 events recorded**, mapped under Top 10 MITRE ATT&CK to **Password Guessing** — confirming the alert pipeline correctly classified the activity, not just logged it.
-
-Checked the general Threat Hunting overview with no filters applied: **669 total events** in the last 24 hours across both agents.
-
----
-
-<a id="day-7"></a>
-## 🟣 Day 7 — Dashboard Navigation & Alert Triage 📝
-
-**Objective:** Move from setup to analyst work — pull a genuine spread of alert types and assess each on its own merits rather than by severity level alone.
-
-> [!NOTE]
-> No screenshots were captured/retained for this day in the source report. The table below is documented from my own notes (marked 📝).
-
-Spent time in the general Threat Hunting Events view (not the File Integrity Monitoring-only tab, which only ever shows rule 550) to find a genuine spread of alert types from the Windows-Host agent. Also reviewed the Rules management page — Wazuh ships **4,513 built-in rules**, organized by group (syslog, firewall, windows, wazuh, etc.), each with its own default severity level.
-
-### 🎯 Top 10 Alert Types Triaged
-
-| Rule | Level | Description | My Assessment |
-|:---:|:---:|---|---|
-| 550 | 7 | Integrity checksum changed (most frequent) | Routine — FIM flagging file content changes, likely logs/system files updating on their own |
-| 553 | 7 | File deleted | Worth a closer look, but repetition alongside 550 suggests routine log rotation, not tampering |
-| 554 | 5 | File added to the system | Routine — lower severity than deletion, consistent with normal activity |
-| 61104 | 3 | Service startup type changed | Low severity, but worth knowing which service before dismissing — can be used to disable security tools |
-| **60602** | **9** | **Windows application error event** | **Real concern — the standout. Level 9 is meaningfully higher than everything else; this is the one I'd investigate first** |
-| 60642 | 3 | Software protection service scheduled successfully | Routine — Windows' own licensing/activation service |
-| 60798 | 3 | Database engine attached a database | Routine — part of a Windows service starting up |
-| 60805 | 3 | Database engine starting a new instance | Routine — same startup sequence |
-| 60807 | 3 | Database engine initiating recovery steps | Routine — normal recovery after a service restart |
-| 60808 | 3 | Database engine replaying log file (`wins\j50.log`) | Routine — final step of the same startup/recovery sequence |
-
-🎯 **Result:** Severity level alone didn't tell the full story — several Level 7 events were routine background noise, while the single Level 9 event stood out precisely because it was rare, not because it was the highest number on the page.
-
----
-
-<a id="coverage-snapshot"></a>
-## 🌟 Coverage Snapshot
-
-| 🛡️ Area | ✅ Status | 📌 Detail |
-|---|---|---|
-| VM Build | Complete | One Ubuntu Server 22.04.5 VM, dual adapters, snapshot taken |
-| SIEM Deployment | Substituted, complete | Local install blocked by RAM; Wazuh Cloud used instead |
-| Agent Coverage | Complete (2/2 approved) | Ubuntu-server + Windows-Host, both Active |
-| Alert Verification | Complete | Real failed-login alert generated and correctly classified |
-| Alert Triage | Complete | Top 10 alert types reviewed and individually assessed |
-| Kali Linux VM | Deferred | Blocked on a RAM upgrade, per the approved plan |
-
-### 🧾 What the Evidence Proves
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}, 'flowchart': {'nodeSpacing': 24, 'rankSpacing': 34, 'padding': 8}}}%%
-flowchart LR
-    D2["🔵 Day 2<br/>VM Build"]:::d2 --> P1["✅ Proven<br/>dual-adapter connectivity"]:::ok
-    D34["🟠 Day 3-4<br/>Wazuh Setup"]:::d34 --> P2["✅ Proven<br/>cloud SIEM live"]:::ok
-    D34 --> N2["❌ Not attempted<br/>fully local install"]:::bad
-    D56["🟢 Day 5-6<br/>Agents"]:::d56 --> P3["✅ Proven<br/>real alert, correctly classified"]:::ok
-    D7["🟣 Day 7<br/>Triage"]:::d7 --> P4["✅ Proven<br/>10 alert types assessed"]:::ok
-    classDef d2 fill:#117864,stroke:#083D33,stroke-width:2px,color:#FFFFFF
-    classDef d34 fill:#B9770E,stroke:#6E4409,stroke-width:2px,color:#FFFFFF
-    classDef d56 fill:#1E8449,stroke:#0E4A28,stroke-width:2px,color:#FFFFFF
-    classDef d7 fill:#76448A,stroke:#432752,stroke-width:2px,color:#FFFFFF
-    classDef ok fill:#1E8449,stroke:#0E4A28,stroke-width:2px,color:#FFFFFF
-    classDef bad fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
-    linkStyle default stroke:#2C3E50,stroke-width:2px
-```
-
----
-
-<a id="troubleshooting-pipeline"></a>
-## 🧭 Troubleshooting Pipeline
-
-How a hardware ceiling becomes a documented, working substitution
-
-```mermaid
-flowchart TB
-    Try["🧪 ATTEMPT PER THE BRIEF"]:::tryClass
-    Check["🔎 HIT A HARDWARE OR CONFIG LIMIT?"]:::checkClass
-    Doc["📝 DOCUMENT WHAT FAILED AND WHY"]:::docClass
-    Alt["🔧 FIND A DELIBERATE SUBSTITUTE"]:::altClass
-    Verify["✅ VERIFY THE SUBSTITUTE ACTUALLY WORKS"]:::verClass
-    Report["📷 CAPTURE EVIDENCE AND REPORT"]:::repClass
-
-    Try --> Check
-    Check -->|YES| Doc --> Alt --> Verify --> Report
-    Check -->|NO| Report
-
-    classDef tryClass fill:#2C3E70,stroke:#131B3A,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef checkClass fill:#B7950B,stroke:#6B5807,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef docClass fill:#943126,stroke:#571C16,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef altClass fill:#76448A,stroke:#432752,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef verClass fill:#117864,stroke:#083D33,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef repClass fill:#1E8449,stroke:#0E4A28,stroke-width:4px,color:#FFFFFF,font-weight:bold
-
-    linkStyle default stroke:#2C3E50,stroke-width:3px
-```
-
----
-
-<a id="command-reference"></a>
-## 🧰 Command Reference
-
-| # | Command | Used In | Purpose |
-|:---:|---|---|---|
-| 1 | `sudo ip link set ens37 up` | Day 2 | Bring the missing second adapter up manually after a rebuild |
-| 2 | `sudo dhclient ens37` | Day 2 | Request a DHCP address on the re-added adapter |
-| 3 | `ping -c 4 8.8.8.8` | Day 2 | Verify outbound internet access via the NAT adapter |
-| 4 | `sh wazuh-install.sh -i` | Day 3-4 | Bypass the installer's pre-flight hardware check |
-| 5 | `sudo systemctl daemon-reload` | Day 5-6 | Reload systemd unit files after agent install |
-| 6 | `sudo systemctl enable wazuh-agent` | Day 5-6 | Enable the Wazuh agent service on boot |
-| 7 | `sudo systemctl start wazuh-agent` | Day 5-6 | Start the Wazuh agent service |
-| 8 | `su root` (wrong password) | Day 5-6 | Deliberately trigger a genuine, loggable authentication failure |
-
----
-
-<a id="project-summary"></a>
-## 📝 Project Summary
-
-| Phase | Tooling | Key Outcome |
-|---|---|---|
-| VM Lab Build | VMware Workstation, Ubuntu Server 22.04.5 LTS | One working VM, dual-adapter networking confirmed, rollback snapshot taken |
-| SIEM Deployment | Wazuh Cloud v4.14.5 | Local install blocked by hardware; cloud pivot verified live before any agent connected |
-| Agent Coverage | Wazuh Agent (Linux + Windows) | Two agents Active simultaneously; 669 total events/24h across both |
-| Alert Verification | `su`, Threat Hunting, MITRE ATT&CK module | Real Authentication failure generated and correctly mapped to Password Guessing |
-| Alert Triage | Threat Hunting Events view, Rules management page | 10 distinct alert types individually assessed, not just sorted by severity |
-
----
-
-<a id="challenges-fixes"></a>
-## ⚠️ Challenges & Fixes
-
-| ❌ Challenge | ✅ Fix |
-|---|---|
-| Hardware (4GB RAM total) below the brief's 3-VM, 4GB-each minimum | Raised with program support before starting; scope reduced to one VM plus the host as a second agent, approved in writing |
-| VM rebuild dropped the second network adapter | Re-added the adapter in VMware settings, then manually brought it up with `ip link set up` and `dhclient` |
-| Local Wazuh install blocked by a 2GB RAM pre-flight check, and still risky at the Indexer stage even after bypassing it | Used Wazuh Cloud's free trial instead — same Manager/Indexer/Dashboard stack, no local RAM ceiling |
-| A supplied "install Wazuh" command was a fake placeholder (`echo "exit 0" > wazuh-install.sh`) | Caught before it caused confusion — running it produced no real install output |
-| `ssh invaliduser@localhost` and `su` against non-existent users did not produce a real authentication-failure event | Used `su root` with a deliberately wrong password against a real local account instead |
-| Ended up with two VMs by accident after a confused rebuild | Deleted both through File Explorer (VMware's own right-click delete didn't remove the underlying files) and rebuilt clean |
-
----
-
-<a id="scope-limitations"></a>
-## 🚧 Scope & Limitations
-
-- **Single VM, not three:** Hardware (4GB total RAM) could not run three concurrent VMs at 4GB+ each as the brief specifies. Approved plan built one Ubuntu Server VM only.
-- **Kali Linux VM deferred:** Blocked on a RAM upgrade, not yet built at the time of this report.
-- **Windows agent, not a Windows 10 VM:** The host Windows machine was used directly as the second agent, per the approved plan.
-- **Cloud SIEM, not a local install:** The local Wazuh install hit its own pre-flight hardware check and remained risky at the Indexer stage even past that check. Wazuh Cloud's free trial was used instead — a deliberate, documented substitution, not a separate tool chosen for convenience.
-- **VMware, not VirtualBox:** The brief specifies VirtualBox; VMware Workstation was used and confirmed acceptable, which is also why the Host-only IP range (`192.168.92.x`) differs from VirtualBox's typical `192.168.56.x`.
-- **No screenshots for Days 5–7:** Steps for agent deployment, the failed-login alert, and alert triage are documented from notes (📝) rather than screenshots, which were not captured/retained in the source report for those days.
-- **Static IP requirement does not directly apply:** Because the Manager is cloud-hosted, agents point at Wazuh Cloud's domain rather than a fixed local IP.
-
-These gaps are stated directly instead of hidden, so the results reflect what was actually built and verified.
-
----
-
-<a id="what-i-learned"></a>
-## 🧠 What I Learned
-
-- **A hardware limit is a decision point, not a dead end.** Choosing a documented substitution (Wazuh Cloud, one VM, host-as-agent) over repeatedly forcing a failing local setup was the single biggest factor in the week.
-- **A pre-flight check failing early is more honest than a crash later.** The installer flagging the 2GB VM before the Indexer stage was a signal to pivot, not a bug to fight through.
-- **Not every "failure" is a real event.** `ssh` to an invalid user and `su` to a non-existent account don't generate the same alert as a real authentication failure against a valid account — getting a genuine Level-9-style event took trial and error.
-- **Severity level and frequency don't always point the same way.** A Level 7 alert firing constantly turned out to be routine noise, while a single Level 9 event stood out precisely because it was rare.
-- **The FIM tab is not the whole picture.** It only ever shows rule 550; the general Threat Hunting Events view was needed to see the full spread of alert types.
-
----
-
-<a id="skills-demonstrated"></a>
-## 🛠️ Skills Demonstrated
-
-- Building and networking a VM lab under real hardware constraints (VMware Workstation, dual-adapter NAT/Host-only design)
-- Diagnosing and fixing VM networking issues (`ip link`, `dhclient`) after a rebuild
-- Recognizing a hardware ceiling early via a pre-flight check and choosing a documented, working substitution
-- Deploying Wazuh agents on both Linux and Windows endpoints and verifying Active status
-- Generating and verifying a real, MITRE-ATT&CK-mapped authentication-failure alert end to end
-- Triaging alerts by reading rule descriptions and context, not just severity level
-- Writing a transparent report that states every deviation from a brief and the reason for it
-
----
-
-<a id="screenshot-index"></a>
-## 🖼️ Screenshot Index
-
-| # | File | Shows |
-|:---:|---|---|
-| 1 | `ss-01-vm-creation-hardware-config.PNG` | VMware VM creation: Ubuntu Server 22.04.5, 2048 MB RAM, 2 CPU cores |
-| 2 | `ss-02-profile-configuration.PNG` | Guest profile configuration during VM creation |
-| 3 | `ss-03-network-config-during-install.PNG` | NAT + Host-only adapters configured during install |
-| 4 | `ss-04-ip-address-confirmation.PNG` | `ip a` confirming both interfaces up with addresses |
-| 5 | `ss-05-connectivity-test-ping.PNG` | `ping -c 4 8.8.8.8` — 0% packet loss |
-| 6 | `ss-06-snapshot-ubuntu-working-day2.PNG` | VMware snapshot `Ubuntu-Working-Day2` |
-| 7 | `ss-07-wazuh-preflight-check-fail.PNG` | Wazuh installer pre-flight check flags the 2GB VM |
-| 8 | `ss-08-wazuh-install-i-flag-bypass.PNG` | Installer re-run with `-i` to bypass the check |
-| 9 | `ss-09-wazuh-cloud-dashboard-login.PNG` | Wazuh Cloud dashboard login, no agents registered yet |
-
----
-
-<a id="repo-structure"></a>
-## 📁 Repo Structure
+<a id="structure"></a>
+## 🧭 Folder Structure
 
 ```text
-project-01-home-soc-lab-setup/
-|-- README.md
-`-- screenshots/
-    |-- ss-01-vm-creation-hardware-config.PNG
-    |-- ss-02-profile-configuration.PNG
-    |-- ss-03-network-config-during-install.PNG
-    |-- ss-04-ip-address-confirmation.PNG
-    |-- ss-05-connectivity-test-ping.PNG
-    |-- ss-06-snapshot-ubuntu-working-day2.PNG
-    |-- ss-07-wazuh-preflight-check-fail.PNG
-    |-- ss-08-wazuh-install-i-flag-bypass.PNG
-    `-- ss-09-wazuh-cloud-dashboard-login.PNG
+3-Advanced-Cyber-Projects/
+│
+├── project-01-home-soc-lab-setup/
+├── project-02-fim-custom-detection-rules/
+├── project-03-network-perimeter-defense/
+├── project-04-firewall-rules-configuration/
+├── project-05-port-scan-detection-lab/
+├── project-06-ssh-bruteforce-detection-lab/
+├── project-07-threat-intelligence-enrichment-and-vulnerability-assessment/
+├── project-08-siem-log-analysis-alert-tuning/
+├── project-09-siem-dashboard/
+├── project-10-network-traffic-analysis-wireshark/
+├── project-11-malware-analysis-incident-response/
+├── project-12-insider-threat-detection-system/
+├── project-13-soc-redvsblue-capstone/
+├── project-14-windows-event-log-analysis/
+├── project-15-dfir-disk-imaging/
+├── project-16-windows-artifacts-prefetch/
+├── project-17-browser-forensics-lnk-analysis/
+├── project-18-mantooth-investigation-registry-analysis/
+│
+└── README.md   ← you are here
 ```
 
-<div align="center">
+Inside each project folder:
 
-🛡️ **[Wazuh](https://wazuh.com)** · 🖥️ **[VMware Workstation](https://www.vmware.com/products/workstation-pro.html)** · 🐧 **[Ubuntu Server](https://ubuntu.com/server)** · 🧭 **[MITRE ATT&CK](https://attack.mitre.org)** · 🧭 **[Troubleshooting Pipeline](#troubleshooting-pipeline)**
+```text
+project-XX-name/
+├── README.md
+├── INDEX.md
+└── screenshots/
+```
 
-</div>
+---
+
+<a id="tracks"></a>
+## 🗺️ Track Map
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '15px'}, 'flowchart': {'nodeSpacing': 30, 'rankSpacing': 44, 'padding': 10}}}%%
+flowchart TB
+    ROOT(("🛡️<br/>Advanced Cyber Projects")):::root --> SOC["🔵 SOC Operations & Detection<br/>Projects 01–13"]:::blue
+    ROOT --> DFIR["🟣 Digital Forensics<br/>Projects 14–18"]:::purple
+    SOC --> S1["🧪 Lab & SIEM<br/>P01 · P02 · P08 · P09"]:::leafBlue
+    SOC --> S2["🚨 Detection & Defense<br/>P03 · P04 · P05 · P06 · P12"]:::leafBlue
+    SOC --> S3["🔎 Analysis & Intel<br/>P07 · P10 · P11 · P13"]:::leafBlue
+    DFIR --> F1["💽 Windows & Disk Forensics<br/>P14 · P15 · P16"]:::leafPurple
+    DFIR --> F2["🕵️ Investigation<br/>P17 · P18"]:::leafPurple
+    classDef root fill:#1B2A4A,stroke:#0B1A33,stroke-width:2px,color:#FFFFFF
+    classDef blue fill:#1A5276,stroke:#0B2E43,stroke-width:2px,color:#FFFFFF
+    classDef purple fill:#5B2C6F,stroke:#3B1A48,stroke-width:2px,color:#FFFFFF
+    classDef leafBlue fill:#2E86C1,stroke:#154360,stroke-width:2px,color:#FFFFFF
+    classDef leafPurple fill:#76448A,stroke:#432752,stroke-width:2px,color:#FFFFFF
+    linkStyle default stroke:#2C3E50,stroke-width:2px
+```
+<p align="center"><em>Eighteen projects across two tracks: SOC operations and detection first, then digital forensics.</em></p>
+
+---
+
+<a id="projects"></a>
+## 📋 Projects Overview
+
+### 🔵 Track 01 — SOC Operations & Detection
+
+| # | Project | Focus | Key Tools |
+|:---:|---|---|---|
+| 01 | [Home SOC Lab Setup](./project-01-home-soc-lab-setup) | VM lab, cloud Wazuh SIEM in place of a failed local install, two live agents, real failed-login alert | VMware, Ubuntu, Wazuh Cloud |
+| 02 | [Wazuh FIM & Custom Detection Rules](./project-02-fim-custom-detection-rules) | Real-time file integrity monitoring plus custom rules (account creation, SSH brute-force) | Wazuh, `wazuh-logtest`, MITRE ATT&CK |
+| 03 | [Network Perimeter Defense with pfSense](./project-03-network-perimeter-defense) | Flat lab network replaced with a pfSense gateway; remote logging verified end-to-end | pfSense, Wazuh, syslog |
+| 04 | [Firewall Rules Configuration on pfSense](./project-04-firewall-rules-configuration) | Remote syslog rule scoped to "Everything", delivery confirmed at the SIEM | pfSense, Wazuh, syslog |
+| 05 | [Port Scan Detection Lab](./project-05-port-scan-detection-lab) | Custom Suricata signature for an Nmap NULL scan, corrected and reloaded live | Suricata, Nmap |
+| 06 | [SSH BruteForce Detection Lab](./project-06-ssh-bruteforce-detection-lab) | Two custom Wazuh rules tested against real attack simulations | Wazuh, `wazuh-logtest`, MITRE ATT&CK |
+| 07 | [Threat Intelligence Enrichment & Vulnerability Assessment](./project-07-threat-intelligence-enrichment-and-vulnerability-assessment) | Live threat feed via CDB list and custom rule; 3 → 0 high-severity CVEs verified by rescan | Wazuh, VirusTotal, URLhaus |
+| 08 | [SIEM Log Analysis & Alert Tuning](./project-08-siem-log-analysis-alert-tuning) | Live SSH failures correlated with labelled, simulated Windows events; CSV report | Wazuh |
+| 09 | [Custom SOC Dashboard Design](./project-09-siem-dashboard) | Five panels, each built against a pre-written question | Wazuh Dashboard (OpenSearch) |
+| 10 | [Network Traffic Analysis (Wireshark)](./project-10-network-traffic-analysis-wireshark) | ARP, DNS, HTTP, HTTPS/TLS, ICMP — normal vs suspicious | Wireshark |
+| 11 | [Malware Analysis & Incident Response](./project-11-malware-analysis-incident-response) | njRAT and Zeus/ZeroAccess samples analysed and converted into Suricata detection logic | Kali, ANY.RUN, Suricata |
+| 12 | [Insider Threat Detection System](./project-12-insider-threat-detection-system) | Stage, obfuscate, exfiltrate, delete — reconstructed from log evidence | Kali, Wazuh, CyberChef |
+| 13 | [SOC Red vs Blue Capstone](./project-13-soc-redvsblue-capstone) | Insider-threat attack and investigation end to end, mapped to NIST IR | Kali, Wazuh Cloud, FIM |
+
+### 🟣 Track 02 — Digital Forensics
+
+| # | Project | Focus | Key Tools |
+|:---:|---|---|---|
+| 14 | [Windows Event Log Analysis](./project-14-windows-event-log-analysis) | Live Security.evtx hashed and parsed twice; human vs background-noise logon baseline | EvtxECmd |
+| 15 | [DFIR Foundations — Disk Imaging & File Systems](./project-15-dfir-disk-imaging) | E01 acquisition, NTFS ADS, MACB timestamps, deleted-file recovery | Sleuth Kit, Kali |
+| 16 | [Windows Artifacts — Prefetch, Thumbcache & Recycle Bin](./project-16-windows-artifacts-prefetch) | 362 of 363 Prefetch files parsed; Recycle Bin walked by SID | PECmd |
+| 17 | [Browser Forensics & LNK Analysis](./project-17-browser-forensics-lnk-analysis) | Chrome artefacts cross-referenced with 75 LNK files into one timeline | BrowsingHistoryView, LECmd |
+| 18 | [Mantooth Investigation & Registry Analysis Methodology](./project-18-mantooth-investigation-registry-analysis) | Autopsy fraud-case triage on `Mantooth.E01`, plus registry analysis methodology | Autopsy, FTK Imager |
+
+---
+
+<a id="highlights"></a>
+## 🌟 Project Highlights
+
+Headline numbers pulled from the individual project write-ups.
+
+| Project | Highlight |
+|:---:|---|
+| 01 | 1 VM, 2 live agents, 10 alert types triaged, all at $0 |
+| 05 | Suricata signature iterated across 2 revisions and loaded live with no service restart |
+| 07 | 20,826 URLhaus indicators loaded; high-severity CVEs closed from 3 to 0 |
+| 09 | 5 dashboard panels answering 5 pre-written questions |
+| 10 | 5 protocols captured live; 7 SOC ports documented |
+| 11 | 2 real malware samples analysed; ET ruleset of 52,725 rules loaded in Suricata |
+| 14 | 33,127 event records parsed in the second pass |
+| 15 | 500 MB image acquired as E01 and hash-verified |
+| 16 | 362 of 363 Prefetch files parsed; 149 `$R` / 74 `$I` Recycle Bin records |
+| 17 | 75 of 75 LNK files parsed with 0 errors |
+| 18 | 276 deleted files found on `Mantooth.E01` |
+
+---
+
+<a id="detections"></a>
+## 🚨 Detection Engineering Across the Series
+
+Detections written and tested along the way, each in its own project.
+
+| Project | Platform | Detection |
+|:---:|---|---|
+| 02 | Wazuh | Custom rules for local account creation and SSH brute-force |
+| 05 | Suricata | Custom signature for an Nmap NULL scan |
+| 06 | Wazuh | Rule 100001 (new user, `T1136.001`) and Rule 100002 (SSH brute-force, `T1110.001`) |
+| 07 | Wazuh | Custom rule backed by a CDB list of malicious URLs |
+| 11 | Suricata | Custom rules written from the analysed njRAT and Zeus/ZeroAccess samples |
+| 12 | Wazuh | Custom rule for the deletion stage of the insider-threat chain |
+| 13 | Wazuh | Custom rule plus a compensating log source for a deletion-detection gap |
+
+---
+
+<a id="honest-reporting"></a>
+## 🧾 Honest Reporting Across the Series
+
+A pattern runs through these projects: when something did not work as planned, it is stated in the write-up rather than smoothed over.
+
+| Project | What Was Disclosed |
+|:---:|---|
+| 01 | Local Wazuh install blocked by RAM; pivoted to Wazuh Cloud and one VM |
+| 05 | First Suricata signature under-performed; revised and re-tested live |
+| 06 | First assumption about the base rule ID was wrong; corrected using `wazuh-logtest` |
+| 08 | Windows events were simulated, and labelled as simulated |
+| 09 | 67 of 128 agents disconnected — surfaced, not filtered out |
+| 12 · 13 | Deletion-detection visibility gap diagnosed and closed with a compensating log source |
+| 14 | A screen-lock test returned a genuine absence, documented rather than fabricated |
+| 15 | Five tool substitutions, each disclosed where it was made |
+| 16 | One "no correlation found" finding reported as such |
+| 18 | One case file split into two sequential labs, kept together to preserve continuity |
+
+---
+
+<a id="skills"></a>
+## 🛠️ Skills Demonstrated
+
+### 🔵 SOC Operations & Detection
+- Building and networking a VM lab, and deploying Wazuh agents on Linux and Windows endpoints
+- Writing custom Wazuh rules and testing them with `wazuh-logtest` before trusting them
+- Writing and live-reloading custom Suricata signatures
+- Configuring a pfSense gateway and verifying syslog delivery at the SIEM
+- Enriching alerts with threat intelligence (VirusTotal, URLhaus) and verifying patches by independent rescan
+- Designing a SOC dashboard panel by panel against explicit questions
+- Reading packet captures and telling normal traffic from suspicious traffic
+- Analysing malware statically and dynamically, and turning findings into detection logic
+- Simulating and reconstructing an insider-threat attack chain, reported against NIST SP 800-61
+
+### 🟣 Digital Forensics
+- Parsing live Windows Security event logs and building a logon baseline
+- Forensic disk imaging with hash verification, and NTFS analysis (ADS, MACB timestamps, deleted-file recovery)
+- Profiling program execution from Prefetch, and reading Recycle Bin and thumbcache records
+- Reviewing Chrome artefacts and cross-referencing them with LNK files into a timeline
+- Autopsy case work on a fraud-case evidence image
+
+---
+
+<a id="tools"></a>
+## 🧰 Tools & Frameworks
+
+`Wazuh` · `OpenSearch Dashboards` · `pfSense` · `Suricata` · `Nmap` · `Wireshark` · `Kali Linux` · `VMware Workstation` · `VirtualBox` · `CyberChef` · `ANY.RUN` · `VirusTotal` · `URLhaus` · `EvtxECmd` · `PECmd` · `LECmd` · `Autopsy` · `FTK Imager` · `Sleuth Kit` · `MITRE ATT&CK` · `NIST SP 800-61`
+
+---
+
+<a id="environments"></a>
+## 🖧 Lab Environments
+
+| Area | Platform Used |
+|---|---|
+| Hypervisors | VMware Workstation (P01) and Oracle VirtualBox (P02) |
+| SIEM | Wazuh (Manager / Indexer / Dashboard) — Wazuh Cloud in P01 and P13 |
+| Firewall | pfSense Community Edition 2.7.2 (P03–P04) |
+| IDS | Suricata 8.0.6 (P05, P11) |
+| Attack / analysis host | Kali Linux (P11, P12, P13, P15) |
+| Windows evidence | Live artefacts from a personal Windows machine (P14, P16, P17) and an E01 evidence image (P18) |
+
+---
+
+<a id="reading-paths"></a>
+## 🧭 Suggested Reading Paths
+
+Short routes through the folder, depending on what you want to see.
+
+| If You Want To See | Start Here |
+|---|---|
+| Detection engineering | P02 → P05 → P06 |
+| Network defense | P03 → P04 |
+| Incident simulation end to end | P12 → P13 |
+| Windows forensics | P14 → P16 → P17 |
+| How a project is structured | P09 (short, two modules) |
+| The full build, in order | P01 → P18 |
+
+---
+
+<a id="navigate"></a>
+## 🧭 How to Navigate
+
+1. Pick a project from the [Projects Overview](#projects) tables.
+2. Open the project's `INDEX.md` for the step-by-step guide and screenshots, or its `README.md` for the full write-up.
+3. Projects are numbered in build order — the SOC lab and SIEM (P01–P02) support the detection, defense, and analysis projects that follow, and the forensics track (P14–P18) builds on the Windows artefacts from the one before it.
+
+---
+
+<a id="connect"></a>
+## 📫 Connect
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/malaika-azhar-tech)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/malaika-azhar)
+
+**Location:** Pakistan
