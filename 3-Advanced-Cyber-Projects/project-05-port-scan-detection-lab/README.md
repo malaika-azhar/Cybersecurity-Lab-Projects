@@ -2,7 +2,7 @@
 
 # 🔍 Port Scan Detection Lab
 
-**Project 07 of 29 — Advanced Cyber Projects**
+**Project 05 of 29 — Advanced Cyber Projects**
 
 Network IDS Rule Engineering (Suricata)
 

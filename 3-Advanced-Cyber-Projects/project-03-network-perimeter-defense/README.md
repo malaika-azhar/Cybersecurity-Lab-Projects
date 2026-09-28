@@ -2,7 +2,7 @@
 
 # 🌐 Network Perimeter Defense with pfSense
 
-**Project 05 of 29 — Advanced Cyber Projects**
+**Project 03 of 29 — Advanced Cyber Projects**
 
 Network Perimeter Engineering (pfSense + Wazuh)
 

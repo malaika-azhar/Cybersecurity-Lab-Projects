@@ -3,7 +3,7 @@
 
 # 🌐 Project 05 — Index
 ### Network Perimeter Defense with pfSense
-**Project 05 of 29 — Advanced Cyber Projects**
+**Project 03 of 29 — Advanced Cyber Projects**
 
 ![pfSense](https://img.shields.io/badge/Firewall-pfSense-212121?style=for-the-badge&logo=pfsense&logoColor=white)
 ![Wazuh](https://img.shields.io/badge/SIEM-Wazuh-005EB8?style=for-the-badge&logo=wazuh&logoColor=white)
