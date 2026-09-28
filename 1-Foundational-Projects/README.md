@@ -14,12 +14,62 @@
 
 ---
 
+## 📑 Table of Contents
+
+1. [About This Repository](#about)
+2. [About the Foundational Projects](#foundational)
+3. [Repository Structure](#structure)
+4. [Skill Coverage Map](#coverage)
+5. [Projects Overview](#projects)
+6. [Skills Demonstrated](#skills)
+7. [How to Navigate This Repo](#navigate)
+8. [Project Workflow](#workflow)
+9. [Topics Covered](#topics)
+10. [License](#license)
+11. [Connect](#connect)
+
+---
+
+<a id="about"></a>
 ## 📖 About This Repository
 
 A collection of **10 hands-on cybersecurity projects** covering SOC alert triage, phishing investigation, network reconnaissance, threat intelligence, vulnerability assessment, digital forensics, and network infrastructure security. Each project includes full documentation, CLI commands, and screenshots demonstrating the workflow and findings.
 
+### 🎯 What This Portfolio Demonstrates
+
+- **Investigating** — phishing emails, packet captures, Linux logs, and SIEM alerts
+- **Probing** — port scanning, password hash analysis, and vulnerability assessment
+- **Securing** — Cisco IOS routing with access control, plus VLAN segmentation
+- **Documenting** — every project records commands, evidence, and lessons learned, not just a final result
+
+### 📚 How Each Project Is Documented
+
+| File | Purpose |
+|---|---|
+| `README.md` | Full write-up: objective, steps, commands, findings, challenges, and lessons learned |
+| `INDEX.md` | Quick guide to every step and screenshot in the project |
+| `screenshots/` | Numbered evidence for each step |
+
+A one-page read of the whole portfolio is available in [`EXECUTIVE-SUMMARY.md`](./EXECUTIVE-SUMMARY.md).
+
 ---
 
+<a id="foundational"></a>
+## 🌱 About the Foundational Projects
+
+The projects in `1-Foundational-Projects/` are the **concept-building phase** of this portfolio — the stage where core cybersecurity ideas (SOC triage, network forensics, vulnerability assessment) were learned hands-on rather than just read about.
+
+| | |
+|---|---|
+| **What they are** | 10 hands-on projects across three tracks: Blue Team/SOC, offensive/recon, and network infrastructure |
+| **What they show** | Early skill-building work, with real findings, evidence, and lessons learned in each project |
+| **What they are not** | The advanced, infrastructure-focused work — that lives in a separate repo |
+
+Every project follows the same pattern (see [Project Workflow](#workflow)): scope the objective, run the technique, hit a real finding, fix or confirm it, capture evidence, and verify the result.
+
+---
+
+<a id="structure"></a>
 ## 🧭 Repository Structure
 
 ```text
@@ -76,12 +126,14 @@ cybersecurity-lab-projects/
 │       ├── INDEX.md
 │       └── screenshots/
 │
+├── EXECUTIVE-SUMMARY.md
 ├── LICENSE
 └── README.md   ← you are here
 ```
 
 ---
 
+<a id="coverage"></a>
 ## 🗺️ Skill Coverage Map
 
 ```mermaid
@@ -113,6 +165,7 @@ flowchart TB
 
 ---
 
+<a id="projects"></a>
 ## 📋 Projects Overview
 
 | # | Project | Focus Area | Key Tools |
@@ -130,6 +183,37 @@ flowchart TB
 
 ---
 
+<a id="skills"></a>
+## 🛠️ Skills Demonstrated
+
+### 🔵 Blue Team / SOC
+- Phishing analysis and IOC hunting using email headers and VirusTotal
+- Mapping a real threat (WannaCry) to MITRE ATT&CK, D3FEND, and the Pyramid of Pain
+- Packet analysis and network forensics with Wireshark
+- SIEM alert triage using Splunk
+- Log-based forensics on Linux systems with auditd
+
+### 🔴 Offensive / Recon
+- Automating reconnaissance with Python and Nmap
+- Password cracking and hash analysis with John the Ripper
+- Vulnerability scanning and reporting with Nmap, Gobuster, and GTFOBins
+
+### 🟣 Network Infrastructure
+- Secure routing on Cisco IOS
+- Network segmentation with VLANs and inter-VLAN routing
+
+---
+
+<a id="navigate"></a>
+## 🧭 How to Navigate This Repo
+
+1. Start with [`EXECUTIVE-SUMMARY.md`](./EXECUTIVE-SUMMARY.md) for a one-page overview.
+2. Use the [Projects Overview](#projects) table to jump to any project.
+3. Inside a project, open `INDEX.md` for the step-by-step guide and screenshots, or `README.md` for the full write-up.
+
+---
+
+<a id="workflow"></a>
 ## 🔄 Project Workflow (General Pattern)
 
 ```mermaid
@@ -149,12 +233,21 @@ flowchart LR
 
 ---
 
+<a id="topics"></a>
 ## 🧰 Topics Covered
 
 `SOC` · `Blue Team` · `Red Team` · `Incident Response` · `Vulnerability Assessment` · `Penetration Testing` · `Digital Forensics` · `Threat Intelligence` · `Wireshark` · `Nmap` · `Splunk` · `Cisco Networking` · `Cybersecurity`
 
 ---
 
+<a id="license"></a>
+## 📄 License
+
+This repository is released under the MIT License — see the [LICENSE](./LICENSE) file.
+
+---
+
+<a id="connect"></a>
 ## 📫 Connect
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/malaika-azhar-tech)
