@@ -389,7 +389,7 @@ These gaps are marked here instead of hidden, so the results reflect exactly wha
 ## 📁 Repo Structure
 
 ```text
-project-05-network-perimeter-defense/
+project-03-network-perimeter-defense/
 |-- README.md
 `-- screenshots/
     |-- Exhibit1_pfsense_dashboard.png
