@@ -1,7 +1,7 @@
 <a id="top"></a>
 <div align="center">
 
-# 🕵️ Project 24 — Index
+# 🕵️ Project 15 — Index
 ### DFIR Foundations — Disk Imaging & File Systems
 **Project 15 of 18 — Advanced Cyber Projects**
 
