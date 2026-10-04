@@ -457,7 +457,7 @@ Recovered orphaned MFT records; original filenames unresolved because the parent
 ## 📁 Repo Structure
 
 ```text
-project-24-dfir-disk-imaging/
+project-15-dfir-disk-imaging/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
