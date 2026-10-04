@@ -445,7 +445,7 @@ flowchart TB
 ## 📁 Repo Structure
 
 ```text
-project-20-soc-redvsblue-capstone/
+project-13-soc-redvsblue-capstone/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
