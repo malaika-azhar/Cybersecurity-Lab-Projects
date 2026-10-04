@@ -1,7 +1,7 @@
 <a id="top"></a>
 <div align="center">
 
-# ⚔️ Project 20 — Index
+# ⚔️ Project 13 — Index
 ### SOC Red vs Blue Capstone
 **Project 13 of 18 — Blue Team Internship Portfolio**
 
