@@ -1,7 +1,7 @@
 <a id="top"></a>
 <div align="center">
 
-# 🔐 Project 22 — Index
+# 🔐 Project 14 — Index
 ### Windows Event Log Analysis
 **Project 14 of 18 — Blue Team Internship Portfolio**
 
