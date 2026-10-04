@@ -1,7 +1,7 @@
 <a id="top"></a>
 <div align="center">
 
-# 🛡️ Project 04 — Index
+# 🛡️ Project 02 — Index
 ### Wazuh File Integrity Monitoring & Custom Detection Rules
 **Project 02 of 18 — Advanced Cyber Projects**
 
@@ -95,7 +95,7 @@ Exhibits 4 to 8.
 <a id="ex5"></a>
 <a href="screenshots/Exhibit5_adduser_command.png"><img src="screenshots/Exhibit5_adduser_command.png" width="280" alt="Exhibit 5"></a>
 <br><b>Exhibit 5 — adduser command</b>
-<br><sub><code>adduser cyberster_test_user</code> run on the Ubuntu endpoint</sub>
+<br><sub><code>adduser cyberster_test_user</code> run on the Wazuh server host (<code>ubuntu-wazuh-server</code>)</sub>
 </td>
 <td align="center" valign="top" width="33%">
 <a id="ex6"></a>
@@ -129,7 +129,7 @@ Exhibits 4 to 8.
 |:---:|---|---|---|:---:|:---:|
 | `100001` | Local user account creation | [T1136.001](https://attack.mitre.org/techniques/T1136/001/) | Persistence | 10 | ✅ Tested & firing |
 | `100002` | SSH brute-force | [T1110.001](https://attack.mitre.org/techniques/T1110/001/) | Credential Access | 12 | ✅ Tested & firing |
-| `100003` | External USB storage insertion | [T1200](https://attack.mitre.org/techniques/T1200/) | Initial Access | 7 | ⏳ Drafted, untested |
+| `100003` | External USB storage insertion | [T1200](https://attack.mitre.org/techniques/T1200/) | Initial Access | 7 | 📝 Written, not validated |
 
 > [!NOTE]
 > Rule 100003 is written but untested because the lab had no Windows agent.
