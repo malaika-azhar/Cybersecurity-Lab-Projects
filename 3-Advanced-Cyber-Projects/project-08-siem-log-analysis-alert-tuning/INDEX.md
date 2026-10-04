@@ -1,7 +1,7 @@
 <a id="top"></a>
 <div align="center">
 
-# 📊 Project 11 — Index
+# 📊 Project 08 — Index
 ### SIEM Log Analysis & Alert Tuning
 **Project 08 of 18 — Blue Team Internship Portfolio**
 
