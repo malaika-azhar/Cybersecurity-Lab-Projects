@@ -398,7 +398,7 @@ The rule was set to **Level 10** deliberately — an encoded file appearing in a
 ## 📁 Repo Structure
 
 ```text
-project-19-insider-threat-detection-system/
+project-12-insider-threat-detection-system/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
