@@ -371,7 +371,7 @@ LECmd.exe -d "C:\Users\hp\Downloads\LNK_Copy" --csv "C:\Users\hp\Downloads"
 ## 📁 Repo Structure
 
 ```text
-project-26-browser-forensics-lnk-analysis/
+project-17-browser-forensics-lnk-analysis/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
