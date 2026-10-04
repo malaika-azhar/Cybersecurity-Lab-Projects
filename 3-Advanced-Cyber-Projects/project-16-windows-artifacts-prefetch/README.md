@@ -56,7 +56,7 @@ PECmd Execution Profiling · Context-Based Suspicion Review · Deletion-Record R
 <a id="project-background"></a>
 ## 📖 Project Background
 
-All artefacts here were extracted live from my own personal Windows machine, continuing directly from the event-log baseline in [Project 22](../project-22-windows-event-log-analysis). This project covers program-execution history (Prefetch), thumbnail/browser cache, and Recycle Bin deletion records — three artefact categories that each persist independently of the files or sessions that generated them.
+All artefacts here were extracted live from my own personal Windows machine, continuing directly from the event-log baseline in [Project 14](../project-14-windows-event-log-analysis). This project covers program-execution history (Prefetch), thumbnail/browser cache, and Recycle Bin deletion records — three artefact categories that each persist independently of the files or sessions that generated them.
 
 | Task Block | Status | Note |
 |---|:---:|---|
@@ -402,7 +402,7 @@ flowchart TB
 ## 📁 Repo Structure
 
 ```text
-project-25-windows-artifacts-prefetch/
+project-16-windows-artifacts-prefetch/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
