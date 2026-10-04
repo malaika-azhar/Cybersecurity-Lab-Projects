@@ -406,7 +406,7 @@ These gaps are stated directly so the CSV export and findings are read for what 
 ## 📁 Repo Structure
 
 ```text
-project-11-siem-log-analysis-alert-tuning/
+project-08-siem-log-analysis-alert-tuning/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
