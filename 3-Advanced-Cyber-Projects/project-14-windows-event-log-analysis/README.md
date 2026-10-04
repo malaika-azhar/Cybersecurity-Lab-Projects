@@ -385,7 +385,7 @@ flowchart TB
 ## 📁 Repo Structure
 
 ```text
-project-22-windows-event-log-analysis/
+project-14-windows-event-log-analysis/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
