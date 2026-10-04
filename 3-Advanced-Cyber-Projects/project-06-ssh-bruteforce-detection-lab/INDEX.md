@@ -1,7 +1,7 @@
 <a id="top"></a>
 <div align="center">
 
-# 🔓 Project 08 — Index
+# 🔓 Project 06 — Index
 ### SSH BruteForce Detection Lab
 **Project 06 of 18 — Blue Team Internship Portfolio**
 
