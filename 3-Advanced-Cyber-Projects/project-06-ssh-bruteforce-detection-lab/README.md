@@ -391,7 +391,7 @@ flowchart TB
 ## 📁 Repo Structure
 
 ```text
-project-08-ssh-bruteforce-detection-lab/
+project-06-ssh-bruteforce-detection-lab/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
