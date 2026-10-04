@@ -245,7 +245,7 @@ flowchart TD
 | File Integrity Monitoring | Live | Real-time on `/etc`, notification-only on `/var/log` |
 | Detection Rules | 2 Firing | New-user creation + SSH brute-force |
 | MITRE Coverage | 2 Techniques | T1136.001 · T1110.001 |
-| Untested Rule | 1 Drafted | External storage insertion — ready, no matching endpoint yet |
+| Not Validated | 1 Written | External storage insertion — out of scope, no Windows endpoint in this lab |
 
 ---
 
@@ -365,7 +365,7 @@ All custom rules live in `local_rules.xml` on the Wazuh Manager. This file is ke
     <mitre><id>T1110.001</id></mitre>
   </rule>
 
-  <!-- RULE 3: Windows USB Insertion (drafted, pending a matching endpoint) -->
+  <!-- RULE 3: Windows USB Insertion (written only, not validated — no Windows endpoint in this lab) -->
   <rule id="100003" level="7">
     <if_sid>60001</if_sid>
     <field name="win.system.eventID">^2003$|^1006$</field>
@@ -389,7 +389,7 @@ sudo adduser cyberster_test_user
 
 <p align="center">
   <img src="screenshots/Exhibit5_adduser_command.png" alt="Exhibit 5 - adduser command" width="850"><br>
-  <em>Exhibit 5 — <code>adduser cyberster_test_user</code> executed on the Ubuntu endpoint</em>
+  <em>Exhibit 5 — <code>adduser cyberster_test_user</code> executed on the Wazuh server host (<code>ubuntu-wazuh-server</code>)</em>
 </p>
 
 ### Step 7 — Confirm Rule 100001 fires on the dashboard ✅
@@ -397,7 +397,7 @@ sudo adduser cyberster_test_user
 <p align="center">
   <img src="screenshots/Exhibit7_rule100001_alert.png" alt="Exhibit 7 - Rule 100001 alert" width="850"><br>
   <em>Exhibit 7 — Threat Hunting panel: Rule <code>100001</code> (Level 10) firing on the new-user event</em><br>
-  <sub>Alerts recorded under agent <code>wazuh-server</code></sub>
+  <sub>Alerts are recorded under agent <code>wazuh-server</code> (the manager host's own agent), because Rule 100001 was tested on the Wazuh server host. The alert text here is the earlier wording of the rule description; the final wording is in Exhibit 4.</sub>
 </p>
 
 ### Step 8 — Trigger Rule 100002 with a real SSH brute-force burst ✅
@@ -408,7 +408,7 @@ for i in {1..7}; do ssh -o ConnectTimeout=2 -o PubkeyAuthentication=no wronguser
 
 <p align="center">
   <img src="screenshots/Exhibit6_ssh_bruteforce_trigger.png" alt="Exhibit 6 - SSH brute-force trigger" width="850"><br>
-  <em>Exhibit 6 — SSH brute-force loop producing repeated "Permission denied" failures</em>
+  <em>Exhibit 6 — SSH brute-force loop producing repeated "Permission denied" failures (self-test against <code>localhost</code> on <code>ubuntu-agent</code>, so the source IP is the endpoint itself)</em>
 </p>
 
 ### Step 9 — Confirm Rule 100002 fires on the dashboard ✅
@@ -424,7 +424,7 @@ for i in {1..7}; do ssh -o ConnectTimeout=2 -o PubkeyAuthentication=no wronguser
 |:---:|---|---|:---:|:---:|
 | 100001 | Local user account creation | T1136.001 — Create Account: Local Account | 10 | ✅ Tested & Firing |
 | 100002 | SSH brute-force detection | T1110.001 — Brute Force: Password Guessing | 12 | ✅ Tested & Firing |
-| 100003 | External storage insertion | T1200 — Hardware Additions | 7 | ⏳ Drafted, pending endpoint |
+| 100003 | External storage insertion | T1200 — Hardware Additions | 7 | 📝 Written, not validated |
 
 ### 🔧 Rule Tuning Notes
 
@@ -444,7 +444,7 @@ for i in {1..7}; do ssh -o ConnectTimeout=2 -o PubkeyAuthentication=no wronguser
 **Rule 100003 — USB storage insertion (not tested)**
 
 - Written and added to `local_rules.xml`, but never simulated. The lab had no Windows agent.
-- It stays marked as untested until a Windows host is attached.
+- It is out of scope for this project, so it is not counted in the results and stays marked as not validated.
 
 ---
 
@@ -468,7 +468,7 @@ flowchart LR
     subgraph RUL["Custom Rule"]
         R1["100001<br/>✅ Tested"]
         R2["100002<br/>✅ Tested"]
-        R3["100003<br/>⏳ Drafted"]
+        R3["100003<br/>📝 Written only"]
     end
     PER --> T1 --> R1
     CRA --> T2 --> R2
@@ -521,6 +521,7 @@ Mapping every rule this way also lets a SOC build a technique-coverage heatmap l
 - **No Windows agent:** The lab never had a Windows endpoint. Rule 100003 is written but untested.
 - **Windows FIM not deployed:** A Windows syscheck block for `C:\Windows\System32` was written as a plan only. It was never deployed or checked on a live endpoint, so it is not part of the results above.
 - **Lab size:** Two VMs only — one Wazuh Manager and one Ubuntu agent.
+- **Test hosts:** Rule 100001 was tested on the Wazuh server host and Rule 100002 on `ubuntu-agent`. The SSH test was a self-test against `localhost`, not traffic from an external source.
 
 These gaps are marked in the project instead of being hidden, so the results show what was actually tested.
 
@@ -568,7 +569,7 @@ These gaps are marked in the project instead of being hidden, so the results sho
 ## 📁 Repo Structure
 
 ```text
-project-04-fim-custom-detection-rules/
+project-02-fim-custom-detection-rules/
 |-- README.md
 `-- screenshots/
     |-- Exhibit1_FIM_syscheck_config.png
