@@ -1,7 +1,7 @@
 <a id="top"></a>
 <div align="center">
 
-# 🌐 Project 05 — Index
+# 🌐 Project 03 — Index
 ### Network Perimeter Defense with pfSense
 **Project 03 of 18 — Advanced Cyber Projects**
 
