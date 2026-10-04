@@ -459,7 +459,7 @@ flowchart TB
 ## 📁 Repo Structure
 
 ```text
-project-28-mantooth-investigation-registry-analysis/
+project-18-mantooth-investigation-registry-analysis/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
