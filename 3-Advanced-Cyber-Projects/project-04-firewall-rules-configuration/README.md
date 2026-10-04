@@ -368,7 +368,7 @@ These gaps are marked here instead of hidden, so the results reflect exactly wha
 ## 📁 Repo Structure
 
 ```text
-project-06-firewall-rules-configuration/
+project-04-firewall-rules-configuration/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
