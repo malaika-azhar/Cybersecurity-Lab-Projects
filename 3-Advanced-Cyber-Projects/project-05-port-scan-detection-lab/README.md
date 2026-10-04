@@ -365,7 +365,7 @@ A NULL scan is reconnaissance, not exploitation — the technique maps to the Di
 ## 📁 Repo Structure
 
 ```text
-project-07-port-scan-detection-lab/
+project-05-port-scan-detection-lab/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
