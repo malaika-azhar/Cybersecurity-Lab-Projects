@@ -331,7 +331,7 @@ flowchart TB
 ## 📁 Repo Structure
 
 ```text
-project-13-network-traffic-analysis-wireshark/
+project-10-network-traffic-analysis-wireshark/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
