@@ -1,7 +1,7 @@
 <a id="top"></a>
 <div align="center">
 
-# 🦈 Project 13 — Index
+# 🦈 Project 10 — Index
 ### Network Traffic Analysis (Wireshark)
 **Project 10 of 18 — Blue Team Internship Portfolio**
 
