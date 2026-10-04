@@ -1,7 +1,7 @@
 <a id="top"></a>
 <div align="center">
 
-# 🕵️ Project 19 — Index
+# 🕵️ Project 12 — Index
 ### Insider Threat Detection System
 **Project 12 of 18 — Advanced Cyber Projects**
 
