@@ -1,7 +1,7 @@
 <a id="top"></a>
 <div align="center">
 
-# 📊 Project 12 — Index
+# 📊 Project 09 — Index
 ### Custom SOC Dashboard Design
 **Project 09 of 18 — Advanced Cyber Projects**
 
