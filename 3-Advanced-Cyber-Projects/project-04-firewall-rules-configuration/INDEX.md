@@ -1,7 +1,7 @@
 <a id="top"></a>
 <div align="center">
 
-# 🔥 Project 06 — Index
+# 🔥 Project 04 — Index
 ### Firewall Rules Configuration on pfSense
 **Project 04 of 18 — Advanced Cyber Projects**
 
