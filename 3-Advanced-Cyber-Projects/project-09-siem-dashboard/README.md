@@ -319,7 +319,7 @@ flowchart TB
 ## 📁 Repo Structure
 
 ```text
-project-12-siem-dashboard/
+project-09-siem-dashboard/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
