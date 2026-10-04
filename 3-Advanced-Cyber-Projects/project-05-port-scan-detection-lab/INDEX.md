@@ -1,7 +1,7 @@
 <a id="top"></a>
 <div align="center">
 
-# 🔍 Project 07 — Index
+# 🔍 Project 05 — Index
 ### Port Scan Detection Lab
 **Project 05 of 18 — Advanced Cyber Projects**
 
