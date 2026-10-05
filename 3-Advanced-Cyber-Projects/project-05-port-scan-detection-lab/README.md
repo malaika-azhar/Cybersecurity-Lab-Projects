@@ -1,19 +1,19 @@
 <div align="center">
 
-# 🔍 Port Scan Detection Lab
+# 🔍 Suricata Custom Rule Detection Lab
 
 **Project 05 of 18 — Advanced Cyber Projects**
 
 Network IDS Rule Engineering (Suricata)
 
 ![Suricata](https://img.shields.io/badge/IDS-Suricata-CC0000?style=for-the-badge&logo=suricata&logoColor=white)
-![Kali](https://img.shields.io/badge/Attacker-Kali_Linux-557C94?style=for-the-badge&logo=kalilinux&logoColor=white)
-![MITRE ATT&CK](https://img.shields.io/badge/MITRE_ATT%26CK-T1046-C8102E?style=for-the-badge)
-![Detection Engineering](https://img.shields.io/badge/Focus-Signature_Iteration-6f42c1?style=for-the-badge)
+![Kali](https://img.shields.io/badge/Sensor-Kali_Linux-557C94?style=for-the-badge&logo=kalilinux&logoColor=white)
+![MITRE ATT&CK](https://img.shields.io/badge/MITRE_ATT%26CK-T1046_%C2%B7_T1498-C8102E?style=for-the-badge)
+![Detection Engineering](https://img.shields.io/badge/Focus-Custom_Signatures-6f42c1?style=for-the-badge)
 ![Cost](https://img.shields.io/badge/Cost-Free_%26_Open--Source-2ea44f?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
 
-A custom Suricata signature written to detect a stealth Nmap NULL scan — tested against real scan traffic, corrected after its first form under-performed, and pushed live into a running sensor without a service restart.
+Two custom Suricata signatures — one for a stealth Nmap NULL port scan, one for an ICMP flood — loaded into a running sensor with a live reload and proven against real generated traffic in `fast.log`.
 
 ### [📑 Open the visual index](INDEX.md)
 
@@ -27,10 +27,10 @@ A custom Suricata signature written to detect a stealth Nmap NULL scan — teste
 2. [Project Background](#project-background)
 3. [Environment](#environment)
 4. [Project Flow](#project-flow)
-5. [Module 1 — Signature Authoring & Iteration](#module-1)
+5. [Module 1 — Sensor Setup & Rule Authoring](#module-1)
 6. [Coverage Snapshot](#coverage-snapshot)
 7. [Detection Pipeline](#detection-pipeline)
-8. [Module 2 — Live Verification & Reload](#module-2)
+8. [Module 2 — Live Reload & Verification](#module-2)
 9. [MITRE ATT&CK Mapping](#mitre-mapping)
 10. [Project Summary](#project-summary)
 11. [Challenges & Fixes](#challenges-fixes)
@@ -45,22 +45,22 @@ A custom Suricata signature written to detect a stealth Nmap NULL scan — teste
 <a id="at-a-glance"></a>
 ## 📊 At a Glance
 
-| 🧩 Modules | 🖼️ Screenshots | 📜 Signature Revisions | 🎯 MITRE Techniques |
+| 🧩 Modules | 🖼️ Screenshots | 📜 Custom Rules | 🎯 MITRE Techniques |
 |:---:|:---:|:---:|:---:|
-| **2** | **4** | **2 (iterated live)** | **1** |
+| **2** | **6** | **2** | **2** |
 
 ---
 
 <a id="project-background"></a>
 ## 📖 Project Background
 
-A NULL scan sends TCP packets with every control flag cleared — real TCP communication always sets at least one flag, so a completely flagless packet is not something a legitimate client ever produces. It is a fingerprint of a stealth scanning tool deliberately probing port state without completing a handshake. This project writes a signature to catch exactly that pattern, then proves the signature works against real generated traffic rather than trusting it on the strength of its syntax alone.
+A network IDS is only as useful as the rules it runs. Default rulesets cover known malware and exploits, but a SOC analyst also needs to write rules for behaviour the default set does not cover. This project writes two signatures from scratch and then proves each one works against real traffic generated in the lab, rather than trusting it on the strength of its syntax alone.
 
-- **Module 1 — Signature Authoring & Iteration:** Update the ruleset, author the detection logic, and correct it after the first form failed to reliably fire.
-- **Module 2 — Live Verification & Reload:** Trigger a real scan, confirm the alert in the sensor's own log, and push the corrected rule into a running sensor without any capture downtime.
+- **NULL scan (port scan):** A NULL scan sends TCP packets with every control flag cleared. Real TCP communication always sets at least one flag, so a completely flagless packet is the fingerprint of a stealth scanning tool such as Nmap probing port state.
+- **ICMP flood:** A single ping is normal diagnostics. What marks a flood is the rate, so this rule alerts on volume per source instead of on the packet type.
 
-> [!NOTE]
-> The first version of this signature looked more precise on paper than the version that actually worked. Both are documented here, because understanding *why* the more deliberate-looking syntax under-performed is itself part of the detection-engineering skill.
+- **Module 1 — Sensor Setup & Rule Authoring:** Bind Suricata to the lab interface, confirm the service runs, update the ruleset, and author the two custom signatures.
+- **Module 2 — Live Reload & Verification:** Push the rules into the running sensor without a restart, then trigger each one with real traffic and confirm the alert in `fast.log`.
 
 <div align="center">
 
@@ -72,8 +72,8 @@ A NULL scan sends TCP packets with every control flag cleared — real TCP commu
 
 ![Kali](https://img.shields.io/badge/Kali_Linux-557C94?style=for-the-badge&logo=kalilinux&logoColor=white)
 
-**Scanning Source**<br>
-<sub><code>nmap -sN</code><br>Stealth NULL scan</sub>
+**Traffic Source**<br>
+<sub><code>nmap -sN</code> scan<br>and ICMP echo flood</sub>
 
 </td>
 <td align="center" valign="middle" width="10%">
@@ -86,7 +86,7 @@ A NULL scan sends TCP packets with every control flag cleared — real TCP commu
 ![Suricata](https://img.shields.io/badge/Suricata-CC0000?style=for-the-badge&logo=suricata&logoColor=white)
 
 **Detection Engine**<br>
-<sub>Custom rule in<br><code>local.rules</code></sub>
+<sub>Custom rules in<br><code>local.rules</code></sub>
 
 </td>
 <td align="center" valign="middle" width="10%">
@@ -112,12 +112,13 @@ A NULL scan sends TCP packets with every control flag cleared — real TCP commu
 
 | Item | Value |
 |---|---|
-| **IDS Platform** | Suricata 8.0.6 RELEASE |
+| **IDS Platform** | Suricata 8.0.6 RELEASE, run as a systemd service |
+| **Sensor Host** | Kali Linux VM (VirtualBox), Host-Only lab network `192.168.56.0/24` |
 | **Capture Interface** | `eth0` (af-packet) |
 | **Rule File** | `/etc/suricata/rules/local.rules` |
 | **Alert Log** | `/var/log/suricata/fast.log` |
 | **Reload Method** | `suricatasc -c reload-rules` (live, no restart) |
-| **Scan Tool** | Nmap — `nmap -sN` (TCP NULL scan) |
+| **Traffic Tools** | Nmap (`-sN` NULL scan), ICMP echo flood from a second lab VM (`192.168.56.103`) |
 
 ---
 
@@ -135,66 +136,77 @@ A NULL scan sends TCP packets with every control flag cleared — real TCP commu
   'titleColor':'#1B2A4A', 'fontSize':'16px'
 }}}%%
 gantt
-    title Project Flow — Signature Draft to Live-Verified Rule
+    title Project Flow — Sensor Setup to Live-Verified Rules
     dateFormat YYYY-MM-DD
     axisFormat %b %d
-    section Signature Authoring
-    Update Ruleset & Author Detection Logic   :active, 2026-07-18, 1d
-    section Iteration
-    Diagnose Non-Firing Revision & Correct    :done, 2026-07-18, 1d
+    section Sensor Setup
+    Configure af-packet & Start Suricata     :active, 2026-07-18, 1d
+    section Rule Authoring
+    Update Ruleset & Write Custom Rules      :done, 2026-07-18, 1d
     section Verification
-    Trigger Real Scan & Reload Live           :crit, 2026-07-18, 1d
+    Live Reload, NULL Scan & ICMP Flood Tests :crit, 2026-07-18, 2d
 ```
 <p align="center"><em>Colors distinguish each project stage — all stages complete.</em></p>
 
 ---
 
 <a id="module-1"></a>
-## 🔵 Module 1 — Signature Authoring & Iteration
+## 🔵 Module 1 — Sensor Setup & Rule Authoring
 
-**Objective:** Update Suricata's ruleset against the latest Emerging Threats Open feed, then author a signature that matches the specific packet-level fingerprint of a stealth NULL scan.
+**Objective:** Get a working Suricata sensor on the lab network, bring its ruleset up to date, and author two signatures that match specific traffic fingerprints.
 
-### Step 1 — Update the ruleset ✅
+### Step 1 — Bind Suricata to the lab interface ✅
+
+The Host-Only interface was identified with `ip a` and written into the `af-packet` section of `suricata.yaml`.
+
+<p align="center">
+  <img src="screenshots/Exhibit1_af_packet_capture_config.png" alt="Exhibit 1 - af-packet capture configuration" width="850"><br>
+  <em>Exhibit 1 — <code>suricata.yaml</code> <code>af-packet</code> section with <code>interface: eth0</code>, the Host-Only lab interface</em>
+</p>
+
+### Step 2 — Start the service ✅
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now suricata
+sudo systemctl status suricata
+```
+
+<p align="center">
+  <img src="screenshots/Exhibit2_suricata_service_running.png" alt="Exhibit 2 - Suricata service active" width="850"><br>
+  <em>Exhibit 2 — <code>systemctl status suricata</code> showing <b>active (running)</b>, Suricata 8.0.6 RELEASE, started with <code>--af-packet</code></em>
+</p>
+
+### Step 3 — Update the ruleset ✅
 
 ```bash
 sudo suricata-update
 ```
 
 <p align="center">
-  <img src="screenshots/Exhibit1_suricata_update_clean_run.png" alt="Exhibit 1 - suricata-update clean run" width="850"><br>
-  <em>Exhibit 1 — Clean <code>suricata-update</code> run confirming the remote checksum was successfully verified against the Emerging Threats Open ruleset</em>
+  <img src="screenshots/Exhibit3_suricata_update_run.png" alt="Exhibit 3 - suricata-update run" width="850"><br>
+  <em>Exhibit 3 — <code>suricata-update</code> run against Emerging Threats Open, reporting the remote checksum has not changed (ruleset already current)</em>
 </p>
 
-### Step 2 — Author the detection logic ✅
+### Step 4 — Author the custom signatures ✅
+
+Both rules live in `/etc/suricata/rules/local.rules`.
+
+**`sid:9000001` — Nmap NULL scan**
 
 ```text
 alert tcp any any -> any any (msg:"CUSTOM Nmap NULL Scan Detected"; flags:0; sid:9000001; rev:3;)
 ```
 
-The `flags:0` bitmask matches a TCP packet where every control flag byte evaluates to a clean zero — the exact fingerprint of a NULL scan probe, since a legitimate handshake always sets at least one flag.
+The `flags:0` match fires on a TCP packet where every control flag is zero — the fingerprint of a NULL scan probe, since a legitimate handshake always sets at least one flag.
 
-### 🔍 Iteration Note — Why the More Deliberate Syntax Under-performed
+**`sid:9000003` — ICMP flood**
 
-```mermaid
-flowchart TD
-    A["✍️ Rev 1/2 — Negated flag list<br/>flags:!FSRPAU"] --> B{"Fires reliably against<br/>real NULL scan traffic?"}
-    B -->|No| C["🔎 Diagnose: raw engine parsing<br/>favors the plain bitmask form"]
-    C --> D["✍️ Rev 3 — Bitmask form<br/>flags:0"]
-    D --> E{"Fires reliably?"}
-    E -->|Yes| F["✅ Documented as the<br/>working, final signature"]
-
-    classDef draft fill:#fff4e5,stroke:#e08a00,stroke-width:2px,color:#000
-    classDef decision fill:#f1ecfb,stroke:#6f42c1,stroke-width:2px,color:#000
-    classDef bad fill:#fdeaea,stroke:#C8102E,stroke-width:2px,color:#000
-    classDef good fill:#eef7ee,stroke:#2ea44f,stroke-width:2px,color:#000
-    class A draft
-    class B,E decision
-    class C bad
-    class D draft
-    class F good
+```text
+alert icmp any any -> any any (msg:"CUSTOM ICMP Flood Detected"; icode:0; itype:8; threshold:type threshold, track by_src, count 20, seconds 5; sid:9000003; rev:1;)
 ```
 
-The first instinct was that explicitly excluding every named flag (`flags:!FSRPAU`) would be a more precise match than the bare zero-value shorthand. In practice, the plain bitmask form (`flags:0`) is what the engine matched reliably. This is recorded rather than hidden, because a signature that *looks* more precise is not the same as a signature that *fires* correctly — the only way to know is to generate the real traffic and check the log.
+The rule matches ICMP echo requests (type 8, code 0) and alerts when one source sends 20 of them within 5 seconds. A lower count would fire on ordinary ping bursts; a much higher one would let a real flood consume bandwidth before detection.
 
 ---
 
@@ -203,26 +215,27 @@ The first instinct was that explicitly excluding every named flag (`flags:!FSRPA
 
 | 🛡️ Layer | ✅ Status | 📌 Detail |
 |---|---|---|
-| Ruleset Currency | Updated | Emerging Threats Open, checksum verified |
-| Signature Authored | Complete | `sid:9000001` — NULL scan bitmask match |
-| Live Traffic Test | Fired | Real `nmap -sN` scan against the monitored host |
-| Live Reload | Confirmed | Pushed via `suricatasc`, zero capture downtime |
+| Sensor | Running | Suricata 8.0.6, af-packet on `eth0` |
+| Ruleset Currency | Updated | Emerging Threats Open, remote checksum unchanged |
+| Port Scan Detection | Fired | `sid:9000001` on a real `nmap -sN` scan |
+| Flood Detection | Fired | `sid:9000003` on ICMP echo traffic from `192.168.56.103` |
+| Live Reload | Confirmed | Pushed via `suricatasc`, no service restart |
 
 ---
 
 <a id="detection-pipeline"></a>
 ## 🧭 Detection Pipeline
 
-How a scan packet becomes a verified, reloadable signature
+How a packet becomes a verified, reloadable signature
 
 ```mermaid
 flowchart TB
-    Packet["📥 TCP PACKET, ALL FLAGS CLEARED"]:::packetClass
+    Packet["📥 NULL-SCAN OR ICMP ECHO PACKET"]:::packetClass
     Capture["🌐 CAPTURED ON ETH0 (AF-PACKET)"]:::captureClass
-    Match["🎯 MATCHED AGAINST FLAGS:0"]:::matchClass
+    Match["🎯 MATCHED AGAINST LOCAL.RULES"]:::matchClass
     Fire["🚨 SIGNATURE FIRES"]:::fireClass
     Log["📝 WRITTEN TO FAST.LOG"]:::logClass
-    Verify["🧪 VERIFIED AGAINST REAL SCAN"]:::verifyClass
+    Verify["🧪 VERIFIED AGAINST REAL TRAFFIC"]:::verifyClass
     Reload["🔄 PUSHED LIVE, NO RESTART"]:::reloadClass
 
     Packet --> Capture --> Match --> Fire --> Log --> Verify --> Reload
@@ -241,33 +254,11 @@ flowchart TB
 ---
 
 <a id="module-2"></a>
-## 🟢 Module 2 — Live Verification & Reload
+## 🟢 Module 2 — Live Reload & Verification
 
-**Objective:** Trigger the signature with a real scan, confirm the exact alert in the sensor's own log, document the rationale behind the detection logic, and push the corrected rule into a running sensor without interrupting capture.
+**Objective:** Load the rules into the running sensor without interrupting capture, then trigger each signature with real traffic and confirm the exact alert in the sensor's own log.
 
-### Step 3 — Trigger a real NULL scan ✅
-
-```bash
-nmap -sN 192.168.56.107
-```
-
-### Step 4 — Confirm the signature fires in fast.log ✅
-
-<p align="center">
-  <img src="screenshots/Exhibit2_nmap_null_scan_alert_firing.png" alt="Exhibit 2 - NULL scan alert firing" width="850"><br>
-  <em>Exhibit 2 — <code>fast.log</code> confirming <b>CUSTOM Nmap NULL Scan Detected</b> firing against the live scan, classified as an Attempted Information Leak</em>
-</p>
-
-### Step 5 — Document the detection rationale ✅
-
-Each rule was documented with the threat scenario, the exact traffic characteristic matched, and any adjustment made after the first test — so the signature is self-explanatory to anyone reviewing it later.
-
-<p align="center">
-  <img src="screenshots/Exhibit3_rule_explanation_document.png" alt="Exhibit 3 - Rule explanation document" width="850"><br>
-  <em>Exhibit 3 — Written rule-explanation report covering threat scenario, traffic characteristic matched, and technical adjustments applied during testing</em>
-</p>
-
-### Step 6 — Reload the corrected rule into a running sensor ✅
+### Step 5 — Reload the rules into the running sensor ✅
 
 ```bash
 sudo nano /etc/suricata/rules/local.rules
@@ -275,17 +266,39 @@ sudo suricatasc -c reload-rules
 ```
 
 <p align="center">
-  <img src="screenshots/Exhibit4_live_rule_reload_confirmation.png" alt="Exhibit 4 - Live rule reload confirmation" width="850"><br>
-  <em>Exhibit 4 — Live rule reload via the Suricata socket control interface, confirming <code>{"message":"done","return":"OK"}</code> with no reload errors</em>
+  <img src="screenshots/Exhibit4_live_rule_reload_confirmation.png" alt="Exhibit 4 - Live rule reload confirmation" width="600"><br>
+  <em>Exhibit 4 — Live rule reload via the Suricata socket control interface, confirming <code>{"message":"done","return":"OK"}</code></em>
 </p>
 
-🎯 **Result:** The signature was corrected and pushed into a live sensor without a single service restart — an operationally significant distinction, since restarting a network sensor even briefly creates a genuine blind window in a production SOC.
+A restart would create a short capture blind window. The socket reload applies new rules while the sensor keeps capturing.
+
+### Step 6 — Trigger a real NULL scan and confirm the alert ✅
+
+```bash
+nmap -sN 192.168.56.107
+```
+
+<p align="center">
+  <img src="screenshots/Exhibit5_null_scan_alert_firing.png" alt="Exhibit 5 - NULL scan alerts in fast.log" width="850"><br>
+  <em>Exhibit 5 — <code>fast.log</code> filtered on <code>9000001</code>: <b>CUSTOM Nmap NULL Scan Detected</b> (<code>[1:9000001:3]</code>) firing repeatedly from source port 45647 against different destination ports of <code>192.168.56.107</code></em>
+</p>
+
+The alerts arrive within milliseconds of each other on one source port and many destination ports, which is the pattern a port scan produces.
+
+### Step 7 — Trigger an ICMP flood and confirm the alert ✅
+
+<p align="center">
+  <img src="screenshots/Exhibit6_icmp_flood_alert_firing.png" alt="Exhibit 6 - ICMP flood alerts in fast.log" width="850"><br>
+  <em>Exhibit 6 — <code>fast.log</code> showing repeated <b>CUSTOM ICMP Flood Detected</b> (<code>[1:9000003:1]</code>) alerts, ICMP type 8 from <code>192.168.56.103</code> to <code>192.168.56.107</code></em>
+</p>
+
+🎯 **Result:** Both custom signatures fired on real traffic and were logged with their SID and revision, after being loaded into a live sensor with no service restart.
 
 | Check | Method | Outcome |
 |---|---|---|
-| Signature fires on real traffic | `fast.log` after live scan | ✅ Confirmed |
-| Reload applied without downtime | `suricatasc -c reload-rules` | ✅ Confirmed, no restart |
-| Rationale documented | Written explanation report | ✅ Confirmed |
+| NULL scan signature fires | `fast.log` after live `nmap -sN` | ✅ Confirmed (`9000001`, rev 3) |
+| ICMP flood signature fires | `fast.log` after ICMP echo flood | ✅ Confirmed (`9000003`, rev 1) |
+| Reload applied without restart | `suricatasc -c reload-rules` | ✅ Confirmed (`"return":"OK"`) |
 
 ---
 
@@ -295,8 +308,9 @@ sudo suricatasc -c reload-rules
 | Signature | Detects | Technique | Tactic |
 |:---:|---|---|---|
 | `sid:9000001` | TCP NULL scan (all control flags cleared) | [T1046](https://attack.mitre.org/techniques/T1046/) — Network Service Discovery | Discovery |
+| `sid:9000003` | ICMP echo flood (20 hits in 5 s per source) | [T1498](https://attack.mitre.org/techniques/T1498/) — Network Denial of Service | Impact |
 
-A NULL scan is reconnaissance, not exploitation — the technique maps to the Discovery tactic because the attacker is enumerating live services and port state before deciding where to focus a follow-on attack.
+A NULL scan is reconnaissance, so it maps to Discovery: the attacker is enumerating port state before choosing a target. A flood aims to exhaust the target's resources, so it maps to Impact.
 
 ---
 
@@ -305,8 +319,8 @@ A NULL scan is reconnaissance, not exploitation — the technique maps to the Di
 
 | Module | Tooling | Key Finding |
 |---|---|---|
-| Signature Authoring & Iteration | `suricata-update`, `local.rules` | Bitmask form (`flags:0`) fired reliably where a negated flag list did not |
-| Live Verification & Reload | `nmap -sN`, `fast.log`, `suricatasc` | Real scan confirmed detected; corrected rule pushed live with zero downtime |
+| Sensor Setup & Rule Authoring | `suricata.yaml`, `suricata-update`, `local.rules` | Sensor bound to `eth0`, ruleset current, two custom signatures written |
+| Live Reload & Verification | `suricatasc`, `nmap -sN`, `fast.log` | Rules loaded live; both signatures confirmed firing on real traffic |
 
 ---
 
@@ -315,37 +329,40 @@ A NULL scan is reconnaissance, not exploitation — the technique maps to the Di
 
 | ❌ Challenge | ✅ Fix |
 |---|---|
-| The negated flag list (`flags:!FSRPAU`) looked more precise but did not reliably fire against real scan traffic | Diagnosed against live traffic and corrected to the simpler bitmask form (`flags:0`) |
-| A full sensor restart would create a capture blind window while testing corrections | Used the Suricata socket control interface (`suricatasc reload-rules`) to push changes into a running sensor |
+| A wrong `af-packet` interface leaves Suricata running healthy but blind, with an empty `fast.log` | Confirmed the real lab interface with `ip a` before writing it into `suricata.yaml` |
+| A full sensor restart creates a capture blind window while testing rules | Used the Suricata socket interface (`suricatasc -c reload-rules`) to push rules into the running sensor |
+| An ICMP rule that alerts per packet would fire on normal pings | Added a per-source threshold (20 hits in 5 s) so only rate, not the packet type, triggers the alert |
 
 ---
 
 <a id="scope-limitations"></a>
 ## 🚧 Scope & Limitations
 
-- **Single scan type:** This signature targets the NULL scan flag pattern specifically. Other stealth scan types (FIN, Xmas) would need their own signatures with different flag matches.
-- **IDS mode, not IPS:** The sensor observes and logs matching traffic; it does not block the scan itself.
-- **Lab-generated traffic only:** Verification is against a controlled `nmap -sN` run in the lab, not production network noise.
+- **Two signatures proven:** `sid:9000001` and `sid:9000003` have alert evidence in this project. Other stealth scan types (FIN, Xmas) would need their own flag matches.
+- **Rule text is documented, alerts are screenshotted:** The exhibits show the alerts with SID and revision. The rule text above is the version recorded in the internship Week 3 report, and the rule file itself is not shown on screen.
+- **IDS mode, not IPS:** The sensor observes and logs matching traffic. It does not block it.
+- **Lab-generated traffic only:** Verification uses controlled traffic in the lab, not production network noise.
 
 ---
 
 <a id="what-i-learned"></a>
 ## 🧠 What I Learned
 
-- **Syntax that looks more precise is not automatically more correct.** The negated flag list was a reasonable first instinct, but the plain bitmask form is what the engine actually matched reliably against real traffic.
-- **A signature is only proven by generating the real attack it targets.** Reading the rule syntax back to confirm it "looks right" is not a substitute for triggering it.
-- **Live reload is an operational skill, not just a convenience.** Pushing a correction into a running sensor without a restart avoids creating the exact blind window a network IDS exists to eliminate.
+- **A signature is only proven by generating the real traffic it targets.** A rule that parses without errors is not the same as a rule that fires; the check is always the log.
+- **Rate-based rules need a threshold, not just a match.** An ICMP echo is harmless alone, so the detection has to count per source over a time window.
+- **Live reload is an operational skill.** Pushing rules into a running sensor avoids the blind window a restart creates.
+- **A healthy service does not mean a working sensor.** Suricata reports running even on the wrong interface, so the capture interface has to be verified against `ip a`.
 
 ---
 
 <a id="skills-demonstrated"></a>
 ## 🛠️ Skills Demonstrated
 
-- Authoring Suricata detection signatures from a raw threat scenario
-- Diagnosing a non-firing rule against real triggered traffic rather than assuming syntax correctness
+- Configuring Suricata capture (`af-packet`) and running it as a service
+- Authoring custom Suricata signatures, including a threshold-based rate rule
+- Validating detections against real triggered traffic and reading `fast.log`
 - Using the Suricata socket control interface for live rule reloads
-- Mapping a reconnaissance-stage detection to its correct MITRE ATT&CK tactic
-- Documenting rule rationale for future review, not just the final working syntax
+- Mapping detections to MITRE ATT&CK techniques and tactics
 
 ---
 
@@ -354,10 +371,12 @@ A NULL scan is reconnaissance, not exploitation — the technique maps to the Di
 
 | # | File | Shows |
 |:---:|---|---|
-| 1 | `Exhibit1_suricata_update_clean_run.png` | Clean `suricata-update` run, checksum verified |
-| 2 | `Exhibit2_nmap_null_scan_alert_firing.png` | `fast.log` confirming the signature firing on a real scan |
-| 3 | `Exhibit3_rule_explanation_document.png` | Written rationale covering threat scenario and adjustments |
-| 4 | `Exhibit4_live_rule_reload_confirmation.png` | Live rule reload via `suricatasc`, no restart required |
+| 1 | `Exhibit1_af_packet_capture_config.png` | `af-packet` section of `suricata.yaml`, `interface: eth0` |
+| 2 | `Exhibit2_suricata_service_running.png` | Suricata 8.0.6 `active (running)` |
+| 3 | `Exhibit3_suricata_update_run.png` | `suricata-update` run, ruleset current |
+| 4 | `Exhibit4_live_rule_reload_confirmation.png` | Live reload via `suricatasc`, no restart |
+| 5 | `Exhibit5_null_scan_alert_firing.png` | `fast.log` showing `sid:9000001` firing on a NULL scan |
+| 6 | `Exhibit6_icmp_flood_alert_firing.png` | `fast.log` showing `sid:9000003` firing on an ICMP flood |
 
 ---
 
@@ -365,14 +384,16 @@ A NULL scan is reconnaissance, not exploitation — the technique maps to the Di
 ## 📁 Repo Structure
 
 ```text
-project-05-port-scan-detection-lab/
+project-05-suricata-custom-rule-detection-lab/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
-    |-- Exhibit1_suricata_update_clean_run.png
-    |-- Exhibit2_nmap_null_scan_alert_firing.png
-    |-- Exhibit3_rule_explanation_document.png
-    `-- Exhibit4_live_rule_reload_confirmation.png
+    |-- Exhibit1_af_packet_capture_config.png
+    |-- Exhibit2_suricata_service_running.png
+    |-- Exhibit3_suricata_update_run.png
+    |-- Exhibit4_live_rule_reload_confirmation.png
+    |-- Exhibit5_null_scan_alert_firing.png
+    `-- Exhibit6_icmp_flood_alert_firing.png
 ```
 
 <div align="center">
