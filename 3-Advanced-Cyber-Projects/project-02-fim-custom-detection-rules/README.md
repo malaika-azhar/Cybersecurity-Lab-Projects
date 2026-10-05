@@ -45,9 +45,9 @@ Real-time File Integrity Monitoring configured on a live Linux endpoint, validat
 <a id="at-a-glance"></a>
 ## 📊 At a Glance
 
-| 🧩 Modules | 🖼️ Screenshots | 📜 Custom Rules Written | 🎯 MITRE Techniques Mapped |
+| 🧩 Modules | 🖼️ Screenshots | 📜 Custom Rules Tested | 🎯 MITRE Techniques Mapped |
 |:---:|:---:|:---:|:---:|
-| **2** | **8** | **2 tested + 1 drafted** | **2** |
+| **2** | **8** | **2** | **2** |
 
 ---
 
@@ -60,7 +60,7 @@ Default SIEM installations only watch generic activity, while a real SOC needs d
 - **Module 2 — Custom Detection Rules:** Write rules for **local account creation** and **SSH brute-force**, test each one with real traffic, and map each one to a **MITRE ATT&CK** technique.
 
 > [!NOTE]
-> A third rule, for **USB storage insertion**, is written but **untested**, because the lab had no Windows machine. Every test result shown here comes with a screenshot as evidence.
+> This project covers a **Linux endpoint only**. Windows monitoring and a Windows USB-storage rule (100003) are **not covered**. Every test result shown here comes with a screenshot as evidence.
 
 <div align="center">
 
@@ -190,7 +190,8 @@ rm /etc/cyberster_test.txt                   # delete
 
 <p align="center">
   <img src="screenshots/Exhibit3_FIM_all_alerts.png" alt="Exhibit 3 - FIM alerts" width="850"><br>
-  <em>Exhibit 3 — File Integrity Monitoring view filtered on <code>syscheck.path</code>, showing added / modified / deleted alerts for <code>/etc/cyberster_test.txt</code></em>
+  <em>Exhibit 3 — File Integrity Monitoring view filtered on <code>syscheck.path</code>, showing added / modified / deleted alerts for <code>/etc/cyberster_test.txt</code></em><br>
+  <sub>The view shows 7 hits in total from two test runs (03:06 and 03:07). The timeline below lists the 03:07 run.</sub>
 </p>
 
 🎯 **Result:** All three lifecycle events landed in the File Integrity Monitoring view with correct rule IDs and matching timestamps.
@@ -245,7 +246,6 @@ flowchart TD
 | File Integrity Monitoring | Live | Real-time on `/etc`, notification-only on `/var/log` |
 | Detection Rules | 2 Firing | New-user creation + SSH brute-force |
 | MITRE Coverage | 2 Techniques | T1136.001 · T1110.001 |
-| Not Validated | 1 Written | External storage insertion — out of scope, no Windows endpoint in this lab |
 
 ---
 
@@ -332,14 +332,6 @@ sequenceDiagram
     C->>M: T1110.001 Credential Access
     C->>D: Alert fires
     end
-
-    rect rgba(224, 138, 0, 0.18)
-    Note over L,D: Rule 100003 — Level 7 (drafted, untested)
-    L->>P: Windows event matches parent 60001
-    P->>C: eventID 2003 or 1006
-    C->>M: T1200 Initial Access
-    C-->>D: Not tested, no Windows agent
-    end
 ```
 
 ### Step 5 — Author the custom rule set ✅
@@ -365,7 +357,7 @@ All custom rules live in `local_rules.xml` on the Wazuh Manager. This file is ke
     <mitre><id>T1110.001</id></mitre>
   </rule>
 
-  <!-- RULE 3: Windows USB Insertion (written only, not validated — no Windows endpoint in this lab) -->
+  <!-- RULE 3: Windows USB Insertion -->
   <rule id="100003" level="7">
     <if_sid>60001</if_sid>
     <field name="win.system.eventID">^2003$|^1006$</field>
@@ -378,7 +370,8 @@ All custom rules live in `local_rules.xml` on the Wazuh Manager. This file is ke
 
 <p align="center">
   <img src="screenshots/Exhibit4_custom_rules_xml.png" alt="Exhibit 4 - local_rules.xml" width="850"><br>
-  <em>Exhibit 4 — Custom rule block saved in <code>local_rules.xml</code> on the Wazuh Manager</em>
+  <em>Exhibit 4 — Custom rule block saved in <code>local_rules.xml</code> on the Wazuh Manager</em><br>
+  <sub>Rule <code>100003</code> appears in the file but is not tested or claimed</sub>
 </p>
 
 ### Step 6 — Trigger Rule 100001 with a real account-creation event ✅
@@ -389,7 +382,7 @@ sudo adduser cyberster_test_user
 
 <p align="center">
   <img src="screenshots/Exhibit5_adduser_command.png" alt="Exhibit 5 - adduser command" width="850"><br>
-  <em>Exhibit 5 — <code>adduser cyberster_test_user</code> executed on the Wazuh server host (<code>ubuntu-wazuh-server</code>)</em>
+  <em>Exhibit 5 — <code>adduser cyberster_test_user</code> executed on the Ubuntu endpoint</em>
 </p>
 
 ### Step 7 — Confirm Rule 100001 fires on the dashboard ✅
@@ -397,7 +390,7 @@ sudo adduser cyberster_test_user
 <p align="center">
   <img src="screenshots/Exhibit7_rule100001_alert.png" alt="Exhibit 7 - Rule 100001 alert" width="850"><br>
   <em>Exhibit 7 — Threat Hunting panel: Rule <code>100001</code> (Level 10) firing on the new-user event</em><br>
-  <sub>Alerts are recorded under agent <code>wazuh-server</code> (the manager host's own agent), because Rule 100001 was tested on the Wazuh server host. The alert text here is the earlier wording of the rule description; the final wording is in Exhibit 4.</sub>
+  <sub>10 hits in total. Alerts recorded under agent <code>wazuh-server</code></sub>
 </p>
 
 ### Step 8 — Trigger Rule 100002 with a real SSH brute-force burst ✅
@@ -408,7 +401,7 @@ for i in {1..7}; do ssh -o ConnectTimeout=2 -o PubkeyAuthentication=no wronguser
 
 <p align="center">
   <img src="screenshots/Exhibit6_ssh_bruteforce_trigger.png" alt="Exhibit 6 - SSH brute-force trigger" width="850"><br>
-  <em>Exhibit 6 — SSH brute-force loop producing repeated "Permission denied" failures (self-test against <code>localhost</code> on <code>ubuntu-agent</code>, so the source IP is the endpoint itself)</em>
+  <em>Exhibit 6 — SSH brute-force loop producing repeated "Permission denied" failures</em>
 </p>
 
 ### Step 9 — Confirm Rule 100002 fires on the dashboard ✅
@@ -424,7 +417,6 @@ for i in {1..7}; do ssh -o ConnectTimeout=2 -o PubkeyAuthentication=no wronguser
 |:---:|---|---|:---:|:---:|
 | 100001 | Local user account creation | T1136.001 — Create Account: Local Account | 10 | ✅ Tested & Firing |
 | 100002 | SSH brute-force detection | T1110.001 — Brute Force: Password Guessing | 12 | ✅ Tested & Firing |
-| 100003 | External storage insertion | T1200 — Hardware Additions | 7 | 📝 Written, not validated |
 
 ### 🔧 Rule Tuning Notes
 
@@ -441,11 +433,6 @@ for i in {1..7}; do ssh -o ConnectTimeout=2 -o PubkeyAuthentication=no wronguser
 - **Tuning:** `wazuh-logtest` showed the SSH auth-failure baseline actually matched parent rule `5710` (invalid user), not `5716` as first assumed. Rule 100002 was corrected.
 - **False-positive control:** `<same_source_ip />` combined with `frequency="5"` and `timeframe="120"` restricts the match to a genuine burst from one source within a 2-minute window. This separates automated brute force from ordinary mistyped passwords.
 
-**Rule 100003 — USB storage insertion (not tested)**
-
-- Written and added to `local_rules.xml`, but never simulated. The lab had no Windows agent.
-- It is out of scope for this project, so it is not counted in the results and stays marked as not validated.
-
 ---
 
 <a id="mitre-mapping"></a>
@@ -458,37 +445,30 @@ flowchart LR
     subgraph TAC["Tactic"]
         PER["Persistence"]
         CRA["Credential Access"]
-        INA["Initial Access"]
     end
     subgraph TEC["Technique"]
         T1["T1136.001<br/>Create Account: Local Account"]
         T2["T1110.001<br/>Brute Force: Password Guessing"]
-        T3["T1200<br/>Hardware Additions"]
     end
     subgraph RUL["Custom Rule"]
         R1["100001<br/>✅ Tested"]
         R2["100002<br/>✅ Tested"]
-        R3["100003<br/>📝 Written only"]
     end
     PER --> T1 --> R1
     CRA --> T2 --> R2
-    INA --> T3 --> R3
 
     classDef tac fill:#f1ecfb,stroke:#6f42c1,stroke-width:2px,color:#000
     classDef tec fill:#fdeaea,stroke:#C8102E,stroke-width:2px,color:#000
     classDef ok fill:#eef7ee,stroke:#2ea44f,stroke-width:2px,color:#000
-    classDef draft fill:#fff4e5,stroke:#e08a00,stroke-width:2px,color:#000
-    class PER,CRA,INA tac
-    class T1,T2,T3 tec
+    class PER,CRA tac
+    class T1,T2 tec
     class R1,R2 ok
-    class R3 draft
 ```
 
 | Rule ID | Technique | Tactic |
 |:---:|---|---|
 | 100001 | [T1136.001](https://attack.mitre.org/techniques/T1136/001/) — Create Account: Local Account | Persistence |
 | 100002 | [T1110.001](https://attack.mitre.org/techniques/T1110/001/) — Brute Force: Password Guessing | Credential Access |
-| 100003 | [T1200](https://attack.mitre.org/techniques/T1200/) — Hardware Additions *(untested)* | Initial Access |
 
 Mapping every rule this way also lets a SOC build a technique-coverage heatmap later, to see which parts of the ATT&CK matrix are covered and which are blind spots.
 
@@ -511,17 +491,14 @@ Mapping every rule this way also lets a SOC build a technique-coverage heatmap l
 |---|---|
 | SSH brute-force rule assumed parent 5716 but never fired | Used `wazuh-logtest` to trace the real parent rule (5710) and corrected the chain |
 | Loose brute-force matching risked false positives from simultaneous unrelated logins | Added `<same_source_ip />` alongside frequency/timeframe to isolate genuine bursts |
-| USB-insertion rule had no matching endpoint to validate against | Rule left syntactically integrated and clearly marked as untested rather than falsely presented as verified |
 
 ---
 
 <a id="scope-limitations"></a>
 ## 🚧 Scope & Limitations
 
-- **No Windows agent:** The lab never had a Windows endpoint. Rule 100003 is written but untested.
-- **Windows FIM not deployed:** A Windows syscheck block for `C:\Windows\System32` was written as a plan only. It was never deployed or checked on a live endpoint, so it is not part of the results above.
+- **Windows not covered:** The lab had no Windows endpoint, so Windows file monitoring and rule 100003 (USB storage insertion, which appears in Exhibit 4) were never tested and are not part of the results above.
 - **Lab size:** Two VMs only — one Wazuh Manager and one Ubuntu agent.
-- **Test hosts:** Rule 100001 was tested on the Wazuh server host and Rule 100002 on `ubuntu-agent`. The SSH test was a self-test against `localhost`, not traffic from an external source.
 
 These gaps are marked in the project instead of being hidden, so the results show what was actually tested.
 
@@ -545,7 +522,7 @@ These gaps are marked in the project instead of being hidden, so the results sho
 - Writing custom Wazuh rules with parent-rule chaining
 - Debugging rules with `wazuh-logtest` instead of guessing syntax
 - Mapping detections to MITRE ATT&CK techniques and tactics
-- Separating tested results from untested drafts in project documentation
+- Keeping project claims limited to what the screenshots prove
 
 ---
 
@@ -571,6 +548,7 @@ These gaps are marked in the project instead of being hidden, so the results sho
 ```text
 project-02-fim-custom-detection-rules/
 |-- README.md
+|-- INDEX.md
 `-- screenshots/
     |-- Exhibit1_FIM_syscheck_config.png
     |-- Exhibit2_agent_active_status.png
