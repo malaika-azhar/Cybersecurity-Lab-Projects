@@ -39,8 +39,8 @@ All 5 steps of the project, with the screenshot that shows each one.
 | # | Step | Module | Result | Evidence |
 |:---:|---|:---:|---|:---:|
 | 1 | Author both rules in `local_rules.xml` | 🔵 Module 1 | Rule 100001 (Level 10) and Rule 100002 (Level 12) saved | [Exhibit 1](#ex1) |
-| 2 | Provision a new local user | 🟠 Module 2 | `adduser lab_test_user` run on the Ubuntu agent | [Exhibit 2](#ex2) |
-| 3 | Run the SSH brute-force loop | 🟠 Module 2 | 10 rapid `Permission denied` failures generated | [Exhibit 3](#ex3) |
+| 2 | Provision a new local user | 🟠 Module 2 | `adduser` run on the Ubuntu agent | [Exhibit 2](#ex2) |
+| 3 | Run the SSH brute-force loop | 🟠 Module 2 | 7 rapid `Permission denied` failures generated | [Exhibit 3](#ex3) |
 | 4 | Confirm Rule 100001 fired | 🟢 Module 3 | Threat Hunting shows Rule 100001 on the new-user event | [Exhibit 4](#ex4) |
 | 5 | Confirm Rule 100002 fired (after correction) | 🟢 Module 3 | Base pattern fixed 5716 → 5710; Rule 100002 fires | [Exhibit 5](#ex5) |
 
@@ -74,13 +74,13 @@ Exhibits 2 to 3.
 <a id="ex2"></a>
 <a href="screenshots/ss-02-new-user-creation-command.PNG"><img src="screenshots/ss-02-new-user-creation-command.PNG" width="380" alt="Exhibit 2"></a>
 <br><b>Exhibit 2 — New user creation</b>
-<br><sub><code>adduser lab_test_user</code> executed on the Ubuntu agent</sub>
+<br><sub><code>adduser</code> executed on the Ubuntu agent (username redacted)</sub>
 </td>
 <td align="center" valign="top" width="50%">
 <a id="ex3"></a>
 <a href="screenshots/ss-03-ssh-bruteforce-loop-trigger.PNG"><img src="screenshots/ss-03-ssh-bruteforce-loop-trigger.PNG" width="380" alt="Exhibit 3"></a>
 <br><b>Exhibit 3 — SSH brute-force loop</b>
-<br><sub>Repeated <code>Permission denied</code> failures generated</sub>
+<br><sub>7-attempt loop generating repeated <code>Permission denied</code> failures</sub>
 </td>
 </tr>
 </table>
@@ -120,10 +120,12 @@ Exhibits 4 to 5.
 | Real SSH failure burst generated | bash SSH loop | Module 2 | ✅ Confirmed |
 | Rule 100001 fired on dashboard | Threat Hunting panel | Module 3 | ✅ Confirmed |
 | Rule 100002 fired on dashboard | Threat Hunting panel, `wazuh-logtest` | Module 3 | ✅ Confirmed (after correcting 5716 → 5710) |
-| Rule 100003 (Windows USB) validated | — | — | ❌ Not tested — no Windows agent |
 
 > [!NOTE]
-> Rule 100002's base pattern was corrected mid-build using `wazuh-logtest` against the real raw log, before being confirmed on the dashboard — this is documented as a correction, not hidden as if it worked the first time.
+> Rule 100002's base pattern was corrected mid-build using `wazuh-logtest` against the real raw log, before being confirmed on the dashboard — this is documented as a correction, not hidden as if it worked the first time. The `wazuh-logtest` output itself was not captured in a screenshot.
+
+> [!NOTE]
+> A third rule (100003, Windows USB insertion) also sits in the rules file but was never tested; it is outside this project's scope.
 
 ---
 
