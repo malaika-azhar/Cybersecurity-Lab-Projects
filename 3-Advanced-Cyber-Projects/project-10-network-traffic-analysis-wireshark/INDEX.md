@@ -23,9 +23,9 @@
 
 <div align="center">
 
-| 🧩 Protocols | 🖼️ Screenshots | 🔌 Ports Documented | 📶 OSI Layers Traced |
-|:---:|:---:|:---:|:---:|
-| **5** | **6** | **7** | **4** |
+| 🧩 Protocols | 🖼️ Screenshots |
+|:---:|:---:|
+| **5** | **6** |
 
 </div>
 
@@ -120,8 +120,7 @@ Exhibits 2 to 6.
 | DNS normal resolution captured | Wireshark live capture | Module 2 | ✅ Confirmed |
 | HTTP plaintext traffic captured | Wireshark live capture | Module 2 | ✅ Confirmed |
 | HTTPS/TLS encrypted traffic captured | Wireshark live capture | Module 2 | ✅ Confirmed |
-| ICMP traffic captured | `ping -c 4 8.8.8.8` + Wireshark | Module 2 | ✅ Confirmed (required manual generation) |
-| A real attack/suspicious packet | — | — | ❌ Not present — suspicious patterns documented conceptually only |
+| ICMP traffic captured | Manual `ping` + Wireshark | Module 2 | ✅ Confirmed (required manual generation) |
 
 > [!NOTE]
 > The "suspicious traffic" side of each protocol reflects known attack patterns, not a captured attack — no real malicious traffic was present on this network. This is stated directly rather than implied.
