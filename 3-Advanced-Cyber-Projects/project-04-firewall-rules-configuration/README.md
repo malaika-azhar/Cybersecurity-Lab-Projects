@@ -13,7 +13,7 @@ Firewall Rule Engineering (pfSense + Wazuh)
 ![Cost](https://img.shields.io/badge/Cost-Free_%26_Open--Source-2ea44f?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
 
-The pfSense gateway deployed in the perimeter phase is configured with an explicit logging rule set — Remote Syslog Contents scoped deliberately to "Everything" rather than a narrow subset — then verified by confirming the SIEM on the other end actually receives what the rule sends.
+The pfSense gateway deployed in the perimeter phase is configured with an explicit logging rule set — Remote Syslog Contents scoped deliberately to "Everything" rather than a narrow subset — then checked on the receiving side by confirming the SIEM is listening for syslog and permits the firewall's address.
 
 ### [📑 Open the visual index](INDEX.md)
 
@@ -44,9 +44,9 @@ The pfSense gateway deployed in the perimeter phase is configured with an explic
 <a id="at-a-glance"></a>
 ## 📊 At a Glance
 
-| 🧩 Modules | 🖼️ Screenshots | 📋 Rule Configured | 📡 Delivery Verified |
+| 🧩 Modules | 🖼️ Screenshots | 📋 Rule Configured | 📡 Receiving Side |
 |:---:|:---:|:---:|:---:|
-| **2** | **3** | **Remote Logging — "Everything"** | **✅ End-to-End** |
+| **2** | **4** | **Remote Logging — "Everything"** | **✅ Listener Confirmed** |
 
 ---
 
@@ -55,8 +55,8 @@ The pfSense gateway deployed in the perimeter phase is configured with an explic
 
 A firewall that is deployed but not configured to log its own decisions is a blind spot wearing the shape of a control — traffic gets filtered, but nobody downstream can see what was allowed, what was dropped, or when. This project focuses specifically on the **rule that makes the firewall's own activity visible**: the Remote Logging configuration, scoped deliberately wide rather than narrow.
 
-- **Module 1 — Firewall Dashboard & Baseline:** Confirm the gateway itself is healthy on both interfaces before trusting any rule configured on top of it.
-- **Module 2 — Logging Rule Configuration:** Configure the Remote Logging rule with a full content scope, then verify delivery against the receiving side rather than the sending side alone.
+- **Module 1 — Firewall Dashboard & Baseline:** Confirm the gateway itself is up and reachable before trusting any rule configured on top of it.
+- **Module 2 — Logging Rule Configuration:** Configure the Remote Logging rule with a full content scope, then check the receiving side rather than the sending side alone.
 
 > [!NOTE]
 > "Everything" was chosen over a narrow content selection (e.g. firewall events only) so that system, DNS, DHCP, and authentication events all forward too — a scope decision made once, up front, rather than discovered as a gap during a later investigation.
@@ -133,15 +133,15 @@ A firewall that is deployed but not configured to log its own decisions is a bli
   'titleColor':'#1B2A4A', 'fontSize':'16px'
 }}}%%
 gantt
-    title Project Flow — Baseline to Verified Logging Rule
+    title Project Flow — Baseline to Configured Logging Rule
     dateFormat YYYY-MM-DD
     axisFormat %b %d
     section Firewall Baseline
-    Confirm Gateway Health on Both Interfaces   :active, 2026-07-19, 1d
+    Confirm Gateway Is Up (Dashboard)           :active, 2026-07-19, 1d
     section Rule Configuration
     Configure Remote Logging Rule (Everything)  :done, 2026-07-19, 1d
     section Verification
-    Confirm Delivery on the Receiving Side      :crit, 2026-07-19, 1d
+    Check the Receiving Side                    :crit, 2026-07-19, 1d
 ```
 <p align="center"><em>Colors distinguish each project stage — all stages complete.</em></p>
 
@@ -150,22 +150,22 @@ gantt
 <a id="module-1"></a>
 ## 🔵 Module 1 — Firewall Dashboard & Baseline
 
-**Objective:** Confirm the firewall itself is healthy and both interfaces are live before configuring any rule on top of it — a rule added to an unhealthy gateway proves nothing.
+**Objective:** Confirm the firewall itself is up and reachable before configuring any rule on top of it — a rule added to an unhealthy gateway proves nothing.
 
 ### Step 1 — Open the pfSense dashboard and confirm system health ✅
 
 <p align="center">
-  <img src="screenshots/Exhibit1_pfsense_firewall_rules.png" alt="Exhibit 1 - pfSense dashboard" width="850"><br>
-  <em>Exhibit 1 — pfSense Status/Dashboard confirming the firewall is running (version 2.7.2-RELEASE), with both WAN and LAN interfaces up before any rule is trusted</em>
+  <img src="screenshots/Exhibit1_pfsense_dashboard.png" alt="Exhibit 1 - pfSense dashboard" width="850"><br>
+  <em>Exhibit 1 — pfSense Status/Dashboard, System Information panel, confirming the firewall is running (version 2.7.2-RELEASE, VirtualBox VM) before any rule is trusted</em>
 </p>
 
-🎯 **Result:** Baseline confirmed healthy — safe to proceed with rule configuration.
+🎯 **Result:** Firewall confirmed up and reachable at `192.168.56.1` — safe to proceed with rule configuration.
 
 | Check | Value | Status |
 |---|---|:---:|
 | Firewall version | 2.7.2-RELEASE | ✅ Current |
-| WAN interface | Up | ✅ Confirmed |
-| LAN interface | Up | ✅ Confirmed |
+| Platform | VirtualBox Virtual Machine | ✅ Confirmed |
+| Dashboard reachable | `192.168.56.1` | ✅ Confirmed |
 
 ### 🔍 Analyst Note — Why Rule Scope Is Decided Before Rule Placement
 
@@ -196,17 +196,17 @@ flowchart TD
 
 | 🛡️ Layer | ✅ Status | 📌 Detail |
 |---|---|---|
-| Firewall Health | Confirmed | Both WAN and LAN interfaces up before rule configuration |
+| Firewall Health | Confirmed | Dashboard reachable, version 2.7.2-RELEASE, before rule configuration |
 | Logging Rule Scope | Full | "Everything" — not narrowed to firewall events only |
 | Delivery Target | Correct | Destination IP matches the live Wazuh Manager |
-| Receiving-Side Verification | Confirmed | Manager socket actively listening, checked directly |
+| Receiving-Side Check | Confirmed | Manager socket listening on UDP 514 and `192.168.56.1` permitted, checked directly |
 
 ---
 
 <a id="rule-pipeline"></a>
 ## 🧭 Rule Evaluation Pipeline
 
-How the logging rule's configuration turns into a verified, receivable event stream
+How the logging rule's configuration turns into a receivable event stream, checked on the receiving side
 
 ```mermaid
 flowchart TB
@@ -238,7 +238,7 @@ flowchart TB
 <a id="module-2"></a>
 ## 🟢 Module 2 — Logging Rule Configuration
 
-**Objective:** Configure the Remote Logging rule with a deliberately full scope, targeting the correct SIEM destination, then verify delivery against the receiving side directly.
+**Objective:** Configure the Remote Logging rule with a deliberately full scope, targeting the correct SIEM destination, then check the receiving side directly.
 
 ### Rule Configuration Map
 
@@ -259,9 +259,10 @@ sequenceDiagram
 
     rect rgba(46, 164, 79, 0.18)
     Note over R,W: Verification, Not Assumption
-    F->>N: Firewall, system, DNS, DHCP, auth events emitted
-    N->>W: Delivered over UDP 514
-    W->>W: ss confirms udp UNCONN 0 0 0.0.0.0:514
+    F->>N: Firewall, system, DNS, DHCP, auth events forwarded (configured scope)
+    N->>W: Sent to UDP 514
+    W->>W: ss confirms listener udp UNCONN 0 0 0.0.0.0:514
+    W->>W: ossec.conf permits syslog from 192.168.56.1
     end
 ```
 
@@ -282,7 +283,7 @@ The rule was set to forward to the Wazuh Manager's address with the content scop
 | Remote log server | `192.168.56.105` |
 | Remote Syslog Contents | `Everything` |
 
-### Step 3 — Verify the rule's effect on the receiving side ✅
+### Step 3 — Check that the receiving side is listening ✅
 
 ```bash
 ss -tulnp | grep 514
@@ -290,16 +291,26 @@ ss -tulnp | grep 514
 
 <p align="center">
   <img src="screenshots/Exhibit3_wazuh_udp514_listening.png" alt="Exhibit 3 - Wazuh UDP 514 listening" width="850"><br>
-  <em>Exhibit 3 — <code>ss</code> output on the Wazuh Manager confirming <code>udp UNCONN 0 0 0.0.0.0:514</code>, proving the configured rule is actually delivering, not just saved</em>
+  <em>Exhibit 3 — <code>ss</code> output on the Wazuh Manager confirming <code>udp UNCONN 0 0 0.0.0.0:514</code>, proving the Manager is listening on the port the rule sends to, not just that the rule was saved</em>
 </p>
 
-🎯 **Result:** The rule was not trusted on the strength of a saved configuration screen alone — its effect was confirmed on the opposite end of the connection.
+### Step 4 — Confirm the Manager permits syslog from the firewall ✅
+
+The Manager's `ossec.conf` shows which sources are allowed to send syslog on UDP 514, so an open port is not assumed to accept traffic from the firewall.
+
+<p align="center">
+  <img src="screenshots/Exhibit4_wazuh_syslog_allowed_ips.png" alt="Exhibit 4 - Wazuh syslog allowed-ips" width="850"><br>
+  <em>Exhibit 4 — Wazuh Manager <code>ossec.conf</code>: two <code>&lt;remote&gt;</code> blocks (<code>syslog</code>, port <code>514</code>, <code>udp</code>) with <code>allowed-ips</code> <code>192.168.56.0/24</code> and <code>192.168.56.1</code> (cropped from the Week 4 report, Figure 4.1)</em>
+</p>
+
+🎯 **Result:** The rule was not trusted on the strength of a saved configuration screen alone — the receiving end was checked directly: its port is open and the firewall's address is permitted.
 
 | Check | Method | Outcome |
 |---|---|---|
 | Rule saved without error | pfSense GUI | ✅ Confirmed |
 | Correct destination configured | IP matches Wazuh Manager | ✅ Confirmed |
-| Rule actually delivering | `ss` showing `UNCONN` on UDP 514 | ✅ Confirmed |
+| Receiver listening on UDP 514 | `ss` showing `UNCONN` on UDP 514 | ✅ Confirmed |
+| Firewall address permitted | `allowed-ips` `192.168.56.1` in `ossec.conf` | ✅ Confirmed |
 
 ---
 
@@ -308,8 +319,8 @@ ss -tulnp | grep 514
 
 | Module | Tooling | Key Finding |
 |---|---|---|
-| Firewall Dashboard & Baseline | pfSense Dashboard | Gateway confirmed healthy on both interfaces before rule work began |
-| Logging Rule Configuration | pfSense Remote Logging, `ss` | Full-scope logging rule configured and confirmed delivering end-to-end |
+| Firewall Dashboard & Baseline | pfSense Dashboard | Gateway confirmed up and reachable before rule work began |
+| Logging Rule Configuration | pfSense Remote Logging, `ss`, `ossec.conf` | Full-scope logging rule configured; receiving side confirmed listening and permitting the firewall's address |
 
 ---
 
@@ -326,9 +337,10 @@ ss -tulnp | grep 514
 <a id="scope-limitations"></a>
 ## 🚧 Scope & Limitations
 
-- **Logging rule only, not traffic-filtering rules:** This project configures and verifies the *logging* rule. Allow/deny traffic-filtering rules on the WAN/LAN interfaces are addressed separately.
+- **Logging rule only, not traffic-filtering rules:** This project configures and checks the *logging* rule. Allow/deny traffic-filtering rules on the WAN/LAN interfaces are not covered here.
 - **Single rule, single destination:** Only one remote logging target is configured. A production deployment might forward to multiple collectors for redundancy.
-- **Verification scope:** Confirms the Manager's socket is open and receiving; does not independently confirm every emitted event type is correctly decoded downstream.
+- **Verification scope:** Confirms the Manager's socket is open and the firewall's address is permitted; no individual forwarded event is shown arriving or being decoded in the Wazuh dashboard.
+- **Interface status:** Exhibit 1 shows the System Information panel only; WAN/LAN interface status is not captured in this project.
 
 These gaps are marked here instead of hidden, so the results reflect exactly what was tested.
 
@@ -338,7 +350,7 @@ These gaps are marked here instead of hidden, so the results reflect exactly wha
 ## 🧠 What I Learned
 
 - **A rule's scope is a decision, not a default.** Choosing "Everything" over a narrower selection was deliberate — the cost of capturing more is low, the cost of missing the wrong event later is high.
-- **A saved rule is not a delivered event.** The configuration screen confirms intent; only checking the receiving side confirms the rule is actually having an effect.
+- **A saved rule is not a delivered event.** The configuration screen confirms intent; checking the receiving side shows the other end is ready, and seeing the events arrive is the final proof.
 - **Baseline health comes before rule trust.** Configuring a rule on top of an unconfirmed gateway risks attributing a delivery failure to the rule when the real cause sits one layer lower.
 
 ---
@@ -347,9 +359,9 @@ These gaps are marked here instead of hidden, so the results reflect exactly wha
 ## 🛠️ Skills Demonstrated
 
 - Configuring firewall logging rules with deliberate, documented scope decisions
-- Verifying rule effect on the receiving side rather than trusting the sending-side configuration alone
-- Using socket-level command-line evidence (`ss`) to confirm SIEM ingestion
-- Structuring firewall configuration work as baseline → configure → verify, rather than configure-and-assume
+- Checking the receiving side rather than trusting the sending-side configuration alone
+- Using socket-level command-line evidence (`ss`) and `ossec.conf` to confirm the SIEM is ready to receive syslog
+- Structuring firewall configuration work as baseline → configure → check the receiver, rather than configure-and-assume
 
 ---
 
@@ -358,9 +370,10 @@ These gaps are marked here instead of hidden, so the results reflect exactly wha
 
 | # | File | Shows |
 |:---:|---|---|
-| 1 | `Exhibit1_pfsense_firewall_rules.png` | pfSense dashboard confirming firewall health and both interfaces up |
+| 1 | `Exhibit1_pfsense_dashboard.png` | pfSense dashboard System Information panel (version 2.7.2-RELEASE, VirtualBox VM) |
 | 2 | `Exhibit2_logging_rule_config.png` | Remote Logging rule — destination IP and "Everything" scope |
 | 3 | `Exhibit3_wazuh_udp514_listening.png` | Wazuh Manager confirmed listening on UDP 514 |
+| 4 | `Exhibit4_wazuh_syslog_allowed_ips.png` | Manager `ossec.conf` syslog blocks with `allowed-ips` (cropped from Week 4 report, Figure 4.1) |
 
 ---
 
@@ -372,9 +385,10 @@ project-04-firewall-rules-configuration/
 |-- README.md
 |-- INDEX.md
 `-- screenshots/
-    |-- Exhibit1_pfsense_firewall_rules.png
+    |-- Exhibit1_pfsense_dashboard.png
     |-- Exhibit2_logging_rule_config.png
-    `-- Exhibit3_wazuh_udp514_listening.png
+    |-- Exhibit3_wazuh_udp514_listening.png
+    `-- Exhibit4_wazuh_syslog_allowed_ips.png
 ```
 
 <div align="center">
