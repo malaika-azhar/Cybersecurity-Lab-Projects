@@ -63,7 +63,10 @@ A default Wazuh install monitors generic infrastructure activity, but a real SOC
 - **Rule 100002:** Rapid, repeated SSH password failures from one source — brute-force password guessing.
 
 > [!NOTE]
-> A third rule (100003, Windows USB insertion) was written and syntax-checked into the same rules file, but **never simulated or validated** — the lab had no Windows agent at the time. It is left out of this project's verified scope; see Scope & Limitations.
+> A third rule (100003, Windows USB insertion) also sits in the same rules file but was **never simulated or validated**, so it is outside this project's scope; see Scope & Limitations.
+
+> [!NOTE]
+> These rules were built during the same Week 2 lab run documented in [Project 02](../project-02-fim-custom-detection-rules/README.md); this project isolates the rule-engineering and tuning.
 
 <div align="center">
 
@@ -106,11 +109,12 @@ A default Wazuh install monitors generic infrastructure activity, but a real SOC
 | Item | Value |
 |---|---|
 | **Lab Topology** | 2 VMs: Wazuh Manager/Indexer/Dashboard + Ubuntu Server agent |
+| **Hosts** | Local Wazuh Manager `wazuh-server`; agent `ubuntu-agent` (July 2026) |
 | **Rules File** | `/var/ossec/etc/rules/local_rules.xml` (persists across software updates) |
 | **Rule 100001** | Level 10, `if_sid` 5501, `<match>new user</match>`, MITRE `T1136.001` |
 | **Rule 100002** | Level 12, `frequency="5"` `timeframe="120"`, `if_matched_sid` 5710, `<same_source_ip/>`, MITRE `T1110.001` |
 | **Base Pattern Used** | Rule 5710 (invalid user) — corrected from an initial assumption of 5716 |
-| **Windows Agent** | Not present in this lab — Rule 100003 written but not tested |
+| **Windows Agent** | Not present in this lab |
 
 ---
 
@@ -188,6 +192,8 @@ gantt
   <em>Exhibit 1 — <code>local_rules.xml</code> custom rule block saved on the Wazuh Manager via <code>nano</code></em>
 </p>
 
+<p align="center"><sub>The saved rules file also contains a third rule, 100003 (Windows USB insertion), which was written but never tested and is outside this project's scope.</sub></p>
+
 🎯 **Design decision:** Rule 100002 combines `frequency="5"` with `timeframe="120"` deliberately — frequency alone could fire on five failures spread across several days. Requiring five failures inside a 2-minute window is what actually separates an automated brute-force burst from ordinary mistyped passwords.
 
 ---
@@ -205,18 +211,18 @@ sudo adduser lab_test_user
 
 <p align="center">
   <img src="screenshots/ss-02-new-user-creation-command.PNG" alt="Exhibit 2 - New user creation command" width="850"><br>
-  <em>Exhibit 2 — <code>adduser lab_test_user</code> executed on the Ubuntu agent</em>
+  <em>Exhibit 2 — <code>adduser</code> executed on the Ubuntu agent (new username redacted in the screenshot)</em>
 </p>
 
 ### Step 3 — Run the SSH brute-force loop (Rule 100002 trigger) ✅
 
 ```
-for i in {1..10}; do ssh -o ConnectTimeout=2 -o PubkeyAuthentication=no wronguser@localhost; done
+for i in {1..7}; do ssh -o ConnectTimeout=2 -o PubkeyAuthentication=no wronguser@localhost; done
 ```
 
 <p align="center">
   <img src="screenshots/ss-03-ssh-bruteforce-loop-trigger.PNG" alt="Exhibit 3 - SSH brute-force loop trigger" width="850"><br>
-  <em>Exhibit 3 — SSH brute-force loop generating repeated <code>Permission denied</code> failures</em>
+  <em>Exhibit 3 — SSH brute-force loop (7 attempts) generating repeated <code>Permission denied</code> failures</em>
 </p>
 
 ---
@@ -235,7 +241,7 @@ for i in {1..10}; do ssh -o ConnectTimeout=2 -o PubkeyAuthentication=no wronguse
 
 ### Step 5 — Confirm Rule 100002 fired, after a mid-build correction ✅
 
-`wazuh-logtest` showed the target logging failures under base pattern **5710** (invalid user) — not **5716**, which I had initially assumed. The rule was corrected from `if_matched_sid` `5716` to `5710` before it would match.
+`wazuh-logtest` showed the target logging failures under base pattern **5710** (invalid user) — not **5716**, which I had initially assumed. The rule was corrected from `if_matched_sid` `5716` to `5710` before it would match. The `wazuh-logtest` output itself was not captured in a screenshot; the corrected rule is evidenced by Exhibit 5 showing it firing.
 
 <p align="center">
   <img src="screenshots/ss-05-alert-ssh-bruteforce-firing.PNG" alt="Exhibit 5 - Rule 100002 firing" width="850"><br>
@@ -253,7 +259,6 @@ for i in {1..10}; do ssh -o ConnectTimeout=2 -o PubkeyAuthentication=no wronguse
 |---|---|---|
 | 100001 — New User Creation | Complete | Fired correctly on first test, no tuning needed |
 | 100002 — SSH Brute Force | Complete | Base pattern corrected from 5716 → 5710 via `wazuh-logtest`, then fired correctly |
-| 100003 — Windows USB Insertion | Not tested | No Windows agent available in this lab; syntax-only |
 
 ### 🧾 What the Evidence Proves
 
@@ -263,7 +268,6 @@ flowchart LR
     M1["🔵 Module 1<br/>Rule Authoring"]:::m1 --> P1["✅ Proven<br/>both rules saved and loaded"]:::ok
     M2["🟠 Module 2<br/>Simulation"]:::m2 --> P2["✅ Proven<br/>real attack traffic generated"]:::ok
     M3["🟢 Module 3<br/>Verification"]:::m3 --> P3["✅ Proven<br/>both rules fired on dashboard"]:::ok
-    M3 --> N3["❌ Not tested<br/>Rule 100003, no Windows agent"]:::bad
     classDef m1 fill:#117864,stroke:#083D33,stroke-width:2px,color:#FFFFFF
     classDef m2 fill:#B9770E,stroke:#6E4409,stroke-width:2px,color:#FFFFFF
     classDef m3 fill:#1E8449,stroke:#0E4A28,stroke-width:2px,color:#FFFFFF
@@ -310,7 +314,7 @@ flowchart TB
 | # | Command / Config | Used In | Purpose |
 |:---:|---|---|---|
 | 1 | `sudo adduser lab_test_user` | Module 2 | Trigger Rule 100001 with a real new-user event |
-| 2 | `for i in {1..10}; do ssh -o ConnectTimeout=2 -o PubkeyAuthentication=no wronguser@localhost; done` | Module 2 | Generate a rapid SSH failure burst to trigger Rule 100002 |
+| 2 | `for i in {1..7}; do ssh -o ConnectTimeout=2 -o PubkeyAuthentication=no wronguser@localhost; done` | Module 2 | Generate a rapid SSH failure burst to trigger Rule 100002 |
 | 3 | `wazuh-logtest` | Module 3 | Test a raw log line against the rules engine to find the true base rule ID |
 | 4 | `<if_matched_sid>5710</if_matched_sid>` | Module 1 / 3 | Corrected base pattern for SSH invalid-user failures |
 | 5 | `<same_source_ip />` | Module 1 | Restrict Rule 100002 to failures from one IP, avoiding false positives from multiple users mistyping at once |
@@ -323,7 +327,7 @@ flowchart TB
 | Module | Tooling | Key Outcome |
 |---|---|---|
 | Module 1 — Rule Authoring | `local_rules.xml`, `nano` | Two custom rules written, inheriting from parent rules 5501 and 5710 |
-| Module 2 — Attack Simulation | `adduser`, bash SSH loop | Real new-user event and a genuine 10-attempt SSH failure burst generated |
+| Module 2 — Attack Simulation | `adduser`, bash SSH loop | Real new-user event and a genuine 7-attempt SSH failure burst generated |
 | Module 3 — Detection Verification | Wazuh Threat Hunting, `wazuh-logtest` | Both rules confirmed firing; one base-pattern assumption corrected before completion |
 
 ---
@@ -336,14 +340,14 @@ flowchart TB
 | Rule 100002 initially built against base pattern 5716 (assumed) | `wazuh-logtest` showed the real pattern was 5710 (invalid user); corrected `if_matched_sid` before re-testing |
 | Frequency-only threshold could fire on failures spread days apart | Added `timeframe="120"` alongside `frequency="5"` to require a genuine 2-minute burst |
 | Multiple users mistyping passwords at once could falsely resemble a brute-force burst | Added `<same_source_ip/>` to scope the rule to one attacking IP |
-| Rule 100003 (Windows USB) had no endpoint to validate against | Left syntactically integrated but explicitly marked "Not Tested" rather than claimed complete |
 
 ---
 
 <a id="scope-limitations"></a>
 ## 🚧 Scope & Limitations
 
-- **Rule 100003 not validated:** No Windows agent existed in this lab; the rule is written and syntax-checked only, not simulated or confirmed to fire.
+- **Rule 100003 not covered:** A third rule (Windows USB insertion) exists in the same rules file but was never simulated or confirmed to fire — no Windows agent existed in this lab. It is outside this project's scope.
+- **`wazuh-logtest` step not screenshotted:** The 5716 → 5710 correction is documented in text; the screenshot evidence is Exhibit 5 showing rule 100002 firing, not a `wazuh-logtest` capture.
 - **Single attacking source:** The SSH brute-force simulation used one source (`localhost`), so distributed/multi-IP brute-force behavior was not tested.
 - **Two-VM lab only:** Wazuh Manager + one Ubuntu agent — no additional endpoints or network segmentation involved in this specific module.
 - **`wronguser` target, not a real account:** The SSH loop authenticates against a non-existent user by design, to generate failures without risking a real account lockout.
@@ -357,7 +361,6 @@ flowchart TB
 - **Frequency needs a timeframe to mean anything.** Five events with no timeframe can span days; pairing it with a timeframe is what actually captures "a burst," not just "eventually five."
 - **`same_source_ip` is cheap insurance against false positives.** Without it, several people mistyping passwords around the same time could look like one coordinated attack.
 - **Parent-rule inheritance keeps custom rules simple.** Chaining from an already-decoded parent rule (5501, 5710) means the custom rule only has to add the specific condition that matters, not re-parse the whole log line.
-- **"Not Tested" is a valid, honest status.** Rule 100003 stayed in the file for future validation rather than being deleted or falsely marked complete.
 
 ---
 
@@ -380,7 +383,7 @@ flowchart TB
 | # | File | Shows |
 |:---:|---|---|
 | 1 | `ss-01-custom-rules-local-rules-xml.PNG` | `local_rules.xml` custom rule block saved via `nano` |
-| 2 | `ss-02-new-user-creation-command.PNG` | `adduser lab_test_user` executed on the Ubuntu agent |
+| 2 | `ss-02-new-user-creation-command.PNG` | `adduser` executed on the Ubuntu agent (username redacted) |
 | 3 | `ss-03-ssh-bruteforce-loop-trigger.PNG` | SSH brute-force loop generating repeated `Permission denied` failures |
 | 4 | `ss-04-alert-new-user-creation-firing.PNG` | Rule 100001 (Level 10) firing on the new-user event |
 | 5 | `ss-05-alert-ssh-bruteforce-firing.PNG` | Rule 100002 (Level 12) firing on the SSH brute-force burst |
