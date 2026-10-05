@@ -13,7 +13,7 @@ Panel-per-Question Dashboard Engineering (Wazuh)
 ![Cost](https://img.shields.io/badge/Cost-Free_%26_Open--Source-2ea44f?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
 
-A five-panel SOC dashboard built against five pre-written questions rather than assembled from whatever data happened to be available — and one panel that surfaced an uncomfortable number was kept in, not filtered out, because that is exactly what a dashboard is for.
+A five-panel SOC dashboard built against five pre-written questions rather than assembled from whatever data happened to be available.
 
 ### [📑 Open the visual index](INDEX.md)
 
@@ -30,7 +30,7 @@ A five-panel SOC dashboard built against five pre-written questions rather than 
 5. [Module 1 — Panel Design Against Pre-Written Questions](#module-1)
 6. [Coverage Snapshot](#coverage-snapshot)
 7. [Dashboard Design Pipeline](#dashboard-pipeline)
-8. [Module 2 — Assembled Dashboard & Findings](#module-2)
+8. [Module 2 — Assembled Dashboard](#module-2)
 9. [Project Summary](#project-summary)
 10. [Challenges & Fixes](#challenges-fixes)
 11. [Scope & Limitations](#scope-limitations)
@@ -56,7 +56,7 @@ A five-panel SOC dashboard built against five pre-written questions rather than 
 A dashboard assembled by adding every chart that happens to be available produces a wall of color with no clear purpose — a panel with no statable question communicates nothing to whoever reads it later. This project inverts that order: five specific, statable questions were written first, and each panel was built only to answer one of them.
 
 - **Module 1 — Panel Design Against Pre-Written Questions:** Decide what needs to be known before building anything, then map each question to exactly one panel.
-- **Module 2 — Assembled Dashboard & Findings:** Assemble the final dashboard, and treat every number it surfaces — including uncomfortable ones — as a finding worth reporting, not a defect to hide.
+- **Module 2 — Assembled Dashboard:** Assemble the final dashboard and record what each panel shows.
 
 > [!NOTE]
 > Agent status and rule-firing counts are live, constantly shifting figures. The final assembled dashboard screenshot — captured last — is treated as the single source of truth for every number cited here, not the individual panels built earlier during construction.
@@ -138,8 +138,6 @@ gantt
     Write 5 Questions & Map to 5 Panels     :active, 2026-07-19, 1d
     section Assembly
     Build & Save SOC-Week4-Dashboard        :done, 2026-07-19, 1d
-    section Findings
-    Read the Assembled Dashboard for Gaps   :crit, 2026-07-19, 1d
 ```
 <p align="center"><em>Colors distinguish each project stage — all stages complete.</em></p>
 
@@ -191,7 +189,7 @@ A colourful chart with no clear label and no stated time range communicates noth
 |---|---|---|
 | Panel Design | Question-First | All 5 panels map to a pre-written, statable question |
 | Dashboard Assembly | Saved | `SOC-Week4-Dashboard`, all panels live |
-| Agent Health Finding | Surfaced, Not Hidden | 67 of 128 agents disconnected — flagged for follow-up |
+| Agent Status Panel | Captured | Panel shows 67 disconnected / 61 active |
 | Source of Truth | Assembled Screenshot | Final dashboard capture used over earlier per-panel builds |
 
 ---
@@ -225,15 +223,15 @@ flowchart TB
 ---
 
 <a id="module-2"></a>
-## 🟢 Module 2 — Assembled Dashboard & Findings
+## 🟢 Module 2 — Assembled Dashboard
 
-**Objective:** Assemble all five panels into a single saved dashboard, and read the result honestly — including the panel that surfaces a number nobody wants to see.
+**Objective:** Assemble all five panels into a single saved dashboard and record what each panel shows.
 
 ### Step 2 — Assemble and capture the dashboard ✅
 
 <p align="center">
   <img src="screenshots/Exhibit1_dashboard_agent_status_timeline.png" alt="Exhibit 1 - Dashboard panels 1 of 2" width="850"><br>
-  <em>Exhibit 1 — Assembled <code>SOC-Week4-Dashboard</code>, panels 1 of 2: agent status (67 disconnected / 61 active) and alert volume timeline showing two clear spikes corresponding to active testing periods</em>
+  <em>Exhibit 1 — Assembled <code>SOC-Week4-Dashboard</code>, panels 1 of 2: agent status (67 disconnected / 61 active) and alert volume timeline (3-hour buckets) with a burst of high-volume buckets peaking at about 6,500 alerts</em>
 </p>
 
 <p align="center">
@@ -241,18 +239,18 @@ flowchart TB
   <em>Exhibit 2 — Assembled dashboard, panels 2 of 2: severity-by-level bar chart, top source IPs, and top 10 firing rules (Integrity checksum changed: 9,207; Suricata CUSTOM Nmap NULL Scan Detected: 5,348)</em>
 </p>
 
-### Step 3 — Read the agent health panel honestly ✅
+### Step 3 — Record what each panel shows ✅
 
-67 of 128 monitored agents currently show as disconnected rather than active. This is flagged as an observation requiring follow-up, not treated as a dashboard artefact to ignore — **a dashboard that surfaces an uncomfortable number is doing its job.**
+The readings below are taken from the two assembled-dashboard screenshots above.
 
-🎯 **Result:** Five panels, five answered questions, and one finding that would have been invisible in a dashboard designed to look complete rather than to be read honestly.
+🎯 **Result:** Five panels built, each answering one pre-written question, and saved in one dashboard.
 
 | Panel | Key Reading |
 |---|---|
-| `panel-agent-status` | 61 active / **67 disconnected** — flagged for IT follow-up |
-| `panel-alert-timeline` | Two clear volume spikes, matching active testing windows |
-| `panel-severity-7day` | Majority of alerts at Level 7 |
-| `panel-top-source-ips` | Traffic concentrated on two internal IPs (`.1`, `.99`) |
+| `panel-agent-status` | 61 active / **67 disconnected** |
+| `panel-alert-timeline` | Volume peaks at about 6,500 alerts per 3-hour bucket |
+| `panel-severity-7day` | Level 7 has the most alerts, followed by Level 3 |
+| `panel-top-source-ips` | Only 6 events carry a source IP: 4 from `192.168.56.1` (the pfSense LAN gateway, per the Week 4 report), 2 from `192.168.56.99` |
 | `panel-top10-rules` | Led by Integrity checksum changed (9,207), then Suricata NULL scan (5,348) |
 
 ---
@@ -260,10 +258,10 @@ flowchart TB
 <a id="project-summary"></a>
 ## 📝 Project Summary
 
-| Module | Tooling | Key Finding |
+| Module | Tooling | Key Result |
 |---|---|---|
 | Panel Design Against Pre-Written Questions | Wazuh Dashboard, OpenSearch visualizations | 5 questions, each mapped to exactly one panel before building began |
-| Assembled Dashboard & Findings | `SOC-Week4-Dashboard` | 67 of 128 agents disconnected — surfaced, not filtered out |
+| Assembled Dashboard | `SOC-Week4-Dashboard` | Five panels saved in one dashboard; readings captured in two screenshots |
 
 ---
 
@@ -273,7 +271,6 @@ flowchart TB
 | ❌ Challenge | ✅ Fix |
 |---|---|
 | Agent status and rule-firing counts shifted between when individual panels were first built and when the full dashboard was assembled | Standardised on the final assembled screenshot as the single source of truth for every number cited, rather than an earlier, already-stale per-panel capture |
-| A dashboard could easily present only "good news" panels | Kept the disconnected-agent finding visible and reported it as a genuine follow-up item, not a number to quietly drop |
 
 ---
 
@@ -281,8 +278,8 @@ flowchart TB
 ## 🚧 Scope & Limitations
 
 - **Snapshot in time:** All figures reflect the state at the moment the dashboard was assembled and captured — agent counts and rule totals are live and will have moved on since.
+- **What the agent counts measure was not checked:** The agent status panel is quoted as displayed (67 disconnected, 61 active). Whether it counts distinct agents or status records was not verified.
 - **Five panels only:** This dashboard answers five specific questions; it is not a general-purpose, exhaustive SOC view.
-- **Disconnected-agent root cause not investigated here:** The 67-disconnected finding is surfaced and flagged, not diagnosed — that follow-up sits outside this project's scope.
 
 ---
 
@@ -291,7 +288,6 @@ flowchart TB
 
 - **A panel with no statable question doesn't belong on the dashboard.** Writing the question before building anything kept every panel purposeful rather than decorative.
 - **Dashboard numbers are a snapshot, not a constant.** Citing the earliest per-panel screenshot instead of the final assembled view risks reporting a number that was already stale by the time it's written down.
-- **A dashboard's job includes surfacing bad news.** A chart that only ever shows good numbers isn't a monitoring tool — it's decoration. The disconnected-agent count staying visible is what makes this dashboard trustworthy.
 
 ---
 
@@ -301,7 +297,6 @@ flowchart TB
 - Designing dashboard panels against explicit, pre-written questions rather than available data
 - Building and saving a multi-panel SOC dashboard in OpenSearch Dashboards
 - Treating live, shifting figures correctly by citing a single authoritative snapshot
-- Reading a dashboard's own output honestly, including findings that require follow-up rather than praise
 
 ---
 
