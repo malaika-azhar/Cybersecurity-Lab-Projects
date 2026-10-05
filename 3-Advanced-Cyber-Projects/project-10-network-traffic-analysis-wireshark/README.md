@@ -47,9 +47,9 @@ Five core protocols captured live and read packet by packet — ARP, DNS, HTTP, 
 <a id="at-a-glance"></a>
 ## 📊 At a Glance
 
-| 🧩 Protocols Analyzed | 🖼️ Screenshots | 🔌 SOC Ports Documented | 📶 Layers Traced | 💰 Cost |
-|:---:|:---:|:---:|:---:|:---:|
-| **5** | **6** | **7** | **4** | **$0** |
+| 🧩 Protocols Analyzed | 🖼️ Screenshots | 💰 Cost |
+|:---:|:---:|:---:|
+| **5** | **6** | **$0** |
 
 ---
 
@@ -77,6 +77,9 @@ Before touching any SIEM tooling, this project builds the foundation underneath 
 <a id="osi-tcpip-trace"></a>
 ## 🗺️ OSI / TCP-IP Trace — Following One Web Request
 
+> [!NOTE]
+> Reference notes from the training material, not captured traffic. No screenshot belongs to this section.
+
 | Layer | What Happens |
 |---|---|
 | **Application** | Type a URL, browser sends an HTTP/HTTPS request. A DNS query goes out first to resolve the server's IP. |
@@ -90,6 +93,9 @@ Before touching any SIEM tooling, this project builds the foundation underneath 
 
 <a id="soc-ports-reference"></a>
 ## 🔌 SOC Ports Reference
+
+> [!NOTE]
+> Reference notes from the training material, not captured traffic. No screenshot belongs to this section.
 
 | Port | Service | Use |
 |:---:|---|---|
@@ -257,7 +263,7 @@ flowchart TB
 
 | # | Command | Used In | Purpose |
 |:---:|---|---|---|
-| 1 | `ping -c 4 8.8.8.8` | Module 2 — ICMP | Manually generate ICMP echo request/reply traffic to capture, since it didn't appear from passive browsing |
+| 1 | `ping` to a Google address (`142.251.38.14` in Exhibit 6) | Module 2 — ICMP | Manually generate ICMP echo request/reply traffic to capture, since it didn't appear from passive browsing |
 
 ---
 
@@ -276,7 +282,7 @@ flowchart TB
 
 | ❌ Challenge | ✅ Fix |
 |---|---|
-| ICMP never appeared in the passive capture | Generated it manually with `ping -c 4 8.8.8.8`, learning that some traffic has to be deliberately produced to study it |
+| ICMP never appeared in the passive capture | Generated it manually with a `ping` to a Google address, learning that some traffic has to be deliberately produced to study it |
 | Initially misunderstood ARP as "finding an IP address" | Re-checked the actual capture against the explanation and corrected it: ARP takes a known IP and finds the matching MAC address — the opposite of the first assumption |
 
 ---
@@ -304,10 +310,10 @@ flowchart TB
 <a id="skills-demonstrated"></a>
 ## 🛠️ Skills Demonstrated
 
-- Tracing a single web request through all four layers of the OSI/TCP-IP model
+- Explaining how a web request moves through the four OSI/TCP-IP layers
 - Live packet capture and protocol identification in Wireshark
-- Distinguishing normal protocol behavior from indicators of spoofing, C2 beaconing, credential exposure, and DoS
-- Practical subnetting and CIDR interpretation
+- Describing normal protocol behavior and the known indicators of spoofing, C2 beaconing, credential exposure, and DoS
+- Explaining /24 subnetting and CIDR notation
 - Recognizing when traffic must be deliberately generated to be observed
 - Self-correcting a technical misunderstanding by re-checking it against real capture data
 
