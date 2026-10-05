@@ -24,7 +24,7 @@
 
 | 🧩 Modules | 🖼️ Screenshots | 📜 Custom Rules | 🎯 MITRE Techniques |
 |:---:|:---:|:---:|:---:|
-| **2** | **8** | **2 tested + 1 drafted** | **2** |
+| **2** | **8** | **2 tested** | **2** |
 
 </div>
 
@@ -42,7 +42,7 @@ All 9 steps of the project, with the screenshot that proves each one.
 | 2 | Restart the agent and confirm it is Active | 🔵 Module 1 | `ubuntu-agent` shows Active | [Exhibit 2](#ex2) |
 | 3 | Create, modify and delete a test file in `/etc` | 🔵 Module 1 | 3 file events generated | Commands (see README) |
 | 4 | Confirm the 3 FIM events on the dashboard | 🔵 Module 1 | Rules 554 added, 550 modified, 553 deleted | [Exhibit 3](#ex3) |
-| 5 | Write the custom rule set in `local_rules.xml` | 🟢 Module 2 | 3 rules saved (2 tested, 1 drafted) | [Exhibit 4](#ex4) |
+| 5 | Write the custom rule set in `local_rules.xml` | 🟢 Module 2 | Rules 100001 and 100002 saved and tested (100003 is in the file, not claimed) | [Exhibit 4](#ex4) |
 | 6 | Trigger Rule 100001 with `adduser` | 🟢 Module 2 | Test user `cyberster_test_user` created | [Exhibit 5](#ex5) |
 | 7 | Confirm Rule 100001 fires on the dashboard | 🟢 Module 2 | Rule 100001 fired, Level 10 | [Exhibit 7](#ex7) |
 | 8 | Trigger Rule 100002 with an SSH failure burst | 🟢 Module 2 | Repeated SSH login failures generated | [Exhibit 6](#ex6) |
@@ -72,7 +72,7 @@ Exhibits 1 to 3. Click a screenshot to open it full size.
 <a id="ex3"></a>
 <a href="screenshots/Exhibit3_FIM_all_alerts.png"><img src="screenshots/Exhibit3_FIM_all_alerts.png" width="280" alt="Exhibit 3"></a>
 <br><b>Exhibit 3 — FIM alerts</b>
-<br><sub>Added (554), modified (550) and deleted (553) events for the test file</sub>
+<br><sub>Added (554), modified (550) and deleted (553) events for the test file (7 hits from two test runs)</sub>
 </td>
 </tr>
 </table>
@@ -89,13 +89,13 @@ Exhibits 4 to 8.
 <a id="ex4"></a>
 <a href="screenshots/Exhibit4_custom_rules_xml.png"><img src="screenshots/Exhibit4_custom_rules_xml.png" width="280" alt="Exhibit 4"></a>
 <br><b>Exhibit 4 — Custom rules XML</b>
-<br><sub>Rules 100001, 100002 and 100003 in <code>local_rules.xml</code></sub>
+<br><sub>Rules 100001, 100002 and 100003 in <code>local_rules.xml</code>. Rule 100003 is present but not tested or claimed</sub>
 </td>
 <td align="center" valign="top" width="33%">
 <a id="ex5"></a>
 <a href="screenshots/Exhibit5_adduser_command.png"><img src="screenshots/Exhibit5_adduser_command.png" width="280" alt="Exhibit 5"></a>
 <br><b>Exhibit 5 — adduser command</b>
-<br><sub><code>adduser cyberster_test_user</code> run on the Wazuh server host (<code>ubuntu-wazuh-server</code>)</sub>
+<br><sub><code>adduser cyberster_test_user</code> run on the Ubuntu endpoint</sub>
 </td>
 <td align="center" valign="top" width="33%">
 <a id="ex6"></a>
@@ -109,7 +109,7 @@ Exhibits 4 to 8.
 <a id="ex7"></a>
 <a href="screenshots/Exhibit7_rule100001_alert.png"><img src="screenshots/Exhibit7_rule100001_alert.png" width="280" alt="Exhibit 7"></a>
 <br><b>Exhibit 7 — Rule 100001 alert</b>
-<br><sub>Level 10 alert in Threat Hunting. Alerts recorded under agent <code>wazuh-server</code></sub>
+<br><sub>Level 10 alert in Threat Hunting, 10 hits. Alerts recorded under agent <code>wazuh-server</code></sub>
 </td>
 <td align="center" valign="top" width="33%">
 <a id="ex8"></a>
@@ -129,10 +129,9 @@ Exhibits 4 to 8.
 |:---:|---|---|---|:---:|:---:|
 | `100001` | Local user account creation | [T1136.001](https://attack.mitre.org/techniques/T1136/001/) | Persistence | 10 | ✅ Tested & firing |
 | `100002` | SSH brute-force | [T1110.001](https://attack.mitre.org/techniques/T1110/001/) | Credential Access | 12 | ✅ Tested & firing |
-| `100003` | External USB storage insertion | [T1200](https://attack.mitre.org/techniques/T1200/) | Initial Access | 7 | 📝 Written, not validated |
 
 > [!NOTE]
-> Rule 100003 is written but untested because the lab had no Windows agent.
+> This project covers a Linux endpoint only. Rule 100003 appears in `local_rules.xml` (Exhibit 4) but is not tested or claimed.
 
 ---
 
