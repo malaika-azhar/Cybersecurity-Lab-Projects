@@ -194,7 +194,8 @@ Full chain-of-custody metadata (case number, evidence number, examiner) is embed
 
 <p align="center">
   <img src="screenshots/Exhibit02_e01_acquisition.png" alt="Exhibit 2 - E01 acquisition" width="850"><br>
-  <em>Exhibit 2 — <code>ewfacquire</code> completing acquisition, with the MD5 hash calculated over the acquired data matching the source</em>
+  <em>Exhibit 2 — <code>ewfacquire</code> completing acquisition, with the MD5 hash calculated over the acquired data matching the source</em><br>
+  <sub>The screenshot starts after the case-metadata prompts, so the case and evidence numbers are not visible in it</sub>
 </p>
 
 ### Step 3 — Independently re-verify the hash ✅
@@ -286,7 +287,7 @@ The default kernel-native `ntfs3` driver doesn't support `streams_interface` —
 
 <p align="center">
   <img src="screenshots/Exhibit05_ads_mount_streams.png" alt="Exhibit 5 - ADS stream mount" width="850"><br>
-  <em>Exhibit 5 — Stream-aware mount confirmed, hidden stream visible to <code>getfattr</code> while the default stream's listed size stays unchanged</em>
+  <em>Exhibit 5 — Stream-aware <code>ntfs-3g</code> mount confirmed, with <code>file1.txt</code> listed at 14 bytes</em>
 </p>
 
 ### Step 6 — Recover the hidden stream by name ✅
@@ -332,7 +333,7 @@ A 27-byte hidden stream held fully recoverable content while the default stream'
 stat /mnt/testdrive/file1.txt
 ```
 
-`analyzeMFT` only resolved NTFS system-file entries, not user files — `stat` was used as the working substitute.
+`analyzeMFT` only resolved NTFS system-file entries, not user files — `stat` was used as the working substitute. The screenshot also shows an `ntfsinfo -m` attempt: its 47-line output had no entry matching `file1.txt` or `file2.txt`.
 
 <p align="center">
   <img src="screenshots/Exhibit08_macb_timestamps.png" alt="Exhibit 8 - MACB timestamps" width="850"><br>
@@ -361,7 +362,7 @@ Recovered orphaned MFT records; original filenames unresolved because the parent
 
 <p align="center">
   <img src="screenshots/Exhibit10_fls_deleted_files.png" alt="Exhibit 10 - fls deleted files" width="850"><br>
-  <em>Exhibit 10 — <code>fls -rd</code> enumerating orphaned MFT records (<code>OrphanFile-16</code> through <code>OrphanFile-29</code>) left behind after deletion</em>
+  <em>Exhibit 10 — <code>fls -rd</code> enumerating orphaned MFT records (<code>OrphanFile-16</code> to <code>OrphanFile-23</code>, and <code>OrphanFile-29</code>) left behind after deletion</em>
 </p>
 
 <p align="center">
@@ -398,7 +399,7 @@ Recovered orphaned MFT records; original filenames unresolved because the parent
 | `mkfs.ntfs` refused to format a loopback file | Used the `-F` (force) flag |
 | Kernel-native `ntfs3` driver doesn't support Alternate Data Streams | Switched to FUSE-based `ntfs-3g` with `streams_interface=windows` |
 | `analyzeMFT` only resolved NTFS system-file entries, not user files | Used `stat` directly against the mounted file as a working substitute |
-| `fsstat` and `fls` both crashed with a segmentation fault on exit | Verified the crash occurred only after complete, valid output was printed — data retained, not discarded |
+| `fsstat`, `fls` and `icat` each crashed with a segmentation fault on exit | Verified the crash occurred only after complete, valid output was printed — data retained, not discarded |
 | No Windows host available for FTK Imager, Arsenal Image Mounter, MFT Explorer, Autopsy GUI | Substituted `ewfacquire`/`ewfverify`, a read-only loop mount, `stat`, and the Sleuth Kit CLI — each documented at first use |
 
 ---
@@ -407,7 +408,7 @@ Recovered orphaned MFT records; original filenames unresolved because the parent
 ## 🚧 Scope & Limitations
 
 - **Controlled evidence source:** The 500 MB image was purpose-built for this exercise, not a real seized device — the acquisition and analysis workflow is representative, not a live case.
-- **Tool crashes on exit:** Both `fsstat` and `fls` segfaulted after completing output — treated as a known quirk of this build, not investigated further as its own root cause.
+- **Tool crashes on exit:** `fsstat`, `fls` and `icat` each segfaulted after completing output — treated as a known quirk of this build, not investigated further as its own root cause.
 - **Single deleted file recovered:** Only one deleted file (`deleteme.txt`) was targeted for recovery in this exercise; broader file carving across the full unallocated space was out of scope.
 
 ---
@@ -417,7 +418,7 @@ Recovered orphaned MFT records; original filenames unresolved because the parent
 
 - **A hash match proves integrity, not process.** Write-blocking and chain-of-custody documentation still have to stand on their own — a matching hash alone doesn't establish how the evidence was handled.
 - **Tool substitution only holds up when stated plainly at the point of substitution**, not silently presented as the real thing — every Windows-only tool in this project has a documented Linux equivalent.
-- **A tool crashing on exit doesn't automatically invalidate the data it already produced.** Both `fsstat` and `fls` segfaulted, but only after printing complete, valid output.
+- **A tool crashing on exit doesn't automatically invalidate the data it already produced.** `fsstat`, `fls` and `icat` each segfaulted, but only after printing complete, valid output.
 - **NTFS deletion removes the map, not the territory.** This is the core fact that later timeline reconstruction and MFT residue analysis build on.
 
 ---
@@ -443,7 +444,7 @@ Recovered orphaned MFT records; original filenames unresolved because the parent
 | 2 | `Exhibit02_e01_acquisition.png` | `ewfacquire` completing, hash calculated |
 | 3 | `Exhibit03_ewfverify.png` | Independent hash re-verification, SUCCESS |
 | 4 | `Exhibit04_readonly_mount.png` | Evidence mounted read-only, files confirmed |
-| 5 | `Exhibit05_ads_mount_streams.png` | Stream-aware mount, hidden stream visible to `getfattr` |
+| 5 | `Exhibit05_ads_mount_streams.png` | Stream-aware mount, `file1.txt` listed at 14 bytes |
 | 6 | `Exhibit06_ads_hidden_content.png` | Hidden stream content recovered by name |
 | 7 | `Exhibit07_ads_verification.png` | Full ADS sequence — default vs. hidden stream |
 | 8 | `Exhibit08_macb_timestamps.png` | MACB timestamps via `stat` |
