@@ -40,7 +40,7 @@ All 9 steps of the project, with the screenshot that proves each one.
 | # | Step | Module | Result | Evidence |
 |:---:|---|:---:|---|:---:|
 | 1 | Hash the source before acquisition | 🔵 Module 1 | Baseline MD5/SHA256 established | [Exhibit 1](#ex1) |
-| 2 | Acquire the E01 image | 🔵 Module 1 | Full chain-of-custody metadata embedded | [Exhibit 2](#ex2) |
+| 2 | Acquire the E01 image | 🔵 Module 1 | E01 acquired, MD5 calculated over the data | [Exhibit 2](#ex2) |
 | 3 | Independently re-verify the hash | 🔵 Module 1 | `ewfverify` — SUCCESS, hash matches | [Exhibit 3](#ex3) |
 | 4 | Mount read-only and confirm integrity | 🔵 Module 1 | Both original files present, unmodified | [Exhibit 4](#ex4) |
 | 5 | Mount with stream support, create hidden stream | 🟢 Module 2 | Default stream unchanged at 14 bytes | [Exhibit 5](#ex5) |
@@ -96,7 +96,7 @@ Exhibits 5 to 11.
 <a id="ex5"></a>
 <a href="screenshots/Exhibit05_ads_mount_streams.png"><img src="screenshots/Exhibit05_ads_mount_streams.png" width="280" alt="Exhibit 5"></a>
 <br><b>Exhibit 5 — Stream-aware mount</b>
-<br><sub>Hidden stream visible to <code>getfattr</code></sub>
+<br><sub>Stream-aware mount, <code>file1.txt</code> listed at 14 bytes</sub>
 </td>
 <td align="center" valign="top" width="33%">
 <a id="ex6"></a>
@@ -155,7 +155,7 @@ Exhibits 5 to 11.
 | Autopsy GUI | The Sleuth Kit CLI (`fsstat`, `fls`, `icat`) | ✅ Disclosed |
 
 > [!NOTE]
-> Both `fsstat` and `fls` segfaulted on exit — but only after printing complete, valid output. The data produced is not discarded by the crash; this is documented in the full README.
+> `fsstat`, `fls` and `icat` each segfaulted on exit — but only after printing complete, valid output. The data produced is not discarded by the crash; this is documented in the full README.
 
 ---
 
