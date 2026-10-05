@@ -39,7 +39,7 @@ Both steps of the project, with the screenshot that proves each one.
 | # | Step | Module | Result | Evidence |
 |:---:|---|:---:|---|:---:|
 | 1 | Write 5 questions, map each to one panel | 🔵 Module 1 | Panel-per-question design table (see README) | Table (see README) |
-| 2 | Assemble and capture the final dashboard | 🟢 Module 2 | 5 panels live, 1 finding flagged for follow-up | [Exhibit 1](#ex1) · [Exhibit 2](#ex2) |
+| 2 | Assemble and capture the final dashboard | 🟢 Module 2 | 5 panels live | [Exhibit 1](#ex1) · [Exhibit 2](#ex2) |
 
 ---
 
@@ -94,7 +94,7 @@ Exhibits 1 to 2. Click a screenshot to open it full size.
 <a id="ex1"></a>
 <a href="screenshots/Exhibit1_dashboard_agent_status_timeline.png"><img src="screenshots/Exhibit1_dashboard_agent_status_timeline.png" width="380" alt="Exhibit 1"></a>
 <br><b>Exhibit 1 — Agent status & timeline</b>
-<br><sub>67 disconnected / 61 active, plus alert volume over time with two clear spikes</sub>
+<br><sub>67 disconnected / 61 active, plus alert volume over time (3-hour buckets, peaking at about 6,500)</sub>
 </td>
 <td align="center" valign="top" width="50%">
 <a id="ex2"></a>
@@ -107,18 +107,15 @@ Exhibits 1 to 2. Click a screenshot to open it full size.
 
 ---
 
-## 🎯 Key Findings Summary
+## 🎯 Key Readings Summary
 
 | Panel | Key Reading | Status |
 |---|---|:---:|
-| Agent Status | 61 active / **67 disconnected** | 🚩 Flagged for follow-up |
-| Alert Timeline | Two clear volume spikes | ✅ Matches testing windows |
-| Severity (7-day) | Majority at Level 7 | ✅ As expected |
-| Top Source IPs | Concentrated on 2 internal IPs | ✅ Documented |
-| Top 10 Rules | FIM checksum changes lead | ✅ Documented |
-
-> [!NOTE]
-> The disconnected-agent count is surfaced here deliberately, not filtered out — a dashboard that only shows good news isn't a monitoring tool.
+| Agent Status | 61 active / **67 disconnected** | ✅ Matches Exhibit 1 |
+| Alert Timeline | Volume peaks at about 6,500 per 3-hour bucket | ✅ Matches Exhibit 1 |
+| Severity (7-day) | Level 7 largest, then Level 3 | ✅ Matches Exhibit 2 |
+| Top Source IPs | Only 6 events carry a source IP (4 and 2); `.1` is the pfSense gateway | ✅ Matches Exhibit 2 |
+| Top 10 Rules | FIM checksum changes lead (9,207) | ✅ Matches Exhibit 2 |
 
 ---
 
