@@ -21,13 +21,13 @@
 
 <div align="center">
 
-| 🧩 Modules | 🖼️ Screenshots | 🔌 Agents | 📋 Alert Types Triaged |
-|:---:|:---:|:---:|:---:|
-| **4** | **9** | **2** | **10** |
+| 🧩 Modules | 🖼️ Screenshots |
+|:---:|:---:|
+| **2** | **9** |
 
 </div>
 
-<p align="center">🧩 <b>Lab:</b> 1 Ubuntu Server VM + Windows Host agent · Wazuh Cloud SIEM · VMware Workstation</p>
+<p align="center">🧩 <b>Lab:</b> 1 Ubuntu Server VM · Wazuh Cloud SIEM · VMware Workstation</p>
 
 ---
 
@@ -44,10 +44,6 @@
 | 7 | Local Wazuh install pre-flight check | 🟠 Module 2 | 2GB VM flagged below recommended minimum | [Exhibit 7](#ex7) |
 | 8 | Bypass attempt with `-i` flag | 🟠 Module 2 | Installer re-run; Indexer stage still risky | [Exhibit 8](#ex8) |
 | 9 | Pivot to Wazuh Cloud and log in | 🟠 Module 2 | Cloud dashboard live, no agents yet | [Exhibit 9](#ex9) |
-| 10 | Deploy Ubuntu agent | 🟢 Module 3 | `Ubuntu-server` Active; 99 medium / 110 low alerts in 24h | 📝 Notes |
-| 11 | Deploy Windows-Host agent | 🟢 Module 3 | PowerShell install; both agents Active | 📝 Notes |
-| 12 | Generate a real failed-login alert | 🟢 Module 3 | `su root` wrong password → 2 events, Password Guessing | 📝 Notes |
-| 13 | Triage top 10 alert types | 🟣 Module 4 | Rule 60602 (Level 9) flagged as standout | 📝 Notes |
 
 ---
 
@@ -134,36 +130,6 @@ Exhibits 7 to 9.
 
 ---
 
-## 🟢 Module 3 — Agent Deployment & Alert Testing 📝
-
-No screenshots were retained for this module; steps are documented from notes.
-
-| Item | Detail |
-|---|---|
-| Ubuntu agent | `Ubuntu-server` (`192.168.92.132`), DEB amd64 package, Active |
-| Windows agent | `Windows-Host`, PowerShell install as Administrator, Active |
-| Telemetry | 99 medium + 110 low alerts in 24h; 669 total events across both agents |
-| Failed-login alert | `su root` with wrong password → 2 Authentication failure events |
-| MITRE ATT&CK mapping | Password Guessing |
-
----
-
-## 🟣 Module 4 — Dashboard Navigation & Alert Triage 📝
-
-No screenshots were retained for this module; results are documented from notes.
-
-| Rule | Level | Assessment |
-|:---:|:---:|---|
-| 550 | 7 | Routine — FIM checksum changes |
-| 553 | 7 | Routine — likely log rotation |
-| 554 | 5 | Routine — file added |
-| 61104 | 3 | Low, but check which service changed |
-| **60602** | **9** | **Real concern — investigate first** |
-| 60642 | 3 | Routine — Windows licensing service |
-| 60798 / 60805 / 60807 / 60808 | 3 | Routine — database engine startup/recovery sequence |
-
----
-
 ## 🎯 Verification Checklist
 
 | Check | Method | Module | Status |
@@ -172,12 +138,9 @@ No screenshots were retained for this module; results are documented from notes.
 | Internet via NAT | `ping -c 4 8.8.8.8` | Module 1 | ✅ Confirmed |
 | Local install blocked by RAM | Installer pre-flight check | Module 2 | ✅ Confirmed (documented) |
 | Cloud SIEM live | Wazuh Cloud dashboard login | Module 2 | ✅ Confirmed |
-| Both agents Active | Dashboard agent list | Module 3 | ✅ Confirmed (📝 notes) |
-| Real failed-login alert | Threat Hunting + MITRE view | Module 3 | ✅ Confirmed (📝 notes) |
-| Alert triage | Threat Hunting Events view | Module 4 | ✅ Confirmed (📝 notes) |
 
 > [!NOTE]
-> Every substitution (one VM, host Windows as agent, Wazuh Cloud, VMware) follows the plan approved by program support. Kali Linux VM is deferred until a RAM upgrade.
+> Every substitution (one VM, Wazuh Cloud, VMware) follows the plan approved by program support. Kali Linux VM is deferred until a RAM upgrade.
 
 ---
 
