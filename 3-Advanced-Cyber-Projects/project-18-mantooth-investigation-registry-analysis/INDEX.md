@@ -21,9 +21,9 @@
 
 <div align="center">
 
-| 🧩 Modules | 🖼️ Screenshots | 🗂️ Deleted Files Found | 🎯 Questions Covered |
-|:---:|:---:|:---:|:---:|
-| **3** | **17** | **276** | **9 (Q1–Q7, Q10, Q11)** |
+| 🧩 Modules | 🖼️ Screenshots | 🗂️ Deleted Files Found | 🎯 Questions Covered | 💰 Cost |
+|:---:|:---:|:---:|:---:|:---:|
+| **3** | **17** | **276** | **9 (Q1–Q7, Q10, Q11)** | **$0** |
 
 </div>
 
@@ -37,18 +37,18 @@ All 12 steps of the project, with the screenshot that proves each one.
 
 | # | Step | Module | Result | Evidence |
 |:---:|---|:---:|---|:---:|
-| 1 | Create the case and configure ingest | 🔵 Module 1 | Mantooth.E01 added, ingest modules selected | [Exhibit 1](#ex1), [2](#ex2) |
+| 1 | Create the case and configure ingest | 🔵 Module 1 | Mantooth.E01 added, ingest modules selected | [Exhibit 1](#ex1) · [Exhibit 2](#ex2) |
 | 2 | Verify the image MD5 hash | 🔵 Module 1 | MD5 `31217210a1a69f272079a3bde3d9d8fc` confirmed | [Exhibit 3](#ex3) |
 | 3 | Document the partition layout | 🔵 Module 1 | Four volumes; vol2 holds the Windows installation | [Exhibit 4](#ex4) |
 | 4 | Find encrypted files | 🟠 Module 2 | 2 password-protected files flagged Notable | [Exhibit 5](#ex5) |
-| 5 | Review deleted files | 🟠 Module 2 | 261 file-system / 276 total deleted files | [Exhibit 6](#ex6), [7](#ex7) |
+| 5 | Review deleted files | 🟠 Module 2 | 261 file-system / 276 total deleted files | [Exhibit 6](#ex6) · [Exhibit 7](#ex7) |
 | 6 | Read photo EXIF metadata | 🟠 Module 2 | 8 photographs, Sony / Kodak / Olympus models seen | [Exhibit 8](#ex8) |
 | 7 | Review web search history | 🟠 Module 2 | "check washing", "making meth", "atm card stealing" | [Exhibit 9](#ex9) |
 | 8 | Recover email addresses | 🟠 Module 2 | 61 entries from Outlook.pst and .eml files | [Exhibit 10](#ex10) |
 | 9 | Identify the operating system | 🟢 Module 3 | WESMANTOOTH-PC, Windows Vista Ultimate (x86) | [Exhibit 11](#ex11) |
 | 10 | Recover the Recycle Bin cleanup | 🟢 Module 3 | CameraShy.exe deleted 2007-07-14 22:55:57 | [Exhibit 12](#ex12) |
-| 11 | Check Xcopy in Prefetch | 🟢 Module 3 | Run count 15, last run 2007-08-24 17:47:33 | [Exhibit 13](#ex13), [14](#ex14), [15](#ex15) |
-| 12 | Review USB device history | 🟢 Module 3 | Canon IXUS 700 and two flash drives identified | [Exhibit 16](#ex16), [17](#ex17) |
+| 11 | Check Xcopy in Prefetch | 🟢 Module 3 | Run count 15, last run 2007-08-24 17:47:33 | [Exhibit 13](#ex13) · [Exhibit 14](#ex14) · [Exhibit 15](#ex15) |
+| 12 | Review USB device history | 🟢 Module 3 | Canon IXUS 700 and two flash drives identified | [Exhibit 16](#ex16) · [Exhibit 17](#ex17) |
 
 ---
 
@@ -58,31 +58,29 @@ Exhibits 1 to 4. Click a screenshot to open it full size.
 
 <table>
 <tr>
-<td align="center" valign="top" width="50%">
+<td align="center" valign="top" width="25%">
 <a id="ex1"></a>
-<a href="screenshots/ss-01-add-data-source-wizard.PNG"><img src="screenshots/ss-01-add-data-source-wizard.PNG" width="380" alt="Exhibit 1"></a>
-<br><b>Exhibit 1 — Add Data Source wizard</b>
+<a href="screenshots/ss-01-add-data-source-wizard.PNG"><img src="screenshots/ss-01-add-data-source-wizard.PNG" width="220" alt="Exhibit 1"></a>
+<br><b>Exhibit 1 — Add Data Source</b>
 <br><sub>Select Data Source step, before browsing to Mantooth.E01</sub>
 </td>
-<td align="center" valign="top" width="50%">
+<td align="center" valign="top" width="25%">
 <a id="ex2"></a>
-<a href="screenshots/ss-02-configure-ingest-modules.PNG"><img src="screenshots/ss-02-configure-ingest-modules.PNG" width="380" alt="Exhibit 2"></a>
+<a href="screenshots/ss-02-configure-ingest-modules.PNG"><img src="screenshots/ss-02-configure-ingest-modules.PNG" width="220" alt="Exhibit 2"></a>
 <br><b>Exhibit 2 — Ingest modules</b>
-<br><sub>Modules selected for the run (Keyword Search deselected)</sub>
+<br><sub>Modules selected (Keyword Search deselected)</sub>
 </td>
-</tr>
-<tr>
-<td align="center" valign="top" width="50%">
+<td align="center" valign="top" width="25%">
 <a id="ex3"></a>
-<a href="screenshots/ss-03-md5-hash-container-tab.PNG"><img src="screenshots/ss-03-md5-hash-container-tab.PNG" width="380" alt="Exhibit 3"></a>
+<a href="screenshots/ss-03-md5-hash-container-tab.PNG"><img src="screenshots/ss-03-md5-hash-container-tab.PNG" width="220" alt="Exhibit 3"></a>
 <br><b>Exhibit 3 — MD5 hash</b>
-<br><sub>Container tab with MD5 and acquisition metadata from the E01 header</sub>
+<br><sub>Container tab with MD5 and E01 acquisition metadata</sub>
 </td>
-<td align="center" valign="top" width="50%">
+<td align="center" valign="top" width="25%">
 <a id="ex4"></a>
-<a href="screenshots/ss-04-partition-layout-4volumes.PNG"><img src="screenshots/ss-04-partition-layout-4volumes.PNG" width="380" alt="Exhibit 4"></a>
+<a href="screenshots/ss-04-partition-layout-4volumes.PNG"><img src="screenshots/ss-04-partition-layout-4volumes.PNG" width="220" alt="Exhibit 4"></a>
 <br><b>Exhibit 4 — Partition layout</b>
-<br><sub>Four volumes; vol2 (NTFS/exFAT) is the Windows installation</sub>
+<br><sub>Four volumes; vol2 holds Windows</sub>
 </td>
 </tr>
 </table>
@@ -197,15 +195,15 @@ Exhibits 11 to 17.
 
 ---
 
-## 🎯 Key Findings
+## 🎯 Key Findings Summary
 
-| Artefact | Finding | Exhibit |
-|---|---|---|
-| Encryption Detection | `How To Steal Credit Numbers.doc` and `Those who owes.xls` password-protected | [5](#ex5) |
-| Web Search | "check washing", "making meth", "atm card stealing" searched repeatedly on 2007-07-12 | [9](#ex9) |
-| Recycle Bin | CameraShy.exe, a "Hacker Stuff" DLL and `ValidateCreditCa....zip` deleted within ~70 seconds | [12](#ex12) |
-| Prefetch | XCOPY.EXE run 15 times, last on 2007-08-24 | [15](#ex15) |
-| USB Device Attached | Canon Digital IXUS 700 and two Silicon Integrated Systems flash drives | [16](#ex16), [17](#ex17) |
+| Artefact | Finding | Status |
+|---|---|:---:|
+| Encryption Detection | `How To Steal Credit Numbers.doc` and `Those who owes.xls` password-protected ([Exhibit 5](#ex5)) | ✅ Confirmed |
+| Web Search | "check washing", "making meth", "atm card stealing" searched repeatedly on 2007-07-12 ([Exhibit 9](#ex9)) | ✅ Confirmed |
+| Recycle Bin | CameraShy.exe, a "Hacker Stuff" DLL and `ValidateCreditCa....zip` deleted within ~70 seconds ([Exhibit 12](#ex12)) | ✅ Confirmed |
+| Prefetch | XCOPY.EXE run 15 times, last on 2007-08-24 ([Exhibit 15](#ex15)) | ✅ Confirmed |
+| USB Device Attached | Canon Digital IXUS 700 and two Silicon Integrated Systems flash drives ([Exhibit 16](#ex16) · [Exhibit 17](#ex17)) | ✅ Confirmed |
 
 > [!NOTE]
 > All timestamps are shown as recorded in Autopsy with the case time zone Asia/Karachi (GMT+5:00); apply −12 hours for Mountain Time. The 30 USB entries share one timestamp, which most likely reflects a single driver-database enumeration, not 30 connections. Items without a screenshot are listed under Scope & Limitations in the README.
@@ -216,6 +214,6 @@ Exhibits 11 to 17.
 
 [⬆️ Back to top](#top) &nbsp;·&nbsp; [📖 Full README](README.md)
 
-🔍 **[Autopsy](https://www.autopsy.com)** · 🧭 **[README Troubleshooting Pipeline](README.md#troubleshooting-pipeline)**
+🕵️ **[Autopsy](https://www.autopsy.com)** · 🔍 **[Correlation Pipeline](README.md#correlation-pipeline)**
 
 </div>
