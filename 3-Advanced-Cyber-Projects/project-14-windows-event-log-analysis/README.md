@@ -154,7 +154,7 @@ certutil -hashfile C:\Forensics\EventLogs\Security.evtx SHA256
 
 <p align="center">
   <img src="screenshots/ss-04-output-csv-filtered-logontype.PNG" alt="Exhibit 4 - Filtered output.csv" width="850"><br>
-  <em>Exhibit 4 (Figure 53.3) — Parsed <code>output.csv</code> opened in a spreadsheet, filtered on MapDescription and Logon Type columns ahead of the search</em>
+  <em>Exhibit 4 (Figure 53.3) — Parsed <code>output.csv</code> opened in a spreadsheet, with the MapDescription and Logon Type columns used for the search</em>
 </p>
 
 <p align="center">
@@ -172,8 +172,8 @@ certutil -hashfile C:\Forensics\EventLogs\Security.evtx SHA256
 ### Step 4 — Locate Event ID 4625 (failed logon) ✅
 
 <p align="center">
-  <img src="screenshots/ss-06-event-4625-failed-logon.PNG" alt="Exhibit 6 - Event 4625 failed logon" width="850"><br>
-  <em>Exhibit 6 (Figure 53.5) — Row containing EventId 4625 ("Failed logon"), TimeCreated 9/11/2026 23:23, with the FailureReason2 field referencing the account involved</em>
+  <img src="screenshots/ss-07-event-4625-failed-logon.PNG" alt="Exhibit 6 - Event 4625 failed logon" width="850"><br>
+  <em>Exhibit 6 (Figure 53.5) — <code>output.csv</code> view with the TimeCreated column highlighted during the Event ID 4625 (failed logon) search: 9/11/2026 23:23</em>
 </p>
 
 ---
@@ -183,14 +183,14 @@ certutil -hashfile C:\Forensics\EventLogs\Security.evtx SHA256
 
 **Objective:** Identify background service accounts to separate expected Windows noise from genuine human activity.
 
-### Step 5 — Filter Event ID 4624 for Logon Type 5 (service logon) ✅
+### Step 5 — Identify Logon Type 5 (service logon) activity ✅
 
 <p align="center">
-  <img src="screenshots/ss-07-logontype5-background-accounts.PNG" alt="Exhibit 7 - Logon Type 5 background accounts" width="850"><br>
-  <em>Exhibit 7 (Figure 55.1) — Filtered Logon Type 5 entries showing UserName values including <code>DESKTOP-0O3U1SH$</code> and the local user account, tied to Event ID 5379 (Credential Manager) and related service-context events</em>
+  <img src="screenshots/ss-08-logontype5-background-accounts.PNG" alt="Exhibit 7 - Logon Type 5 background accounts" width="850"><br>
+  <em>Exhibit 7 (Figure 55.1) — <code>output.csv</code> rows around Logon Type 5 events with the PayloadData2 column highlighted, showing <code>DESKTOP-0O3U1SH$</code> as the UserName on service logons, alongside Credential Manager entries for the local account</em>
 </p>
 
-🎯 **Why these shouldn't be flagged as suspicious:** `DESKTOP-0O3U1SH$` is the machine's own computer account, used by Windows itself (Group Policy, domain/workgroup communication) rather than a human user — its recurring Logon Type 5 activity is expected on every Windows machine. The intern's own account appearing in a Type 5 context reflects Credential Manager and related background services operating on behalf of the logged-in session, not a second human logon. An analyst reviewing a compromised server should expect exactly this pattern and focus investigative attention on Logon Types 2, 3, and 10 instead.
+🎯 **Why these shouldn't be flagged as suspicious:** `DESKTOP-0O3U1SH$` is the machine's own computer account, used by Windows itself (Group Policy, domain/workgroup communication) rather than a human user — its recurring Logon Type 5 activity is expected on every Windows machine. The local user account appearing next to them on Credential Manager entries reflects background services operating on behalf of the logged-in session, not a second human logon. An analyst reviewing a compromised server should expect exactly this pattern and focus investigative attention on Logon Types 2, 3, and 10 instead.
 
 ---
 
@@ -243,7 +243,7 @@ flowchart LR
 | Module 1 — Evidence Integrity & Parsing | `certutil`, EvtxECmd | 32,738-record CSV produced with a verified SHA256 source hash |
 | Module 2 — Human Baseline | Spreadsheet filtering | Logon Type 2 baseline confirmed with timestamp |
 | Module 3 — Failed Logon | Spreadsheet filtering, Event ID 4625 | Most recent failed logon located with timestamp |
-| Module 4 — Background Noise | Event ID 4624, Logon Type 5 | Multiple service accounts identified and explained as non-suspicious |
+| Module 4 — Background Noise | Logon Type 5, Credential Manager entries | Multiple service accounts identified and explained as non-suspicious |
 
 ---
 
@@ -293,8 +293,8 @@ flowchart LR
 | 3 | `ss-03-evtxecmd-pass1-completion.PNG` | Completion: 32,738 records, 0 errors |
 | 4 | `ss-04-output-csv-filtered-logontype.PNG` | output.csv filtered on Logon Type columns |
 | 5 | `ss-05-logontype2-event-4624.PNG` | First Logon Type 2 event, EventId 4624 |
-| 6 | `ss-06-event-4625-failed-logon.PNG` | Event 4625 failed logon row |
-| 7 | `ss-07-logontype5-background-accounts.PNG` | Filtered Logon Type 5 background service accounts |
+| 6 | `ss-07-event-4625-failed-logon.PNG` | Event 4625 failed logon row |
+| 7 | `ss-08-logontype5-background-accounts.PNG` | Filtered Logon Type 5 background service accounts |
 
 ---
 
@@ -311,8 +311,8 @@ project-14-windows-event-log-analysis/
     |-- ss-03-evtxecmd-pass1-completion.PNG
     |-- ss-04-output-csv-filtered-logontype.PNG
     |-- ss-05-logontype2-event-4624.PNG
-    |-- ss-06-event-4625-failed-logon.PNG
-    `-- ss-07-logontype5-background-accounts.PNG
+    |-- ss-07-event-4625-failed-logon.PNG
+    `-- ss-08-logontype5-background-accounts.PNG
 ```
 
 <div align="center">
