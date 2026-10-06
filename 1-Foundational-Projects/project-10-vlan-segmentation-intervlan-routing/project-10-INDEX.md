@@ -35,26 +35,26 @@
 | # | Step | Module | Result | Evidence |
 |:---:|---|:---:|---|:---:|
 | 1 | Build the topology | 🔵 Module 1 | 2 switches, router, 5 end devices wired | [Exhibit 1](#ex1) |
-| 2 | Configure VTP server (Switch1) | 🟢 Module 2 | VTP mode server, domain LABNET | [Exhibit 2](#ex2) |
-| 3 | Configure VTP client (Switch2) | 🟢 Module 2 | VTP mode client, joined domain | [Exhibit 3](#ex3) |
+| 2 | Configure VTP server (Switch1) | 🟢 Module 2 | VTP mode server, domain malaika.lab | [Exhibit 2](#ex2) |
+| 3 | Configure VTP client (Switch2) | 🟢 Module 2 | VTP mode client, joined malaika.lab | [Exhibit 3](#ex3) |
 | 4 | Create VLANs on Switch1 | 🟢 Module 2 | VLANs 10/20/99 created | [Exhibit 4](#ex4) |
-| 5 | Verify VLAN sync | 🟢 Module 2 | VLANs appear on Switch2 | [Exhibit 5](#ex5) |
+| 5 | Verify VLAN sync | 🟢 Module 2 | Switch2 checked before trunk was up; sync seen in Exhibit 7 | [Exhibit 5](#ex5) |
 | 6 | Configure Switch1 ports | 🟣 Module 3 | Access + trunk ports set | [Exhibit 6](#ex6) |
 | 7 | Configure Switch2 ports | 🟣 Module 3 | Access + trunk ports set | [Exhibit 7](#ex7) |
-| 8 | Shut down unused ports | 🟠 Module 4 | All unused ports disabled | [Exhibit 8](#ex8) |
-| 9 | Enable port security | 🟠 Module 4 | Sticky MAC, PortFast, BPDU Guard | [Exhibit 9](#ex9) |
-| 10 | Configure management VLAN | 🔴 Module 5 | VLAN 99 SVIs addressed | [Exhibit 10](#ex10) |
+| 8 | Shut down unused ports | 🟠 Module 4 | Switch1 unused ports disabled (VLAN 99) | [Exhibit 8](#ex8) |
+| 9 | Enable port security | 🟠 Module 4 | Sticky MAC, max 1, shutdown on violation | [Exhibit 9](#ex9) |
+| 10 | Configure management VLAN | 🔴 Module 5 | VLAN 99 SVI addressed (Switch1) | [Exhibit 10](#ex10) |
 | 11 | Enable SSH on switches | 🔴 Module 5 | SSH v2 + RSA key configured | [Exhibit 11](#ex11) |
 | 12 | Configure router subinterfaces | 🟤 Module 6 | dot1Q per VLAN | [Exhibit 12](#ex12) |
 | 13 | Configure DHCP pools | 🟤 Module 6 | Pools for VLAN 10 & 20 | [Exhibit 13](#ex13) |
 | 14 | Test PC DHCP | 🟤 Module 6 | PC0 leases an address | [Exhibit 14](#ex14) |
-| 15 | Verify DHCP binding | 🟤 Module 6 | Router binding table confirmed | [Exhibit 15](#ex15) |
-| 16 | Pre-ACL ping test | ⚫ Module 7 | All directions reachable | [Exhibit 16](#ex16) |
-| 17 | Configure the ACL | ⚫ Module 7 | Deny VLAN20 → VLAN10 | [Exhibit 17](#ex17) |
+| 15 | Verify DHCP binding | 🟤 Module 6 | 2 leases per pool confirmed on router | [Exhibit 15](#ex15) |
+| 16 | Pre-ACL ping test | ⚫ Module 7 | Same-VLAN and cross-VLAN pings succeed | [Exhibit 16](#ex16) |
+| 17 | Configure the ACL | ⚫ Module 7 | Deny ICMP VLAN10 → VLAN20 | [Exhibit 17](#ex17) |
 | 18 | Test the ACL | ⚫ Module 7 | One direction blocked, one open | [Exhibit 18](#ex18) |
-| 19 | Test SSH access | 🟡 Module 8 | Admin PC → both switches | [Exhibit 19](#ex19) |
-| 20 | Final `show` verification | 🟡 Module 8 | All layers confirmed healthy | [Exhibit 20](#ex20) |
-| 21 | Save configuration | 🟡 Module 8 | Saved to startup-config | [Exhibit 21](#ex21) |
+| 19 | Test SSH access | 🟡 Module 8 | PC2 → both switches | [Exhibit 19](#ex19) |
+| 20 | Final `show` verification | 🟡 Module 8 | VTP, STP, routes and ACL hits confirmed | [Exhibit 20](#ex20) |
+| 21 | Save configuration | 🟡 Module 8 | Switch1 and router saved to startup-config | [Exhibit 21](#ex21) |
 
 ---
 
@@ -82,13 +82,13 @@
 <a id="ex2"></a>
 <a href="screenshots/02-vtp-server.png"><img src="screenshots/02-vtp-server.png" width="380" alt="Exhibit 2"></a>
 <br><b>Exhibit 2 — VTP server</b>
-<br><sub>Switch1, domain LABNET, VTP v2</sub>
+<br><sub>Switch1, domain malaika.lab, VTP v1</sub>
 </td>
 <td align="center" valign="top" width="50%">
 <a id="ex3"></a>
 <a href="screenshots/03-vtp-client.png"><img src="screenshots/03-vtp-client.png" width="380" alt="Exhibit 3"></a>
 <br><b>Exhibit 3 — VTP client</b>
-<br><sub>Switch2 joined domain LABNET</sub>
+<br><sub>Switch2 joined domain malaika.lab</sub>
 </td>
 </tr>
 </table>
@@ -104,8 +104,8 @@
 <td align="center" valign="top" width="50%">
 <a id="ex5"></a>
 <a href="screenshots/05-vtp-sync.png"><img src="screenshots/05-vtp-sync.png" width="380" alt="Exhibit 5"></a>
-<br><b>Exhibit 5 — Sync confirmed</b>
-<br><sub>VLANs appear on Switch2 without re-creation</sub>
+<br><b>Exhibit 5 — Sync check (pre-trunk)</b>
+<br><sub>Switch2 before the trunk was up — VLANs not yet synced</sub>
 </td>
 </tr>
 </table>
@@ -141,13 +141,13 @@
 <a id="ex8"></a>
 <a href="screenshots/08-unused-ports.png"><img src="screenshots/08-unused-ports.png" width="380" alt="Exhibit 8"></a>
 <br><b>Exhibit 8 — Unused ports shut</b>
-<br><sub>Administratively disabled on both switches</sub>
+<br><sub>Switch1 ports disabled and parked in VLAN 99</sub>
 </td>
 <td align="center" valign="top" width="50%">
 <a id="ex9"></a>
 <a href="screenshots/09-port-security.png"><img src="screenshots/09-port-security.png" width="380" alt="Exhibit 9"></a>
 <br><b>Exhibit 9 — Port security</b>
-<br><sub>Sticky MAC, PortFast, BPDU Guard</sub>
+<br><sub>Switch1 Fa0/1–3: sticky MAC, max 1, shutdown</sub>
 </td>
 </tr>
 </table>
@@ -162,7 +162,7 @@
 <a id="ex10"></a>
 <a href="screenshots/10-mgmt-vlan.png"><img src="screenshots/10-mgmt-vlan.png" width="380" alt="Exhibit 10"></a>
 <br><b>Exhibit 10 — Management VLAN</b>
-<br><sub>Switch1 .2, Switch2 .3 on VLAN 99</sub>
+<br><sub>Switch1 SVI 192.168.99.2/24 on VLAN 99</sub>
 </td>
 <td align="center" valign="top" width="50%">
 <a id="ex11"></a>
@@ -189,7 +189,7 @@
 <a id="ex13"></a>
 <a href="screenshots/13-dhcp-pools.png"><img src="screenshots/13-dhcp-pools.png" width="380" alt="Exhibit 13"></a>
 <br><b>Exhibit 13 — DHCP pools</b>
-<br><sub>SALES_VLAN10, IT_VLAN20</sub>
+<br><sub>VLAN10-SALES, VLAN20-IT</sub>
 </td>
 </tr>
 </table>
@@ -205,8 +205,8 @@
 <td align="center" valign="top" width="50%">
 <a id="ex15"></a>
 <a href="screenshots/15-dhcp-binding.png"><img src="screenshots/15-dhcp-binding.png" width="380" alt="Exhibit 15"></a>
-<br><b>Exhibit 15 — Binding table</b>
-<br><sub>Active leases confirmed on router</sub>
+<br><b>Exhibit 15 — Pool &amp; lease check</b>
+<br><sub>2 leases per pool; tail of binding table</sub>
 </td>
 </tr>
 </table>
@@ -221,13 +221,13 @@
 <a id="ex16"></a>
 <a href="screenshots/16-pre-acl-ping.png"><img src="screenshots/16-pre-acl-ping.png" width="380" alt="Exhibit 16"></a>
 <br><b>Exhibit 16 — Pre-ACL test</b>
-<br><sub>All directions reachable before any ACL</sub>
+<br><sub>Same-VLAN and cross-VLAN pings succeed before any ACL</sub>
 </td>
 <td align="center" valign="top" width="50%">
 <a id="ex17"></a>
 <a href="screenshots/17-acl-config.png"><img src="screenshots/17-acl-config.png" width="380" alt="Exhibit 17"></a>
-<br><b>Exhibit 17 — ACL 110</b>
-<br><sub>Denies VLAN20 → VLAN10, applied inbound</sub>
+<br><b>Exhibit 17 — ACL BLOCK-SALES-TO-IT</b>
+<br><sub>Denies ICMP VLAN10 → VLAN20, inbound on Gi0/0.10</sub>
 </td>
 </tr>
 </table>
@@ -254,13 +254,13 @@
 <a id="ex19"></a>
 <a href="screenshots/19-ssh-test.png"><img src="screenshots/19-ssh-test.png" width="380" alt="Exhibit 19"></a>
 <br><b>Exhibit 19 — SSH test</b>
-<br><sub>Admin PC connects to both switches</sub>
+<br><sub>PC2 connects to both switches</sub>
 </td>
 <td align="center" valign="top" width="50%">
 <a id="ex20"></a>
 <a href="screenshots/20-final-verify.png"><img src="screenshots/20-final-verify.png" width="380" alt="Exhibit 20"></a>
 <br><b>Exhibit 20 — Final verification</b>
-<br><sub>VLANs, routes, ACL all confirmed healthy</sub>
+<br><sub>VTP server, STP, routes, ACL hit count</sub>
 </td>
 </tr>
 </table>
@@ -271,7 +271,7 @@
 <a id="ex21"></a>
 <a href="screenshots/21-save-config.png"><img src="screenshots/21-save-config.png" width="380" alt="Exhibit 21"></a>
 <br><b>Exhibit 21 — Config saved</b>
-<br><sub>Running config saved to startup config</sub>
+<br><sub>Saved on Switch1 and the router</sub>
 </td>
 <td></td>
 </tr>
@@ -283,15 +283,15 @@
 
 | Check | Method | Module | Status |
 |:---:|---|---|:---:|
-| VLANs synced without re-creation | `show vlan brief` on Switch2 | Module 2 | ✅ Confirmed |
-| Port security + hardening active | `show port-security` | Module 4 | ✅ Confirmed |
-| SSH reachable on both switches | `ssh` from Admin PC | Modules 5, 8 | ✅ Confirmed |
-| DHCP leases granted | `show ip dhcp binding` | Module 6 | ✅ Confirmed |
-| ACL blocks exactly one direction | Pre/post ping test | Module 7 | ✅ Confirmed |
-| Config persisted | `copy running-config startup-config` | Module 8 | ✅ Confirmed |
+| VLANs synced without re-creation | `show vlan brief` on Switch2 | Modules 2–3 (Exhibit 7) | ✅ Confirmed |
+| Port security active on Switch1 | `show port-security` | Module 4 | ✅ Confirmed |
+| SSH reachable on both switches | `ssh` from PC2 | Modules 5, 8 | ✅ Confirmed |
+| DHCP leases granted | `show ip dhcp pool` | Module 6 | ✅ Confirmed |
+| ACL blocks ICMP in exactly one direction | Pre/post ping test | Module 7 | ✅ Confirmed |
+| Config persisted (Switch1, router) | `copy running-config startup-config` | Module 8 | ✅ Confirmed |
 
 > [!NOTE]
-> The ACL (Module 7) is intentionally one-directional — VLAN 20 → VLAN 10 is blocked while VLAN 10 → VLAN 20 stays open, verified with a before/after ping test rather than assumed from the config alone.
+> The ACL (Module 7) is intentionally one-directional and ICMP-only — ICMP from VLAN 10 → VLAN 20 is blocked while VLAN 20 → VLAN 10 stays open, verified with a before/after ping test rather than assumed from the config alone.
 
 ---
 
