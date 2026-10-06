@@ -110,32 +110,39 @@ project-XX-name/
 ## 🗺️ Skill Map
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '15px'}, 'flowchart': {'nodeSpacing': 30, 'rankSpacing': 44, 'padding': 10}}}%%
-flowchart TB
-    ROOT(("🛡️<br/>Foundational Projects")):::root --> BLUE["🔵 Blue Team & SOC"]:::blue
-    ROOT --> FOR["🟣 Forensics & Logs"]:::purple
-    ROOT --> OFF["🔴 Recon & Assessment"]:::red
-    ROOT --> NET["🟠 Network Infrastructure"]:::orange
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '18px'}, 'flowchart': {'nodeSpacing': 22, 'rankSpacing': 70, 'padding': 14, 'useMaxWidth': true, 'curve': 'linear'}}}%%
+flowchart LR
+    ROOT(("🛡️<br/>Foundational<br/>Projects")):::root
+
+    ROOT --> BLUE["🔵 Blue Team<br/>& SOC"]:::blue
+    ROOT --> FOR["🟣 Forensics<br/>& Logs"]:::purple
+    ROOT --> OFF["🔴 Recon &<br/>Assessment"]:::red
+    ROOT --> NET["🟠 Network<br/>Infrastructure"]:::orange
+
     BLUE --> B1["P01 Phishing Email Investigation"]:::leafBlue
-    BLUE --> B2["P04 Threat Framework Mapping — WannaCry"]:::leafBlue
+    BLUE --> B2["P04 Threat Mapping: WannaCry"]:::leafBlue
     BLUE --> B3["P06 SIEM Alert Triage"]:::leafBlue
-    FOR --> F1["P05 Network Forensics — Wireshark"]:::leafPurple
-    FOR --> F2["P07 Linux Log Analysis & Forensics"]:::leafPurple
+
+    FOR --> F1["P05 Network Forensics: Wireshark"]:::leafPurple
+    FOR --> F2["P07 Linux Log Analysis"]:::leafPurple
+
     OFF --> O1["P03 Automated Port Scanner"]:::leafRed
-    OFF --> O2["P08 Password Cracking & Hash Analysis"]:::leafRed
-    OFF --> O3["P09 Vulnerability Assessment Report"]:::leafRed
-    NET --> N1["P02 Cisco Infrastructure & Secure Routing"]:::leafOrange
-    NET --> N2["P10 VLAN Segmentation & Inter-VLAN Routing"]:::leafOrange
-    classDef root fill:#1B2A4A,stroke:#0B1A33,stroke-width:2px,color:#FFFFFF
-    classDef blue fill:#1A5276,stroke:#0B2E43,stroke-width:2px,color:#FFFFFF
-    classDef purple fill:#5B2C6F,stroke:#3B1A48,stroke-width:2px,color:#FFFFFF
-    classDef red fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
-    classDef orange fill:#B9770E,stroke:#6E4409,stroke-width:2px,color:#FFFFFF
-    classDef leafBlue fill:#2E86C1,stroke:#154360,stroke-width:2px,color:#FFFFFF
-    classDef leafPurple fill:#76448A,stroke:#432752,stroke-width:2px,color:#FFFFFF
-    classDef leafRed fill:#C0392B,stroke:#78281F,stroke-width:2px,color:#FFFFFF
-    classDef leafOrange fill:#D68910,stroke:#7E5109,stroke-width:2px,color:#FFFFFF
-    linkStyle default stroke:#2C3E50,stroke-width:2px
+    OFF --> O2["P08 Password Cracking"]:::leafRed
+    OFF --> O3["P09 Vulnerability Assessment"]:::leafRed
+
+    NET --> N1["P02 Cisco Secure Routing"]:::leafOrange
+    NET --> N2["P10 VLAN & Inter-VLAN Routing"]:::leafOrange
+
+    classDef root fill:#1B2A4A,stroke:#0B1A33,stroke-width:1px,color:#FFFFFF
+    classDef blue fill:#1A5276,stroke:#0B2E43,stroke-width:1px,color:#FFFFFF
+    classDef purple fill:#5B2C6F,stroke:#3B1A48,stroke-width:1px,color:#FFFFFF
+    classDef red fill:#943126,stroke:#571C16,stroke-width:1px,color:#FFFFFF
+    classDef orange fill:#B9770E,stroke:#6E4409,stroke-width:1px,color:#FFFFFF
+    classDef leafBlue fill:#2E86C1,stroke:#154360,stroke-width:1px,color:#FFFFFF
+    classDef leafPurple fill:#76448A,stroke:#432752,stroke-width:1px,color:#FFFFFF
+    classDef leafRed fill:#C0392B,stroke:#78281F,stroke-width:1px,color:#FFFFFF
+    classDef leafOrange fill:#D68910,stroke:#7E5109,stroke-width:1px,color:#FFFFFF
+    linkStyle default stroke:#5D6D7E,stroke-width:1px,fill:none
 ```
 <p align="center"><em>Ten projects across four skill areas: SOC work, forensics, reconnaissance and assessment, and network infrastructure.</em></p>
 
