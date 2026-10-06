@@ -126,13 +126,13 @@ flowchart LR
 ├── project-02-fim-custom-detection-rules/
 ├── project-03-network-perimeter-defense/
 ├── project-04-firewall-rules-configuration/
-├── project-05-port-scan-detection-lab/
+├── project-05-suricata-custom-rule-detection-lab/
 ├── project-06-ssh-bruteforce-detection-lab/
 ├── project-07-threat-intelligence-enrichment-and-vulnerability-assessment/
 ├── project-08-siem-log-analysis-alert-tuning/
 ├── project-09-siem-dashboard/
 ├── project-10-network-traffic-analysis-wireshark/
-├── project-11-malware-analysis-incident-response/
+├── project-11-malware-sample-acquisition-static-analysis/
 ├── project-12-insider-threat-detection-system/
 ├── project-13-soc-redvsblue-capstone/
 ├── project-14-windows-event-log-analysis/
@@ -190,13 +190,13 @@ flowchart TB
 | 02 | [Wazuh FIM & Custom Detection Rules](./project-02-fim-custom-detection-rules) | Real-time file integrity monitoring plus custom rules (account creation, SSH brute-force) | Wazuh, `wazuh-logtest`, MITRE ATT&CK |
 | 03 | [Network Perimeter Defense with pfSense](./project-03-network-perimeter-defense) | Flat lab network replaced with a pfSense gateway; remote logging verified end-to-end | pfSense, Wazuh, syslog |
 | 04 | [Firewall Rules Configuration on pfSense](./project-04-firewall-rules-configuration) | Remote syslog rule scoped to "Everything", delivery confirmed at the SIEM | pfSense, Wazuh, syslog |
-| 05 | [Port Scan Detection Lab](./project-05-port-scan-detection-lab) | Custom Suricata signature for an Nmap NULL scan, corrected and reloaded live | Suricata, Nmap |
+| 05 | [Suricata Custom Rule Detection Lab](./project-05-suricata-custom-rule-detection-lab) | Two custom Suricata signatures (NULL scan, ICMP flood) loaded live without a restart and proven against real traffic | Suricata, Nmap, Kali |
 | 06 | [SSH BruteForce Detection Lab](./project-06-ssh-bruteforce-detection-lab) | Two custom Wazuh rules tested against real attack simulations | Wazuh, `wazuh-logtest`, MITRE ATT&CK |
 | 07 | [Threat Intelligence Enrichment & Vulnerability Assessment](./project-07-threat-intelligence-enrichment-and-vulnerability-assessment) | Live threat feed via CDB list and custom rule; 3 → 0 high-severity CVEs verified by rescan | Wazuh, VirusTotal, URLhaus |
 | 08 | [SIEM Log Analysis & Alert Tuning](./project-08-siem-log-analysis-alert-tuning) | Live SSH failures correlated with labelled, simulated Windows events; CSV report | Wazuh |
 | 09 | [Custom SOC Dashboard Design](./project-09-siem-dashboard) | Five panels, each built against a pre-written question | Wazuh Dashboard (OpenSearch) |
 | 10 | [Network Traffic Analysis (Wireshark)](./project-10-network-traffic-analysis-wireshark) | ARP, DNS, HTTP, HTTPS/TLS, ICMP — normal vs suspicious | Wireshark |
-| 11 | [Malware Analysis & Incident Response](./project-11-malware-analysis-incident-response) | njRAT and Zeus/ZeroAccess samples analysed and converted into Suricata detection logic | Kali, ANY.RUN, Suricata |
+| 11 | [Malware Sample Acquisition & Static Analysis](./project-11-malware-sample-acquisition-static-analysis) | njRAT and a Zeus dropper acquired, hashed, isolated at the hypervisor, and analysed statically | Kali, binwalk, VirusTotal |
 | 12 | [Insider Threat Detection System](./project-12-insider-threat-detection-system) | Stage, obfuscate, exfiltrate, delete — reconstructed from log evidence | Kali, Wazuh, CyberChef |
 | 13 | [SOC Red vs Blue Capstone](./project-13-soc-redvsblue-capstone) | Insider-threat attack and investigation end to end, mapped to NIST IR | Kali, Wazuh Cloud, FIM |
 
@@ -220,11 +220,11 @@ Headline numbers pulled from the individual project write-ups.
 | Project | Highlight |
 |:---:|---|
 | 01 | 1 VM, 2 live agents, 10 alert types triaged, all at $0 |
-| 05 | Suricata signature iterated across 2 revisions and loaded live with no service restart |
+| 05 | 2 custom Suricata signatures proven on real traffic and loaded live with no service restart |
 | 07 | 20,826 URLhaus indicators loaded; high-severity CVEs closed from 3 to 0 |
 | 09 | 5 dashboard panels answering 5 pre-written questions |
 | 10 | 5 protocols captured live; 7 SOC ports documented |
-| 11 | 2 real malware samples analysed; ET ruleset of 52,725 rules loaded in Suricata |
+| 11 | 2 real malware samples analysed statically; njRAT flagged 62 / 70 on VirusTotal |
 | 14 | 33,127 event records parsed in the second pass |
 | 15 | 500 MB image acquired as E01 and hash-verified |
 | 16 | 362 of 363 Prefetch files parsed; 149 `$R` / 74 `$I` Recycle Bin records |
@@ -241,12 +241,11 @@ Detections written and tested along the way, each in its own project.
 | Project | Platform | Detection |
 |:---:|---|---|
 | 02 | Wazuh | Custom rules for local account creation and SSH brute-force |
-| 05 | Suricata | Custom signature for an Nmap NULL scan |
+| 05 | Suricata | Custom signatures for an Nmap NULL scan and an ICMP flood |
 | 06 | Wazuh | Rule 100001 (new user, `T1136.001`) and Rule 100002 (SSH brute-force, `T1110.001`) |
 | 07 | Wazuh | Custom rule backed by a CDB list of malicious URLs |
-| 11 | Suricata | Custom rules written from the analysed njRAT and Zeus/ZeroAccess samples |
-| 12 | Wazuh | Custom rule for the deletion stage of the insider-threat chain |
-| 13 | Wazuh | Custom rule plus a compensating log source for a deletion-detection gap |
+| 12 | Wazuh | Custom rule for the insider-threat chain, with the sudo audit log as a compensating source for the deletion stage |
+| 13 | Wazuh | Custom rule 100050, verified live against the attack steps |
 
 ---
 
@@ -262,7 +261,9 @@ A pattern runs through these projects: when something did not work as planned, i
 | 06 | First assumption about the base rule ID was wrong; corrected using `wazuh-logtest` |
 | 08 | Windows events were simulated, and labelled as simulated |
 | 09 | 67 of 128 agents disconnected — surfaced, not filtered out |
-| 12 · 13 | Deletion-detection visibility gap diagnosed and closed with a compensating log source |
+| 11 | `binwalk` could not extract the embedded payloads; recorded as a tooling gap, not as evidence of absence |
+| 12 | Dedicated deletion rule did not fire; diagnosed and covered with a compensating log source |
+| 13 | Kali used in place of a Windows endpoint, disclosed up front |
 | 14 | A screen-lock test returned a genuine absence, documented rather than fabricated |
 | 15 | Five tool substitutions, each disclosed where it was made |
 | 16 | One "no correlation found" finding reported as such |
@@ -281,7 +282,7 @@ A pattern runs through these projects: when something did not work as planned, i
 - Enriching alerts with threat intelligence (VirusTotal, URLhaus) and verifying patches by independent rescan
 - Designing a SOC dashboard panel by panel against explicit questions
 - Reading packet captures and telling normal traffic from suspicious traffic
-- Analysing malware statically and dynamically, and turning findings into detection logic
+- Handling malware samples safely (isolation, hashing) and analysing them statically
 - Simulating and reconstructing an insider-threat attack chain, reported against NIST SP 800-61
 
 ### 🟣 Digital Forensics
@@ -296,7 +297,7 @@ A pattern runs through these projects: when something did not work as planned, i
 <a id="tools"></a>
 ## 🧰 Tools & Frameworks
 
-`Wazuh` · `OpenSearch Dashboards` · `pfSense` · `Suricata` · `Nmap` · `Wireshark` · `Kali Linux` · `VMware Workstation` · `VirtualBox` · `CyberChef` · `ANY.RUN` · `VirusTotal` · `URLhaus` · `EvtxECmd` · `PECmd` · `LECmd` · `Autopsy` · `FTK Imager` · `Sleuth Kit` · `MITRE ATT&CK` · `NIST SP 800-61`
+`Wazuh` · `OpenSearch Dashboards` · `pfSense` · `Suricata` · `Nmap` · `Wireshark` · `Kali Linux` · `VMware Workstation` · `VirtualBox` · `CyberChef` · `binwalk` · `VirusTotal` · `URLhaus` · `EvtxECmd` · `PECmd` · `LECmd` · `Autopsy` · `FTK Imager` · `Sleuth Kit` · `MITRE ATT&CK` · `NIST SP 800-61`
 
 ---
 
@@ -308,8 +309,8 @@ A pattern runs through these projects: when something did not work as planned, i
 | Hypervisors | VMware Workstation (P01) and Oracle VirtualBox (P02) |
 | SIEM | Wazuh (Manager / Indexer / Dashboard) — Wazuh Cloud in P01 and P13 |
 | Firewall | pfSense Community Edition 2.7.2 (P03–P04) |
-| IDS | Suricata 8.0.6 (P05, P11) |
-| Attack / analysis host | Kali Linux (P11, P12, P13, P15) |
+| IDS | Suricata 8.0.6 (P05) |
+| Attack / analysis host | Kali Linux (P05, P11, P12, P13, P15) |
 | Windows evidence | Live artefacts from a personal Windows machine (P14, P16, P17) and an E01 evidence image (P18) |
 
 ---
