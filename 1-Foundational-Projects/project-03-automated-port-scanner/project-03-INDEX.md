@@ -36,7 +36,7 @@
 |:---:|---|:---:|---|:---:|
 | 1 | Install Python & python-nmap | 🔵 Module 1 | Python + library installed | [Exhibit 1](#ex1) |
 | 2 | Write scanner.py | 🔵 Module 2 | Initial script saved | [Exhibit 2](#ex2) |
-| 3 | Diagnose hidden file extension | 🔴 Module 3 | Found `scanner.py.txt`, renamed | [Exhibit 3](#ex3) |
+| 3 | Diagnose hidden file extension | 🔴 Module 3 | Found `scanner.py.txt`, renamed | [Exhibit 3](#ex3) · [Exhibit 3 fix](#ex3fix) |
 | 4 | Install Nmap & refresh PATH | 🔴 Module 4 | Fixed install + stale CMD session | 📝 No screenshot |
 | 5 | Diagnose invalid scan flag | 🔴 Module 5 | XML parse error traced to `-xyz` | [Exhibit 5](#ex5) |
 | 6 | Configure the scan call | 🟠 Module 6 | `-sV -Pn --unprivileged` applied | — |
@@ -54,7 +54,7 @@ Exhibits 1 to 2.
 <a id="ex1"></a>
 <a href="screenshots/1_Python_Installation.PNG"><img src="screenshots/1_Python_Installation.PNG" width="380" alt="Exhibit 1"></a>
 <br><b>Exhibit 1 — Python installed</b>
-<br><sub>Python + <code>python-nmap</code> installed successfully</sub>
+<br><sub><code>python-nmap</code> 0.7.1 installed via pip</sub>
 </td>
 <td align="center" valign="top" width="50%">
 <a id="ex2"></a>
@@ -76,13 +76,14 @@ Exhibits 3 (and its fix, same file group).
 <td align="center" valign="top" width="50%">
 <a id="ex3"></a>
 <a href="screenshots/3_Extension_Error_Check.PNG"><img src="screenshots/3_Extension_Error_Check.PNG" width="380" alt="Exhibit 3"></a>
-<br><b>Exhibit 3 — Hidden extension found</b>
-<br><sub><code>dir</code> reveals <code>scanner.py.txt</code></sub>
+<br><b>Exhibit 3 — Before diagnosis</b>
+<br><sub>Command prompt in the project folder beside the script</sub>
 </td>
 <td align="center" valign="top" width="50%">
+<a id="ex3fix"></a>
 <a href="screenshots/4_File_Renamed_Fix.PNG"><img src="screenshots/4_File_Renamed_Fix.PNG" width="380" alt="Exhibit 3 fix"></a>
-<br><b>Exhibit 3 (fix) — Renamed</b>
-<br><sub><code>ren scanner.py.txt scanner.py</code></sub>
+<br><b>Exhibit 3 (fix) — Found and renamed</b>
+<br><sub><code>dir</code> reveals <code>scanner.py.txt</code>, then <code>ren</code> fixes it</sub>
 </td>
 </tr>
 </table>
@@ -117,7 +118,7 @@ Exhibit 7.
 <a id="ex7"></a>
 <a href="screenshots/6_Final_Scan_Success.PNG"><img src="screenshots/6_Final_Scan_Success.PNG" width="380" alt="Exhibit 7"></a>
 <br><b>Exhibit 7 — Clean scan</b>
-<br><sub>Host up, no errors, service-version detection enabled</sub>
+<br><sub>Host up, no errors; no open ports listed in 21–80</sub>
 </td>
 <td></td>
 </tr>
