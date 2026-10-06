@@ -2,17 +2,17 @@
 
 # 🕵️ Mantooth Investigation — Autopsy Triage & Windows Artefact Analysis
 
-**Project 18 of 18 — Blue Team Internship Portfolio**
+**Project 18 of 18 — Advanced Cyber Projects**
 
-Autopsy Case Work · Fraud-Case Artefact Triage · Windows Artefact Hunting
+Autopsy Case Work & Windows Artefact Hunting on a Fraud-Case Disk Image
 
 ![Autopsy](https://img.shields.io/badge/Autopsy_4.23.1-2E4053?style=for-the-badge)
 ![E01](https://img.shields.io/badge/EWF%2FE01_Image-8E44AD?style=for-the-badge)
 ![NTFS](https://img.shields.io/badge/NTFS_Analysis-217346?style=for-the-badge)
 ![Cost](https://img.shields.io/badge/Cost-Free-2EA043?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Complete_(Lab_1_Scope)-2EA043?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Complete_(Lab_1_Scope)-brightgreen?style=for-the-badge)
 
-**Scope:** This case comes from the Week 10 report and examines a single evidence image, `Mantooth.E01`, in Autopsy. Every finding below is backed by a screenshot taken directly from the case; Week 10 items that have no screenshot are listed under Scope & Limitations and are not claimed anywhere else in this write-up.
+A fraud-case disk image examined in Autopsy — image integrity verified, partitions documented, encrypted and deleted files, web searches and emails reviewed, then Recycle Bin, Prefetch and USB artefacts correlated into one account of the suspect's activity. Every finding is backed by a screenshot.
 
 ### [📑 Open the visual index](INDEX.md)
 
@@ -31,7 +31,7 @@ Autopsy Case Work · Fraud-Case Artefact Triage · Windows Artefact Hunting
 7. [Module 3 — Windows Artefact Hunting](#module-3)
 8. [Module 4 — Investigative Commentary](#module-4)
 9. [Coverage Snapshot](#coverage-snapshot)
-10. [Troubleshooting Pipeline](#troubleshooting-pipeline)
+10. [Cross-Artifact Correlation Pipeline](#correlation-pipeline)
 11. [Project Summary](#project-summary)
 12. [Challenges & Fixes](#challenges-fixes)
 13. [Scope & Limitations](#scope-limitations)
@@ -45,25 +45,70 @@ Autopsy Case Work · Fraud-Case Artefact Triage · Windows Artefact Hunting
 <a id="at-a-glance"></a>
 ## 📊 At a Glance
 
-| 🧩 Evidence Image | 🖼️ Screenshots | 🎯 Questions Covered | 🗂️ Deleted Files Found | 💰 Cost |
-|:---:|:---:|:---:|:---:|:---:|
-| **Mantooth.E01** | **17** | **9 (Q1–Q7, Q10, Q11)** | **276** | **$0** |
+| 🧩 Modules | 🖼️ Screenshots | 🗂️ Deleted Files Found | 🎯 Questions Covered |
+|:---:|:---:|:---:|:---:|
+| **3** | **17** | **276** | **9 (Q1–Q7, Q10, Q11)** |
 
 ---
 
 <a id="project-background"></a>
 ## 📖 Project Background
 
-This report examines `Mantooth.E01` — a forensic image taken from the laptop of Wes Mantooth, a suspect in a fraudulent cheque case. Access was delayed by a shared-drive permission error (see Module 4), but once a working copy was confirmed, a genuine examination was carried out directly against the image.
+This project examines `Mantooth.E01` — a forensic image taken from the laptop of Wes Mantooth, a suspect in a fraudulent cheque case. Access was delayed by a shared-drive permission error (see Challenges & Fixes), but once a working copy was confirmed, a genuine examination was carried out directly against the image. The case comes from the Week 10 report; only work backed by a screenshot is claimed here.
 
-| Task Block | Status | Note |
-|---|:---:|---|
-| Case Setup & Image Verification (Q1–Q2) | ✅ Complete — real findings | MD5 hash and 4-partition layout confirmed |
-| Targeted Triage (Q3–Q7) | ✅ Complete — real findings | EXIF device models, 276 deleted files, encrypted files, web searches and recovered emails documented |
-| Windows Artefact Hunting (Q10, Q11 + OS & USB history) | ✅ Complete — real findings | CameraShy.exe, Xcopy prefetch, OS information and USB device history confirmed |
+- **Module 1 — Case Setup & Image Verification:** Create the case, verify the MD5 hash, and document the partition layout.
+- **Module 2 — Targeted Triage Findings:** Review encrypted files, deleted files, EXIF metadata, web search history, and recovered email addresses.
+- **Module 3 — Windows Artefact Hunting:** Correlate OS information, the Recycle Bin, Prefetch, and USB device history.
 
 > [!IMPORTANT]
-> One limitation is disclosed directly: the case's time zone was set to **Asia/Karachi (GMT+5:00)** instead of the brief's Mountain Time (Phoenix), so every timestamp below is recorded as observed with a noted **−12 hour** adjustment needed for Mountain Time equivalence. Week 10 items without a screenshot are not claimed in this write-up — see Scope & Limitations.
+> The case's time zone was set to **Asia/Karachi (GMT+5:00)** instead of the brief's Mountain Time (Phoenix), so every timestamp below is recorded as observed with a noted **−12 hour** adjustment needed for Mountain Time equivalence. Week 10 items without a screenshot are not claimed in this write-up — see Scope & Limitations.
+
+<div align="center">
+
+### 🧩 Artefact Coverage at a Glance
+
+<table>
+<tr>
+<td align="center" valign="top" width="16%">
+
+**🔐 Encryption**<br>
+<sub>Password-protected<br>files flagged</sub>
+
+</td>
+<td align="center" valign="top" width="16%">
+
+**🗑️ Deleted Files**<br>
+<sub>261 file-system,<br>276 total</sub>
+
+</td>
+<td align="center" valign="top" width="16%">
+
+**🌐 Web Search**<br>
+<sub>index.dat via<br>Internet Explorer</sub>
+
+</td>
+<td align="center" valign="top" width="16%">
+
+**✉️ Email**<br>
+<sub>Outlook.pst and<br>.eml addresses</sub>
+
+</td>
+<td align="center" valign="top" width="16%">
+
+**🧹 Recycle Bin**<br>
+<sub>CameraShy.exe<br>cleanup cluster</sub>
+
+</td>
+<td align="center" valign="top" width="16%">
+
+**💾 Prefetch & USB**<br>
+<sub>Xcopy run count,<br>device history</sub>
+
+</td>
+</tr>
+</table>
+
+</div>
 
 ---
 
@@ -104,6 +149,8 @@ gantt
     Module 2 - Targeted triage findings             :done, 2026-01-01, 1d
     Module 3 - Windows artefact hunting             :done, 2026-01-02, 1d
 ```
+<p align="center"><em>All modules complete.</em></p>
+
 ---
 
 <a id="module-1"></a>
@@ -137,6 +184,13 @@ gantt
   <em>Exhibit 4 (Figure 3.4) — Four volumes: vol2 (NTFS/exFAT, allocated, Windows installation) is the primary focus of the rest of the examination</em>
 </p>
 
+🎯 **Result:** The image's integrity and structure were established before any artefact was reviewed.
+
+| Check | Method | Outcome |
+|---|---|---|
+| Image integrity | Container tab, MD5 | ✅ `31217210a1a69f272079a3bde3d9d8fc` |
+| Partition layout | Data source volume listing | ✅ 4 volumes; vol2 is the Windows installation |
+
 ---
 
 <a id="module-2"></a>
@@ -144,14 +198,14 @@ gantt
 
 **Objective:** Extract and interpret encrypted files, deleted files, EXIF metadata, web search history, and email artefacts.
 
-### Q4 — Encrypted files ✅
+### Step 4 — Q4: Find encrypted files ✅
 
 <p align="center">
   <img src="screenshots/ss-05-encryption-detected-2files.PNG" alt="Exhibit 5 - Encryption detected" width="850"><br>
   <em>Exhibit 5 (Figure 4.1) — Two files flagged Notable: <code>How To Steal Credit Numbers.doc</code> and <code>Those who owes.xls</code></em>
 </p>
 
-### Q5 — Deleted files ✅
+### Step 5 — Q5: Review deleted files ✅
 
 <p align="center">
   <img src="screenshots/ss-06-deleted-files-overview.PNG" alt="Exhibit 6 - Deleted files overview" width="850"><br>
@@ -163,7 +217,7 @@ gantt
   <em>Exhibit 7 (Figure 4.3) — Full 276-entry deleted files listing, sorted by name</em>
 </p>
 
-### Q3 — EXIF metadata ✅
+### Step 6 — Q3: Read photo EXIF metadata ✅
 
 <p align="center">
   <img src="screenshots/ss-08-exif-metadata-8photos.PNG" alt="Exhibit 8 - EXIF metadata" width="850"><br>
@@ -172,7 +226,7 @@ gantt
 
 Device Model values visible in the results: `DSC00252.JPG` — DSC-W1 (Sony), `image_0.jpg` — DC210 Zoom (Kodak), `forsale.jpg` — C730UZ (Olympus Camedia C-730 Ultra Zoom). The other five photographs show no device model.
 
-### Q6 — Web search history ✅
+### Step 7 — Q6: Review web search history ✅
 
 <p align="center">
   <img src="screenshots/ss-09-web-search-results.PNG" alt="Exhibit 9 - Web search results" width="850"><br>
@@ -181,21 +235,31 @@ Device Model values visible in the results: `DSC00252.JPG` — DSC-W1 (Sony), `i
 
 "Check washing" (altering a physical cheque's payee/amount) directly matches this investigation's fraud premise.
 
-### Q7 — Email addresses ✅
+### Step 8 — Q7: Recover email addresses ✅
 
 <p align="center">
   <img src="screenshots/ss-10-email-addresses-recovered.PNG" alt="Exhibit 10 - Email addresses" width="850"><br>
   <em>Exhibit 10 (Figure 4.6) — 61 email entries from Outlook.pst and .eml files; <code>chkwasher@comcast.net</code> and <code>skimmerman27@hotmail.com</code> both echo the fraud narrative</em>
 </p>
 
+🎯 **Result:** Encrypted files, deleted files, device models, web searches, and email addresses were reviewed directly from Autopsy's parsed artefacts.
+
+| Artefact | Reviewed | Key Finding |
+|---|:---:|---|
+| Encryption Detection | ✅ | 2 password-protected documents with fraud-related names |
+| Deleted Files | ✅ | 261 file-system / 276 total |
+| EXIF Metadata | ✅ | 8 photographs; Sony, Kodak, and Olympus models seen |
+| Web Search | ✅ | "check washing", "making meth", "atm card stealing" |
+| Email | ✅ | 61 entries; two addresses echo the fraud narrative |
+
 ---
 
 <a id="module-3"></a>
 ## 🟢 Module 3 — Windows Artefact Hunting (Q10–Q11, OS & USB)
 
-**Objective:** Correlate prefetch execution, Recycle Bin entries, and system information with the suspect's likely actions.
+**Objective:** Correlate prefetch execution, Recycle Bin entries, system information, and USB history with the suspect's likely actions.
 
-### Operating System Information (bonus finding) ✅
+### Step 9 — Operating System Information ✅
 
 <p align="center">
   <img src="screenshots/ss-11-os-information-wesmantoothpc.PNG" alt="Exhibit 11 - OS Information" width="850"><br>
@@ -205,16 +269,16 @@ Device Model values visible in the results: `DSC00252.JPG` — DSC-W1 (Sony), `i
 > [!NOTE]
 > **Discrepancy noted, not resolved:** the E01 acquisition metadata records "Windows XP" while the live file system reports "Windows Vista Ultimate." Documented as an observed discrepancy — possibly a default value from the acquisition tool — rather than forced to agree.
 
-### Q10 — Recycle Bin: CameraShy.exe ✅
+### Step 10 — Q10: Recycle Bin — CameraShy.exe ✅
 
 <p align="center">
   <img src="screenshots/ss-12-recyclebin-camerashy-exe.PNG" alt="Exhibit 12 - CameraShy.exe" width="850"><br>
   <em>Exhibit 12 (Figure 5.2) — CameraShy.exe deleted 2007-07-14 22:55:57 from <code>C:\Users\Wes Mantooth\Documents\</code></em>
 </p>
 
-Two further entries deleted within ~90 seconds of CameraShy.exe: a DLL from a folder named "Hacker Stuff", and `ValidateCreditCa....zip` — suggesting a single cleanup action rather than three unrelated deletions.
+Two further entries were deleted within ~90 seconds of CameraShy.exe: a DLL from a folder named "Hacker Stuff", and `ValidateCreditCa....zip` — suggesting a single cleanup action rather than three unrelated deletions.
 
-### Q11 — Prefetch: Xcopy ✅
+### Step 11 — Q11: Prefetch — Xcopy ✅
 
 <p align="center">
   <img src="screenshots/ss-13-prefetch-runprograms-listing.PNG" alt="Exhibit 13 - Prefetch listing" width="850"><br>
@@ -233,7 +297,7 @@ Two further entries deleted within ~90 seconds of CameraShy.exe: a DLL from a fo
 
 🎯 **Interpretation:** A run count of 15 for a built-in utility is unusually high for incidental use and is consistent with repeated bulk file-copying, for example to the removable drives shown in the USB history below. The last recorded run (2007-08-24) is later than the 14 July Recycle Bin cleanup, so these artefacts alone do not tie the copying to that cleanup.
 
-### USB Device History ✅
+### Step 12 — USB Device History ✅
 
 <p align="center">
   <img src="screenshots/ss-16-usb-device-attached-listing.PNG" alt="Exhibit 16 - USB Device Attached listing" width="850"><br>
@@ -254,26 +318,24 @@ Two further entries deleted within ~90 seconds of CameraShy.exe: a DLL from a fo
 > [!NOTE]
 > All 30 entries share the identical timestamp 2007-07-14 22:56:41, which most likely reflects a single driver-database enumeration rather than 30 separate physical connections. The timestamp is recorded as observed and is not treated as a connection time.
 
-### Suspicious files identified ✅
+🎯 **Result:** Five suspicious files are identified, each tied to a specific artefact.
 
-Five suspicious files are identified, each tied to a specific artefact: `CameraShy.exe` (Recycle Bin, Documents folder), an unnamed DLL deleted from a folder named "Hacker Stuff" (Recycle Bin), `ValidateCreditCa....zip` (Recycle Bin, Documents folder), and the two password-protected documents `How To Steal Credit Numbers.doc` and `Those who owes.xls` (Encryption Detection).
+| Suspicious File | Source | Why It Is Flagged |
+|---|---|---|
+| `CameraShy.exe` | Recycle Bin, Documents folder | Deleted in the same cleanup cluster as the two entries below |
+| Unnamed DLL | Recycle Bin, "Hacker Stuff" folder | The folder name itself is the flag |
+| `ValidateCreditCa....zip` | Recycle Bin, Documents folder | Name suggests credit-card-related activity |
+| `How To Steal Credit Numbers.doc` | Encryption Detection | Password-protected; name states intent |
+| `Those who owes.xls` | Encryption Detection | Password-protected; ledger-style name |
 
 ---
 
 <a id="module-4"></a>
 ## 🟣 Module 4 — Investigative Commentary
 
-The findings form a coherent picture. The web search history shows deliberate research into three fraud techniques within a narrow window on 12 July 2007. The two password-protected documents sit squarely alongside that research. The Recycle Bin shows a tight ~90-second cleanup cluster the same evening. Xcopy's 15 executions plus two USB flash drives are consistent with files being copied to removable media at some point; Xcopy's last recorded run (2007-08-24) falls after the 14 July cleanup, so the two are not shown to be linked in time.
+The findings form a coherent picture. The web search history shows deliberate research into three fraud techniques within a narrow window on 12 July 2007. The two password-protected documents sit squarely alongside that research. The Recycle Bin shows a tight ~90-second cleanup cluster on 14 July 2007. Xcopy's 15 executions plus two USB flash drives are consistent with files being copied to removable media at some point; Xcopy's last recorded run (2007-08-24) falls after the 14 July cleanup, so the two are not shown to be linked in time.
 
 The camera evidence is the one area that does not reinforce the narrative: the camera connected to this machine (Canon Digital IXUS 700, Exhibits 16–17) is a different model from the Olympus device indicated by `forsale.jpg`'s EXIF data (Exhibit 8), and a Sony and a Kodak model also appear in the EXIF results. More than one distinct camera appears across the evidence, and this is recorded as an observation, not reconciled.
-
-### Technical Issues & Troubleshooting Log
-
-| Issue | What Happened | Resolution |
-|---|---|---|
-| Evidence file access | `Mantooth.E01` failed to download in usable form on more than one attempt | Traced to the download itself, not the file format; a complete verified copy opened in Autopsy without issue |
-| Case time zone | Case created at Asia/Karachi instead of Mountain Time; couldn't be edited after the fact in this Autopsy version | Proceeded with times as recorded, applying a documented −12 hour manual adjustment note wherever it matters |
-| Time constraints | Same-day deadline, ~half the week lost to the access issue | Lab 1 worked in priority order; items without a screenshot are left out of this write-up (see Scope & Limitations) |
 
 ---
 
@@ -304,30 +366,30 @@ flowchart LR
 
 ---
 
-<a id="troubleshooting-pipeline"></a>
-## 🧭 Troubleshooting Pipeline
+<a id="correlation-pipeline"></a>
+## 🧭 Cross-Artifact Correlation Pipeline
 
-How Lab 1 items without evidence are scoped out honestly instead of padded
+From separate artefact sets to one account of the suspect's activity
 
 ```mermaid
 flowchart TB
-    Time["⏱️ TIME PRESSURE HITS MID-CASE"]:::timeClass
-    Priority["📋 WORK IN PRIORITY ORDER, NOT SEQUENTIALLY"]:::priorityClass
-    Closed["✅ CLOSE WHAT'S CLOSABLE WITH REAL FINDINGS"]:::closedClass
-    Open["📝 FOR WHAT ISN'T CLOSED, LIST IT AS NOT COVERED"]:::openClass
-    Disclose["🔍 DISCLOSE GAPS EXPLICITLY, DON'T PAD OR APPROXIMATE"]:::discloseClass
-    Resume["🔁 EVERY REMAINING CLAIM MATCHES A SCREENSHOT"]:::resumeClass
+    Image["🧩 MANTOOTH.E01 IN AUTOPSY"]:::imageClass
+    Triage["🔎 TRIAGE: SEARCHES, EMAILS, ENCRYPTED FILES"]:::triageClass
+    Windows["🪟 WINDOWS: RECYCLE BIN, PREFETCH, USB"]:::windowsClass
+    Merge["🧩 CROSS-REFERENCED"]:::mergeClass
+    Story["📅 CONSISTENT FRAUD NARRATIVE"]:::storyClass
 
-    Time --> Priority --> Closed --> Open --> Disclose --> Resume
+    Image --> Triage --> Merge
+    Image --> Windows --> Merge
+    Merge --> Story
 
-    classDef timeClass fill:#943126,stroke:#571C16,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef priorityClass fill:#2C3E70,stroke:#131B3A,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef closedClass fill:#1E8449,stroke:#0E4A28,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef openClass fill:#B7950B,stroke:#6B5807,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef discloseClass fill:#76448A,stroke:#432752,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef resumeClass fill:#117864,stroke:#083D33,stroke-width:4px,color:#FFFFFF,font-weight:bold
+    classDef imageClass fill:#2C3E70,stroke:#131B3A,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef triageClass fill:#B9770E,stroke:#6E4409,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef windowsClass fill:#1E8449,stroke:#0E4A28,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef mergeClass fill:#B7950B,stroke:#6B5807,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef storyClass fill:#117864,stroke:#083D33,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
 
-    linkStyle default stroke:#2C3E50,stroke-width:3px
+    linkStyle default stroke:#2C3E50,stroke-width:4px
 ```
 
 ---
@@ -335,7 +397,7 @@ flowchart TB
 <a id="project-summary"></a>
 ## 📝 Project Summary
 
-| Module | Tooling | Key Outcome |
+| Module | Tooling | Key Finding |
 |---|---|---|
 | Module 1 — Case Setup | Autopsy 4.23.1 | MD5 hash and 4-partition layout confirmed |
 | Module 2 — Targeted Triage | Encryption Detection, Web Search, Communication Accounts | Fraud-linked documents, searches, and emails recovered |
@@ -349,7 +411,7 @@ flowchart TB
 
 | ❌ Challenge | ✅ Fix |
 |---|---|
-| `Mantooth.E01` failed to download usable on first attempts | Re-downloaded a complete, verified copy — confirmed as a valid EWF/EnCase image |
+| `Mantooth.E01` failed to download in a usable form on first attempts | Re-downloaded a complete, verified copy — confirmed as a valid EWF/EnCase image |
 | Case time zone set to Asia/Karachi, uneditable after creation | Proceeded with times as recorded, applied a documented −12 hour Mountain Time adjustment note |
 | Same-day deadline with ~half the week lost to access issues | Worked Lab 1 in priority order; left out anything without a screenshot rather than padding or approximating |
 
@@ -440,6 +502,6 @@ project-18-mantooth-investigation-registry-analysis/
 
 <div align="center">
 
-🔍 **[Autopsy](https://www.autopsy.com)** · 🧭 **[Troubleshooting Pipeline](#troubleshooting-pipeline)**
+🔍 **[Autopsy](https://www.autopsy.com)** · 🧭 **[Correlation Pipeline](#correlation-pipeline)**
 
 </div>
