@@ -24,30 +24,29 @@
 
 | 🧩 Modules | 🖼️ Screenshots | 🔗 LNK Files Parsed | ❌ Parse Errors |
 |:---:|:---:|:---:|:---:|
-| **2** | **10** | **75 / 75** | **0** |
+| **2** | **9** | **75 / 75** | **0** |
 
 </div>
 
-<p align="center">🧩 <b>Lab:</b> Chrome full artifact set ➜ BrowsingHistoryView export ➜ 75 LNK files ➜ LECmd ➜ Chronological Timeline</p>
+<p align="center">🧩 <b>Lab:</b> Chrome artifacts ➜ BrowsingHistoryView export ➜ 75 LNK files ➜ LECmd ➜ Chronological Timeline</p>
 
 ---
 
 ## 📑 Step Index
 
-All 10 steps of the project, with the screenshot that proves each one.
+All 9 steps of the project, with the screenshot that proves each one.
 
 | # | Step | Module | Result | Evidence |
 |:---:|---|:---:|---|:---:|
-| 1 | Locate and copy the Chrome profile | 🔵 Module 1 | Full artifact set identified before analysis | [Exhibit 1](#ex1) |
-| 2 | Export and review browsing history | 🔵 Module 1 | Multi-profile history captured | [Exhibit 2](#ex2) |
+| 1 | Locate the Chrome profile | 🔵 Module 1 | Chrome artifact folder identified | [Exhibit 1](#ex1) |
+| 2 | Export and review browsing history | 🔵 Module 1 | History entries exported with visit time and source file | [Exhibit 2](#ex2) |
 | 3 | Review download history | 🔵 Module 1 | Task briefs, reports, archive tool identified | [Exhibit 3](#ex3) |
 | 4 | Review cookies and site data | 🔵 Module 1 | Storage concentrated on a few frequent domains | [Exhibit 4](#ex4) |
 | 5 | Review autofill and stored credentials | 🔵 Module 1 | 6 passwords, 1 address stored | [Exhibit 5](#ex5) |
 | 6 | Review installed extensions | 🔵 Module 1 | Google Docs Offline installed and active | [Exhibit 6](#ex6) |
 | 7 | Parse all LNK files with LECmd | 🟢 Module 2 | 75/75 processed, zero errors | [Exhibit 7](#ex7) |
 | 8 | Review the full parsed output | 🟢 Module 2 | Complete metadata for every shortcut | [Exhibit 8](#ex8) |
-| 9 | Confirm no external device via volume serial | 🟢 Module 2 | Single serial across all 75 entries | [Exhibit 9](#ex9) |
-| 10 | Build the chronological access timeline | 🟢 Module 2 | Minute-by-minute sorted sequence | [Exhibit 10](#ex10) |
+| 9 | Build the chronological access timeline | 🟢 Module 2 | Minute-by-minute sorted sequence | [Exhibit 9](#ex9) |
 
 ---
 
@@ -61,7 +60,7 @@ Exhibits 1 to 6. Click a screenshot to open it full size.
 <a id="ex1"></a>
 <a href="screenshots/Exhibit01_chrome_userdata_folder.png"><img src="screenshots/Exhibit01_chrome_userdata_folder.png" width="280" alt="Exhibit 1"></a>
 <br><b>Exhibit 1 — User Data folder</b>
-<br><sub>Full artifact set before any file is queried</sub>
+<br><sub>Chrome User Data\Default folder</sub>
 </td>
 <td align="center" valign="top" width="33%">
 <a id="ex2"></a>
@@ -87,13 +86,13 @@ Exhibits 1 to 6. Click a screenshot to open it full size.
 <a id="ex5"></a>
 <a href="screenshots/Exhibit05_autofill_passwords.png"><img src="screenshots/Exhibit05_autofill_passwords.png" width="280" alt="Exhibit 5"></a>
 <br><b>Exhibit 5 — Autofill & passwords</b>
-<br><sub>Stored credentials and payment data</sub>
+<br><sub>6 passwords and 1 address stored</sub>
 </td>
 <td align="center" valign="top" width="33%">
 <a id="ex6"></a>
 <a href="screenshots/Exhibit06_extensions_listing.png"><img src="screenshots/Exhibit06_extensions_listing.png" width="280" alt="Exhibit 6"></a>
 <br><b>Exhibit 6 — Extensions</b>
-<br><sub>Version, size, ID, and permissions</sub>
+<br><sub>Version, size, and extension ID</sub>
 </td>
 </tr>
 </table>
@@ -102,7 +101,7 @@ Exhibits 1 to 6. Click a screenshot to open it full size.
 
 ## 🟢 Module 2 — LNK Parsing & Timeline Correlation
 
-Exhibits 7 to 10.
+Exhibits 7 to 9.
 
 <table>
 <tr>
@@ -122,16 +121,11 @@ Exhibits 7 to 10.
 <tr>
 <td align="center" valign="top" width="50%">
 <a id="ex9"></a>
-<a href="screenshots/Exhibit09_volume_serial_number.png"><img src="screenshots/Exhibit09_volume_serial_number.png" width="380" alt="Exhibit 9"></a>
-<br><b>Exhibit 9 — Volume serial check</b>
-<br><sub>Single serial across all entries — no USB</sub>
+<a href="screenshots/Exhibit09_chronological_timeline.png"><img src="screenshots/Exhibit09_chronological_timeline.png" width="380" alt="Exhibit 9"></a>
+<br><b>Exhibit 9 — Chronological timeline</b>
+<br><sub>Sorted by TargetAccessed, newest first</sub>
 </td>
-<td align="center" valign="top" width="50%">
-<a id="ex10"></a>
-<a href="screenshots/Exhibit10_chronological_timeline.png"><img src="screenshots/Exhibit10_chronological_timeline.png" width="380" alt="Exhibit 10"></a>
-<br><b>Exhibit 10 — Chronological timeline</b>
-<br><sub>Sorted by TargetAccessed, minute by minute</sub>
-</td>
+<td></td>
 </tr>
 </table>
 
@@ -141,13 +135,8 @@ Exhibits 7 to 10.
 
 | Finding | Evidence | Status |
 |---|---|:---:|
-| Edge / Firefox presence | Host check prior to analysis | ❌ Confirmed absent |
 | LNK parse success rate | LECmd batch run | ✅ 75 / 75, 0 errors |
-| External storage device used | Volume Serial Number comparison | ❌ None found |
 | Chronological timeline | `TargetAccessed` sort | ✅ Built, complete |
-
-> [!NOTE]
-> A negative finding — no external device ever referenced — is exactly as reportable as a positive one. It directly answers a real investigative question rather than leaving it open.
 
 ---
 
