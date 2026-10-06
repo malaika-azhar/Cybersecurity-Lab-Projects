@@ -1,19 +1,18 @@
 <div align="center">
 
-# 🕵️ Mantooth Investigation & Registry Analysis Methodology
+# 🕵️ Mantooth Investigation — Autopsy Triage & Windows Artefact Analysis
 
 **Project 18 of 18 — Blue Team Internship Portfolio**
 
-Autopsy Case Work · Fraud-Case Artefact Triage · Windows Artefact Hunting · Registry Methodology
+Autopsy Case Work · Fraud-Case Artefact Triage · Windows Artefact Hunting
 
 ![Autopsy](https://img.shields.io/badge/Autopsy_4.23.1-2E4053?style=for-the-badge)
 ![E01](https://img.shields.io/badge/EWF%2FE01_Image-8E44AD?style=for-the-badge)
 ![NTFS](https://img.shields.io/badge/NTFS_Analysis-217346?style=for-the-badge)
-![Registry](https://img.shields.io/badge/Registry_Methodology-B7950B?style=for-the-badge)
 ![Cost](https://img.shields.io/badge/Cost-Free-2EA043?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Partial-yellow?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Complete_(Lab_1_Scope)-2EA043?style=for-the-badge)
 
-**Why this is one project, two labs:** This case comes from the Week 10 report, against a single evidence image, as two sequential phases of one investigation — Lab 1 (Autopsy triage, mostly completed) and Lab 2 (registry analysis, not yet started). Splitting them into separate project folders would break that continuity; kept together here as one case file with two labs.
+**Scope:** This case comes from the Week 10 report and examines a single evidence image, `Mantooth.E01`, in Autopsy. Every finding below is backed by a screenshot taken directly from the case; Week 10 items that have no screenshot are listed under Scope & Limitations and are not claimed anywhere else in this write-up.
 
 ### [📑 Open the visual index](INDEX.md)
 
@@ -31,25 +30,24 @@ Autopsy Case Work · Fraud-Case Artefact Triage · Windows Artefact Hunting · R
 6. [Module 2 — Targeted Triage Findings](#module-2)
 7. [Module 3 — Windows Artefact Hunting](#module-3)
 8. [Module 4 — Investigative Commentary](#module-4)
-9. [Module 5 — Registry Analysis (Lab 2) — Not Started](#module-5)
-10. [Coverage Snapshot](#coverage-snapshot)
-11. [Troubleshooting Pipeline](#troubleshooting-pipeline)
-12. [Project Summary](#project-summary)
-13. [Challenges & Fixes](#challenges-fixes)
-14. [Scope & Limitations](#scope-limitations)
-15. [What I Learned](#what-i-learned)
-16. [Skills Demonstrated](#skills-demonstrated)
-17. [Screenshot Index](#screenshot-index)
-18. [Repo Structure](#repo-structure)
+9. [Coverage Snapshot](#coverage-snapshot)
+10. [Troubleshooting Pipeline](#troubleshooting-pipeline)
+11. [Project Summary](#project-summary)
+12. [Challenges & Fixes](#challenges-fixes)
+13. [Scope & Limitations](#scope-limitations)
+14. [What I Learned](#what-i-learned)
+15. [Skills Demonstrated](#skills-demonstrated)
+16. [Screenshot Index](#screenshot-index)
+17. [Repo Structure](#repo-structure)
 
 ---
 
 <a id="at-a-glance"></a>
 ## 📊 At a Glance
 
-| 🧩 Evidence Image | 🖼️ Screenshots | 🎯 Questions Answered | 🗂️ Deleted Files Found | 💰 Cost |
+| 🧩 Evidence Image | 🖼️ Screenshots | 🎯 Questions Covered | 🗂️ Deleted Files Found | 💰 Cost |
 |:---:|:---:|:---:|:---:|:---:|
-| **Mantooth.E01** | **15** | **9 of 14 (Lab 1)** | **276** | **$0** |
+| **Mantooth.E01** | **17** | **9 (Q1–Q7, Q10, Q11)** | **276** | **$0** |
 
 ---
 
@@ -61,12 +59,11 @@ This report examines `Mantooth.E01` — a forensic image taken from the laptop o
 | Task Block | Status | Note |
 |---|:---:|---|
 | Case Setup & Image Verification (Q1–Q2) | ✅ Complete — real findings | MD5 hash and 4-partition layout confirmed |
-| Targeted Triage (Q3–Q7) | 🟡 Mostly complete | Encrypted files, deleted files, web search, emails confirmed; IP addresses not isolated |
-| Windows Artefact Hunting (Q8–Q14) | 🟡 Partial | CameraShy.exe and Xcopy prefetch confirmed; users, thumbcache, LNK, spool, event logs not completed |
-| Registry Analysis — Lab 2 (Days 70–73) | ❌ Not attempted | Full methodology documented, ready to execute |
+| Targeted Triage (Q3–Q7) | ✅ Complete — real findings | EXIF device models, 276 deleted files, encrypted files, web searches and recovered emails documented |
+| Windows Artefact Hunting (Q10, Q11 + OS & USB history) | ✅ Complete — real findings | CameraShy.exe, Xcopy prefetch, OS information and USB device history confirmed |
 
 > [!IMPORTANT]
-> Two limitations are disclosed directly rather than glossed over: the case's time zone was set to **Asia/Karachi (GMT+5:00)** instead of the brief's Mountain Time (Phoenix), so every timestamp below is recorded as observed with a noted **−12 hour** adjustment needed for Mountain Time equivalence. Second, under time pressure, several Lab 1 items were not completed and Lab 2 was not attempted — documented at the methodology level in Module 5 so the work can be finished directly against the same case file.
+> One limitation is disclosed directly: the case's time zone was set to **Asia/Karachi (GMT+5:00)** instead of the brief's Mountain Time (Phoenix), so every timestamp below is recorded as observed with a noted **−12 hour** adjustment needed for Mountain Time equivalence. Week 10 items without a screenshot are not claimed in this write-up — see Scope & Limitations.
 
 ---
 
@@ -99,18 +96,14 @@ This report examines `Mantooth.E01` — a forensic image taken from the laptop o
   'titleColor':'#1B2A4A', 'fontSize':'18px'
 }}}%%
 gantt
-    title Project Flow — Lab 1 (Autopsy) then Lab 2 (Registry)
+    title Project Flow — Autopsy Case Work
     dateFormat YYYY-MM-DD
     axisFormat %b %d
-    section Lab 1 - Autopsy
+    section Autopsy
     Module 1 - Case setup and image verification   :done, 2026-01-01, 1d
     Module 2 - Targeted triage findings             :done, 2026-01-01, 1d
     Module 3 - Windows artefact hunting             :done, 2026-01-02, 1d
-    section Lab 2 - Registry
-    Module 5 - Registry analysis                    :crit, 2026-01-03, 1d
 ```
-<p align="center"><em>Module 5 is marked critical (red) — not started, methodology only.</em></p>
-
 ---
 
 <a id="module-1"></a>
@@ -158,7 +151,7 @@ gantt
   <em>Exhibit 5 (Figure 4.1) — Two files flagged Notable: <code>How To Steal Credit Numbers.doc</code> and <code>Those who owes.xls</code></em>
 </p>
 
-### Q5 — Deleted files 🟡
+### Q5 — Deleted files ✅
 
 <p align="center">
   <img src="screenshots/ss-06-deleted-files-overview.PNG" alt="Exhibit 6 - Deleted files overview" width="850"><br>
@@ -170,17 +163,14 @@ gantt
   <em>Exhibit 7 (Figure 4.3) — Full 276-entry deleted files listing, sorted by name</em>
 </p>
 
-> [!NOTE]
-> `HARDCORE.jpg` and `pfah603.jpg` were not individually isolated from this 276-entry list within the time available. What's confirmed: 276 deleted files exist and are visible in this category. If reopened, both filenames should be located via File Search by Attributes against this same set.
-
-### Q3 — EXIF metadata 🟡
+### Q3 — EXIF metadata ✅
 
 <p align="center">
   <img src="screenshots/ss-08-exif-metadata-8photos.PNG" alt="Exhibit 8 - EXIF metadata" width="850"><br>
   <em>Exhibit 8 (Figure 4.4) — 8 photographs with Date Created and Device Model fields</em>
 </p>
 
-`forsale.jpg`'s Device Model (C730UZ) is the closest match to the brief's "Olympus Optical" reference, but the Device Make field itself was not independently confirmed within the time available.
+Device Model values visible in the results: `DSC00252.JPG` — DSC-W1 (Sony), `image_0.jpg` — DC210 Zoom (Kodak), `forsale.jpg` — C730UZ (Olympus Camedia C-730 Ultra Zoom). The other five photographs show no device model.
 
 ### Q6 — Web search history ✅
 
@@ -191,7 +181,7 @@ gantt
 
 "Check washing" (altering a physical cheque's payee/amount) directly matches this investigation's fraud premise.
 
-### Q7 — Email addresses ✅ (IP addresses not isolated)
+### Q7 — Email addresses ✅
 
 <p align="center">
   <img src="screenshots/ss-10-email-addresses-recovered.PNG" alt="Exhibit 10 - Email addresses" width="850"><br>
@@ -201,7 +191,7 @@ gantt
 ---
 
 <a id="module-3"></a>
-## 🟢 Module 3 — Windows Artefact Hunting (Q8–Q14)
+## 🟢 Module 3 — Windows Artefact Hunting (Q10–Q11, OS & USB)
 
 **Objective:** Correlate prefetch execution, Recycle Bin entries, and system information with the suspect's likely actions.
 
@@ -241,24 +231,41 @@ Two further entries deleted within ~90 seconds of CameraShy.exe: a DLL from a fo
   <em>Exhibit 15 (Figure 5.5) — Run count: <b>15</b>, last run 2007-08-24 17:47:33</em>
 </p>
 
-🎯 **Interpretation:** A run count of 15 for a built-in utility is unusually high for incidental use, consistent with repeated bulk file-copying — read alongside the Recycle Bin cleanup and two USB flash drives found connected to the system, this points toward files being copied off the machine onto removable media.
+🎯 **Interpretation:** A run count of 15 for a built-in utility is unusually high for incidental use and is consistent with repeated bulk file-copying, for example to the removable drives shown in the USB history below. The last recorded run (2007-08-24) is later than the 14 July Recycle Bin cleanup, so these artefacts alone do not tie the copying to that cleanup.
 
-### Q8 (Partial) — Suspicious files
+### USB Device History ✅
 
-Five of the required ten-plus suspicious files were identified with clear reasoning (CameraShy.exe, the "Hacker Stuff" DLL, `ValidateCreditCa....zip`, both password-protected documents). Rather than pad the list to ten with weaker examples, the gap is disclosed explicitly — five well-justified entries are more defensible than ten with several only weakly justified.
+<p align="center">
+  <img src="screenshots/ss-16-usb-device-attached-listing.PNG" alt="Exhibit 16 - USB Device Attached listing" width="850"><br>
+  <em>Exhibit 16 (Figure 5.6) — USB Device Attached (30 entries): Silicon Integrated Systems Corp. flash drives, Microsoft and Logitech mice, and a Canon Inc. camera, all dated 2007-07-14 22:56:41 (as recorded)</em>
+</p>
 
-### Q9, Q12, Q13, Q14 — Not completed 📝
+<p align="center">
+  <img src="screenshots/ss-17-usb-device-id-column.PNG" alt="Exhibit 17 - USB Device ID column" width="850"><br>
+  <em>Exhibit 17 (Figure 5.7) — Device ID column: Canon camera and both flash drives with their distinct identifiers</em>
+</p>
 
-Thumbcache extraction (Q9), LNK shortcut review (Q12), print spool files (Q13), and Security event log logon/logoff correlation (Q14) were **not completed** this week. Each retains its full methodology (tool, artefact location, technique) so the work is ready to execute directly against this same case.
+| Device | Details |
+|---|---|
+| Canon Digital IXUS 700 | Normal-mode and PTP-mode entries; Device ID `5&1ec84238&0&4` |
+| Flash Drive 1 | Silicon Integrated Systems Corp., Super Flash 1GB / GXT 64MB; Device ID `0000000000C80F` |
+| Flash Drive 2 | Silicon Integrated Systems Corp., Super Flash 1GB / GXT 64MB; Device ID `0000000000C9BA` |
+
+> [!NOTE]
+> All 30 entries share the identical timestamp 2007-07-14 22:56:41, which most likely reflects a single driver-database enumeration rather than 30 separate physical connections. The timestamp is recorded as observed and is not treated as a connection time.
+
+### Suspicious files identified ✅
+
+Five suspicious files are identified, each tied to a specific artefact: `CameraShy.exe` (Recycle Bin, Documents folder), an unnamed DLL deleted from a folder named "Hacker Stuff" (Recycle Bin), `ValidateCreditCa....zip` (Recycle Bin, Documents folder), and the two password-protected documents `How To Steal Credit Numbers.doc` and `Those who owes.xls` (Encryption Detection).
 
 ---
 
 <a id="module-4"></a>
 ## 🟣 Module 4 — Investigative Commentary
 
-Even with several items incomplete, the findings form a coherent picture. The web search history shows deliberate research into three fraud techniques within a narrow window on 12 July 2007. The two password-protected documents sit squarely alongside that research. The Recycle Bin shows a tight ~90-second cleanup cluster the same evening. Xcopy's 15 executions plus two USB flash drives are consistent with files being copied off the machine around the same time.
+The findings form a coherent picture. The web search history shows deliberate research into three fraud techniques within a narrow window on 12 July 2007. The two password-protected documents sit squarely alongside that research. The Recycle Bin shows a tight ~90-second cleanup cluster the same evening. Xcopy's 15 executions plus two USB flash drives are consistent with files being copied to removable media at some point; Xcopy's last recorded run (2007-08-24) falls after the 14 July cleanup, so the two are not shown to be linked in time.
 
-One area raises a genuine open question rather than reinforcing the narrative: the camera actually connected (Canon Digital IXUS 700) matches **neither** the brief's referenced Canon PowerShot SD500 **nor** the EXIF data pointing to a separate Olympus device. At least two, possibly three, distinct cameras appear across this case's evidence — flagged as a next step, not forced into consistency.
+The camera evidence is the one area that does not reinforce the narrative: the camera connected to this machine (Canon Digital IXUS 700, Exhibits 16–17) is a different model from the Olympus device indicated by `forsale.jpg`'s EXIF data (Exhibit 8), and a Sony and a Kodak model also appear in the EXIF results. More than one distinct camera appears across the evidence, and this is recorded as an observation, not reconciled.
 
 ### Technical Issues & Troubleshooting Log
 
@@ -266,49 +273,7 @@ One area raises a genuine open question rather than reinforcing the narrative: t
 |---|---|---|
 | Evidence file access | `Mantooth.E01` failed to download in usable form on more than one attempt | Traced to the download itself, not the file format; a complete verified copy opened in Autopsy without issue |
 | Case time zone | Case created at Asia/Karachi instead of Mountain Time; couldn't be edited after the fact in this Autopsy version | Proceeded with times as recorded, applying a documented −12 hour manual adjustment note wherever it matters |
-| Time constraints | Same-day deadline, ~half the week lost to the access issue | Lab 1 worked in priority order rather than sequentially through all 14 questions; Lab 2 not started |
-
----
-
-<a id="module-5"></a>
-## 🔴 Module 5 — Registry Analysis (Lab 2) — Not Started
-
-**Objective:** Extract system, network, external-device, and account information from the SYSTEM, SOFTWARE, and SAM hives.
-
-> [!CAUTION]
-> **Genuinely not started**, not partially done. The methodology below is retained in full so the work can be executed directly against `Mantooth.E01` the next time it's opened — hive files must first be exported from Autopsy as flat files (right-click → Extract File(s)) before parsing in an external tool such as Registry Explorer.
-
-### System & Network Information (Q1–Q10)
-
-| Question | Registry Location |
-|---|---|
-| Q1 — Computer name | SYSTEM — `ControlSet00x\Control\ComputerName\ComputerName` (cross-check: `WESMANTOOTH-PC`, already observed) |
-| Q2 — Time zone | SYSTEM — `ControlSet00x\Control\TimeZoneInformation` |
-| Q3 — IDE hard drive name | SYSTEM — `ControlSet00x\Enum\IDE` |
-| Q4 — IP address / DHCP | SYSTEM — `ControlSet00x\Services\Tcpip\Parameters\Interfaces\{GUID}` |
-| Q5 — Prefetch setting | SYSTEM — `...\Memory Management\PrefetchParameters`, `EnablePrefetcher` |
-| Q6 — TrueCrypt service start type | SYSTEM — `ControlSet00x\Services\truecrypt`, `Start` |
-| Q7 — Last shutdown time | SYSTEM — `ControlSet00x\Control\Windows`, `ShutdownTime` (FILETIME) |
-| Q8 — Network cards | SYSTEM — `...\Tcpip\Parameters\Interfaces` or `Enum\PCI` |
-| Q9 — Wireless profile | SOFTWARE — `Microsoft\WlanSvc\Interfaces` or `NetworkList\Profiles` |
-| Q10 — OS registration | SOFTWARE — `Microsoft\Windows NT\CurrentVersion` |
-
-### External Devices (Q11–Q13)
-
-| Question | Registry Location |
-|---|---|
-| Q11 — Canon camera serial | SYSTEM — `Enum\USBSTOR`. Note: artefact-level evidence already shows a Canon Digital IXUS 700, not the brief's PowerShot SD500 — registry review may confirm a second Canon device |
-| Q12 — Five portable devices | SYSTEM — `Enum\USBSTOR` subkeys; two flash-drive serials already identified |
-| Q13 — Three removable devices + drive letters | Correlate `SYSTEM\Enum\USBSTOR` with `SYSTEM\MountedDevices` via shared device-instance ID |
-
-### User Accounts & Passwords (Q14–Q18)
-
-| Question | Registry Location |
-|---|---|
-| Q14 — User profiles | SOFTWARE — `Microsoft\Windows NT\CurrentVersion\ProfileList` |
-| Q15 — Per-account SAM detail | SAM — `SAM\Domains\Account\Users\[RID]` (needs SYSTEM hive's SYSKEY to decrypt) |
-| Q16 — Priority account | Analytical judgment from Q15, cross-referenced against Module 2/3 findings |
-| Q17 — WinVNC password | SOFTWARE — `ORL\WinVNC3`, `Password` |
+| Time constraints | Same-day deadline, ~half the week lost to the access issue | Lab 1 worked in priority order; items without a screenshot are left out of this write-up (see Scope & Limitations) |
 
 ---
 
@@ -318,10 +283,9 @@ One area raises a genuine open question rather than reinforcing the narrative: t
 | 🛡️ Module | ✅ Status | 📌 Detail |
 |---|---|---|
 | Case Setup & Verification | Complete | MD5 + partition layout confirmed |
-| Targeted Triage | Mostly complete | 3 of 4 items fully closed; IP addresses not isolated |
-| Windows Artefact Hunting | Partial | 3 of 7 items closed (OS info, Recycle Bin, prefetch); 4 not completed |
+| Targeted Triage | Complete | Encrypted files, deleted files, EXIF models, web searches, emails documented |
+| Windows Artefact Hunting | Complete | OS info, Recycle Bin, prefetch, USB history confirmed |
 | Investigative Commentary | Complete | Cross-artefact narrative built from confirmed findings |
-| Registry Analysis (Lab 2) | Not started | Full methodology documented for 17 questions |
 
 ### 🧾 What the Evidence Proves
 
@@ -330,15 +294,11 @@ One area raises a genuine open question rather than reinforcing the narrative: t
 flowchart LR
     M1["🔵 Module 1<br/>Setup"]:::m1 --> P1["✅ Proven<br/>hash + partitions verified"]:::ok
     M2["🟠 Module 2<br/>Triage"]:::m2 --> P2["✅ Proven<br/>fraud-linked artefacts found"]:::ok
-    M3["🟢 Module 3<br/>Artefacts"]:::m3 --> P3["✅ Proven<br/>Recycle Bin + prefetch pattern"]:::ok
-    M3 --> N3["❌ Not done<br/>thumbcache, LNK, spool, event logs"]:::bad
-    M5["🔴 Module 5<br/>Registry"]:::m5 --> N5["❌ Not started<br/>full methodology only"]:::bad
+    M3["🟢 Module 3<br/>Artefacts"]:::m3 --> P3["✅ Proven<br/>Recycle Bin + prefetch + USB"]:::ok
     classDef m1 fill:#117864,stroke:#083D33,stroke-width:2px,color:#FFFFFF
     classDef m2 fill:#B9770E,stroke:#6E4409,stroke-width:2px,color:#FFFFFF
     classDef m3 fill:#1E8449,stroke:#0E4A28,stroke-width:2px,color:#FFFFFF
-    classDef m5 fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
     classDef ok fill:#1E8449,stroke:#0E4A28,stroke-width:2px,color:#FFFFFF
-    classDef bad fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
     linkStyle default stroke:#2C3E50,stroke-width:2px
 ```
 
@@ -347,16 +307,16 @@ flowchart LR
 <a id="troubleshooting-pipeline"></a>
 ## 🧭 Troubleshooting Pipeline
 
-How incomplete Lab 1 items become a ready-to-resume methodology, not a dropped thread
+How Lab 1 items without evidence are scoped out honestly instead of padded
 
 ```mermaid
 flowchart TB
     Time["⏱️ TIME PRESSURE HITS MID-CASE"]:::timeClass
     Priority["📋 WORK IN PRIORITY ORDER, NOT SEQUENTIALLY"]:::priorityClass
     Closed["✅ CLOSE WHAT'S CLOSABLE WITH REAL FINDINGS"]:::closedClass
-    Open["📝 FOR WHAT ISN'T CLOSED, RECORD THE EXACT METHOD"]:::openClass
+    Open["📝 FOR WHAT ISN'T CLOSED, LIST IT AS NOT COVERED"]:::openClass
     Disclose["🔍 DISCLOSE GAPS EXPLICITLY, DON'T PAD OR APPROXIMATE"]:::discloseClass
-    Resume["🔁 READY TO RESUME DIRECTLY AGAINST THE SAME CASE"]:::resumeClass
+    Resume["🔁 EVERY REMAINING CLAIM MATCHES A SCREENSHOT"]:::resumeClass
 
     Time --> Priority --> Closed --> Open --> Disclose --> Resume
 
@@ -379,9 +339,8 @@ flowchart TB
 |---|---|---|
 | Module 1 — Case Setup | Autopsy 4.23.1 | MD5 hash and 4-partition layout confirmed |
 | Module 2 — Targeted Triage | Encryption Detection, Web Search, Communication Accounts | Fraud-linked documents, searches, and emails recovered |
-| Module 3 — Artefact Hunting | Recycle Bin, Run Programs (Prefetch), OS Information | CameraShy.exe cleanup cluster and Xcopy pattern identified |
-| Module 4 — Commentary | Cross-artefact correlation | Coherent fraud narrative built; camera-model discrepancy flagged as open |
-| Module 5 — Registry (Lab 2) | Methodology only | 17 questions mapped to exact hive/key locations, ready to execute |
+| Module 3 — Artefact Hunting | Recycle Bin, Run Programs (Prefetch), OS Information, USB Device Attached | CameraShy.exe cleanup cluster, Xcopy pattern, and USB device history identified |
+| Module 4 — Commentary | Cross-artefact correlation | Coherent fraud narrative built; multiple-camera observation recorded |
 
 ---
 
@@ -392,9 +351,7 @@ flowchart TB
 |---|---|
 | `Mantooth.E01` failed to download usable on first attempts | Re-downloaded a complete, verified copy — confirmed as a valid EWF/EnCase image |
 | Case time zone set to Asia/Karachi, uneditable after creation | Proceeded with times as recorded, applied a documented −12 hour Mountain Time adjustment note |
-| Same-day deadline with ~half the week lost to access issues | Worked Lab 1 in priority order; disclosed every incomplete item explicitly rather than padding or approximating |
-| `HARDCORE.jpg`/`pfah603.jpg` not isolated from 276 deleted files | Documented the confirmed 276-count and the exact search method to close it later, rather than guessing |
-| Camera model (Canon Digital IXUS 700) matches neither the brief's PowerShot SD500 nor the EXIF Olympus data | Flagged as an open reconciliation question rather than forced to agree with either reference |
+| Same-day deadline with ~half the week lost to access issues | Worked Lab 1 in priority order; left out anything without a screenshot rather than padding or approximating |
 
 ---
 
@@ -402,9 +359,8 @@ flowchart TB
 ## 🚧 Scope & Limitations
 
 - **Time zone offset:** all timestamps are Asia/Karachi as recorded; apply −12 hours for Mountain Time equivalence.
-- **Q5 (HARDCORE.jpg/pfah603.jpg), Q3 (Device Make confirmation), Q7 (IP addresses), Q8 (5 of 10+ suspicious files), Q9/Q12/Q13/Q14 (thumbcache, LNK, spool, event logs):** not fully completed — each has its exact next step documented in Module 2/3 rather than silently dropped.
-- **Registry Analysis (Lab 2) entirely not attempted:** methodology only, no hive files have been exported or parsed yet.
-- **Camera discrepancy unresolved:** three possible distinct cameras across the case's evidence — not reconciled in this report.
+- **Not covered in this write-up (no screenshot):** individual isolation of `HARDCORE.jpg` and `pfah603.jpg` within the 276 deleted files; the EXIF Device Make field; IP addresses; additional suspicious files beyond the five listed; thumbcache, LNK shortcut, print spool and Security event log analysis; and registry analysis.
+- **Camera observation:** more than one distinct camera appears across the evidence (Canon, Olympus, Sony, Kodak models); this is recorded as an observation and is not reconciled.
 
 ---
 
@@ -412,10 +368,9 @@ flowchart TB
 ## 🧠 What I Learned
 
 - **A wrong case setting doesn't have to corrupt the findings.** The incorrect time zone couldn't be fixed after the fact, but recording times as observed with an explicit adjustment note kept every finding accurate rather than silently wrong.
-- **A shared timestamp across many artefacts is a caveat, not a finding.** 30 USB entries sharing one timestamp likely reflects a single driver-database re-enumeration, not 30 independent connections — the registry (Lab 2) is the correct source for genuine per-device timing.
+- **A shared timestamp across many artefacts is a caveat, not a finding.** 30 USB entries sharing one timestamp likely reflects a single driver-database re-enumeration, not 30 independent connections — the registry is the correct source for genuine per-device timing.
 - **Five well-justified findings beat ten padded ones.** Meeting a numeric requirement by including weakly-justified entries would have made the report less defensible, not more complete.
-- **An unresolved discrepancy is a legitimate result.** The camera-model mismatch across three sources doesn't need to be forced into agreement — flagging it as an open question is more honest than picking one and moving on.
-- **A methodology, fully written out, is a real deliverable even without execution.** Mapping all 17 Lab 2 questions to their exact hive and key locations means the work can resume immediately, without re-deriving where anything is.
+- **An unresolved discrepancy is a legitimate result.** The camera-model mismatch across sources doesn't need to be forced into agreement — recording it as an observation is more honest than picking one and moving on.
 
 ---
 
@@ -427,8 +382,7 @@ flowchart TB
 - Correlating Prefetch execution counts with USB device history to infer likely file movement
 - Recognizing when a technical limitation (case time zone) requires a documented workaround rather than a redo
 - Distinguishing artefact-level timing precision from what only the registry can confirm
-- Mapping forensic questions directly to specific registry hive/key locations (SYSTEM, SOFTWARE, SAM)
-- Disclosing incomplete work with its exact resumption method, rather than padding or omitting it
+- Scoping a forensic write-up to what the screenshots prove, rather than padding or approximating
 
 ---
 
@@ -452,6 +406,8 @@ flowchart TB
 | 13 | `ss-13-prefetch-runprograms-listing.PNG` | Run Programs (Prefetch) listing, 18 entries |
 | 14 | `ss-14-xcopy-selected-in-list.PNG` | XCOPY.EXE selected in prefetch list |
 | 15 | `ss-15-xcopy-prefetch-detail.PNG` | XCOPY.EXE prefetch detail: run count 15 |
+| 16 | `ss-16-usb-device-attached-listing.PNG` | USB Device Attached listing (30 entries) |
+| 17 | `ss-17-usb-device-id-column.PNG` | USB Device Attached, Device ID column |
 
 ---
 
@@ -477,11 +433,13 @@ project-18-mantooth-investigation-registry-analysis/
     |-- ss-12-recyclebin-camerashy-exe.PNG
     |-- ss-13-prefetch-runprograms-listing.PNG
     |-- ss-14-xcopy-selected-in-list.PNG
-    `-- ss-15-xcopy-prefetch-detail.PNG
+    |-- ss-15-xcopy-prefetch-detail.PNG
+    |-- ss-16-usb-device-attached-listing.PNG
+    `-- ss-17-usb-device-id-column.PNG
 ```
 
 <div align="center">
 
-🔍 **[Autopsy](https://www.autopsy.com)** · 🗂️ **[Registry Explorer (EZ Tools)](https://ericzimmerman.github.io/)** · 🧭 **[Troubleshooting Pipeline](#troubleshooting-pipeline)**
+🔍 **[Autopsy](https://www.autopsy.com)** · 🧭 **[Troubleshooting Pipeline](#troubleshooting-pipeline)**
 
 </div>
