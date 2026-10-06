@@ -1,9 +1,10 @@
-<a id="top"></a>
 <div align="center">
 
-# 🌐 Project 17 — Index
-### Browser Forensics & LNK Analysis
+# 🌐 Browser Forensics & LNK Analysis
+
 **Project 17 of 18 — Advanced Cyber Projects**
+
+Chrome Artifact Review & Windows Shortcut Forensics (LECmd)
 
 ![Chrome](https://img.shields.io/badge/Browser-Chrome-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)
 ![LECmd](https://img.shields.io/badge/Tool-LECmd-1E8449?style=for-the-badge)
@@ -12,138 +13,362 @@
 ![Cost](https://img.shields.io/badge/Cost-Free_%26_Open--Source-2ea44f?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
 
-**Quick guide to every step and screenshot in this project.**
+Chrome's artifacts reviewed — history, downloads, cookies, autofill, and extensions — cross-referenced against a complete Windows Shortcut (LNK) parse of 75 files with zero errors, resolving into a single chronological file-access timeline.
 
-### [📖 Open the full README](README.md)
+### [📑 Open the visual index](INDEX.md)
 
 </div>
 
 ---
 
-<div align="center">
+## 📑 Table of Contents
+
+1. [At a Glance](#at-a-glance)
+2. [Project Background](#project-background)
+3. [Environment](#environment)
+4. [Project Flow](#project-flow)
+5. [Module 1 — Chrome Artifact Review](#module-1)
+6. [Coverage Snapshot](#coverage-snapshot)
+7. [Cross-Artifact Correlation Pipeline](#correlation-pipeline)
+8. [Module 2 — LNK Parsing & Timeline Correlation](#module-2)
+9. [Project Summary](#project-summary)
+10. [Challenges & Fixes](#challenges-fixes)
+11. [Scope & Limitations](#scope-limitations)
+12. [What I Learned](#what-i-learned)
+13. [Skills Demonstrated](#skills-demonstrated)
+14. [Screenshot Index](#screenshot-index)
+15. [Repo Structure](#repo-structure)
+
+---
+
+<a id="at-a-glance"></a>
+## 📊 At a Glance
 
 | 🧩 Modules | 🖼️ Screenshots | 🔗 LNK Files Parsed | ❌ Parse Errors |
 |:---:|:---:|:---:|:---:|
 | **2** | **9** | **75 / 75** | **0** |
 
-</div>
-
-<p align="center">🧩 <b>Lab:</b> Chrome artifacts ➜ BrowsingHistoryView export ➜ 75 LNK files ➜ LECmd ➜ Chronological Timeline</p>
-
 ---
 
-## 📑 Step Index
+<a id="project-background"></a>
+## 📖 Project Background
 
-All 9 steps of the project, with the screenshot that proves each one.
+A browser's on-disk artifacts and a system's Windows Shortcut (LNK) files tell overlapping but different stories — one shows what a user looked at, the other shows what they actually opened. This project reviews both independently, then cross-references them into a single timeline.
 
-| # | Step | Module | Result | Evidence |
-|:---:|---|:---:|---|:---:|
-| 1 | Locate the Chrome profile | 🔵 Module 1 | Chrome artifact folder identified | [Exhibit 1](#ex1) |
-| 2 | Export and review browsing history | 🔵 Module 1 | History entries exported with visit time and source file | [Exhibit 2](#ex2) |
-| 3 | Review download history | 🔵 Module 1 | Task briefs, reports, archive tool identified | [Exhibit 3](#ex3) |
-| 4 | Review cookies and site data | 🔵 Module 1 | Storage concentrated on a few frequent domains | [Exhibit 4](#ex4) |
-| 5 | Review autofill and stored credentials | 🔵 Module 1 | 6 passwords, 1 address stored | [Exhibit 5](#ex5) |
-| 6 | Review installed extensions | 🔵 Module 1 | Google Docs Offline installed and active | [Exhibit 6](#ex6) |
-| 7 | Parse all LNK files with LECmd | 🟢 Module 2 | 75/75 processed, zero errors | [Exhibit 7](#ex7) |
-| 8 | Review the full parsed output | 🟢 Module 2 | Complete metadata for every shortcut | [Exhibit 8](#ex8) |
-| 9 | Build the chronological access timeline | 🟢 Module 2 | Minute-by-minute sorted sequence | [Exhibit 9](#ex9) |
+- **Module 1 — Chrome Artifact Review:** Extract and review Chrome's artifacts — history, downloads, cookies, autofill, and extensions.
+- **Module 2 — LNK Parsing & Timeline Correlation:** Parse every LNK file with LECmd and build a chronological file-access timeline.
 
----
-
-## 🔵 Module 1 — Chrome Artifact Review
-
-Exhibits 1 to 6. Click a screenshot to open it full size.
-
-<table>
-<tr>
-<td align="center" valign="top" width="33%">
-<a id="ex1"></a>
-<a href="screenshots/Exhibit01_chrome_userdata_folder.png"><img src="screenshots/Exhibit01_chrome_userdata_folder.png" width="280" alt="Exhibit 1"></a>
-<br><b>Exhibit 1 — User Data folder</b>
-<br><sub>Chrome User Data\Default folder</sub>
-</td>
-<td align="center" valign="top" width="33%">
-<a id="ex2"></a>
-<a href="screenshots/Exhibit02_browsing_history_export.png"><img src="screenshots/Exhibit02_browsing_history_export.png" width="280" alt="Exhibit 2"></a>
-<br><b>Exhibit 2 — History export</b>
-<br><sub>Visit time, count, type, and source file</sub>
-</td>
-<td align="center" valign="top" width="33%">
-<a id="ex3"></a>
-<a href="screenshots/Exhibit03_download_history.png"><img src="screenshots/Exhibit03_download_history.png" width="280" alt="Exhibit 3"></a>
-<br><b>Exhibit 3 — Download history</b>
-<br><sub>Documents, archives, and PDFs</sub>
-</td>
-</tr>
-<tr>
-<td align="center" valign="top" width="33%">
-<a id="ex4"></a>
-<a href="screenshots/Exhibit04_cookies_site_data.png"><img src="screenshots/Exhibit04_cookies_site_data.png" width="280" alt="Exhibit 4"></a>
-<br><b>Exhibit 4 — Cookies & site data</b>
-<br><sub>Storage and cookie count per domain</sub>
-</td>
-<td align="center" valign="top" width="33%">
-<a id="ex5"></a>
-<a href="screenshots/Exhibit05_autofill_passwords.png"><img src="screenshots/Exhibit05_autofill_passwords.png" width="280" alt="Exhibit 5"></a>
-<br><b>Exhibit 5 — Autofill & passwords</b>
-<br><sub>6 passwords and 1 address stored</sub>
-</td>
-<td align="center" valign="top" width="33%">
-<a id="ex6"></a>
-<a href="screenshots/Exhibit06_extensions_listing.png"><img src="screenshots/Exhibit06_extensions_listing.png" width="280" alt="Exhibit 6"></a>
-<br><b>Exhibit 6 — Extensions</b>
-<br><sub>Version, size, and extension ID</sub>
-</td>
-</tr>
-</table>
-
----
-
-## 🟢 Module 2 — LNK Parsing & Timeline Correlation
-
-Exhibits 7 to 9.
-
-<table>
-<tr>
-<td align="center" valign="top" width="50%">
-<a id="ex7"></a>
-<a href="screenshots/Exhibit07_lecmd_processing_confirmation.png"><img src="screenshots/Exhibit07_lecmd_processing_confirmation.png" width="380" alt="Exhibit 7"></a>
-<br><b>Exhibit 7 — LECmd processing</b>
-<br><sub>75/75 files in 32.13 seconds, zero errors</sub>
-</td>
-<td align="center" valign="top" width="50%">
-<a id="ex8"></a>
-<a href="screenshots/Exhibit08_lecmd_csv_output.png"><img src="screenshots/Exhibit08_lecmd_csv_output.png" width="380" alt="Exhibit 8"></a>
-<br><b>Exhibit 8 — Full CSV output</b>
-<br><sub>Timestamps, target paths, machine/MAC IDs</sub>
-</td>
-</tr>
-<tr>
-<td align="center" valign="top" width="50%">
-<a id="ex9"></a>
-<a href="screenshots/Exhibit09_chronological_timeline.png"><img src="screenshots/Exhibit09_chronological_timeline.png" width="380" alt="Exhibit 9"></a>
-<br><b>Exhibit 9 — Chronological timeline</b>
-<br><sub>Sorted by TargetAccessed, newest first</sub>
-</td>
-<td></td>
-</tr>
-</table>
-
----
-
-## 🎯 Key Findings Summary
-
-| Finding | Evidence | Status |
-|---|---|:---:|
-| LNK parse success rate | LECmd batch run | ✅ 75 / 75, 0 errors |
-| Chronological timeline | `TargetAccessed` sort | ✅ Built, complete |
-
----
+> [!NOTE]
+> The LNK files were copied to a working folder (`LNK_Copy`) before parsing, keeping the original shortcuts untouched throughout review.
 
 <div align="center">
 
-[⬆️ Back to top](#top) &nbsp;·&nbsp; [📖 Full README](README.md)
+### 🧩 Artifact Coverage at a Glance
 
-🌐 **[Chrome](https://www.google.com/chrome/)** · 🔗 **[LECmd](https://ericzimmerman.github.io/#!index.md)** · 🕘 **[BrowsingHistoryView](https://www.nirsoft.net/utils/browsing_history_view.html)** · 🧭 **[Correlation Pipeline](README.md#correlation-pipeline)**
+<table>
+<tr>
+<td align="center" valign="top" width="20%">
+
+**🕘 History**<br>
+<sub>BrowsingHistoryView<br>export</sub>
+
+</td>
+<td align="center" valign="top" width="20%">
+
+**⬇️ Downloads**<br>
+<sub>Chrome download<br>history</sub>
+
+</td>
+<td align="center" valign="top" width="20%">
+
+**🍪 Cookies**<br>
+<sub>Per-site storage<br>and cookie counts</sub>
+
+</td>
+<td align="center" valign="top" width="20%">
+
+**🔑 Autofill**<br>
+<sub>Passwords and<br>address data</sub>
+
+</td>
+<td align="center" valign="top" width="20%">
+
+**🧩 Extensions**<br>
+<sub>Extension detail<br>(version, ID)</sub>
+
+</td>
+</tr>
+</table>
+
+</div>
+
+---
+
+<a id="environment"></a>
+## 🖧 Environment
+
+| Item | Value |
+|---|---|
+| **Target Browser** | Google Chrome |
+| **History Tool** | BrowsingHistoryView |
+| **LNK Parsing Tool** | LECmd |
+| **LNK Files Analyzed** | 75 (from Recent Items and Downloads) |
+| **Working Method** | LNK files copied to a working folder before parsing |
+
+---
+
+<a id="project-flow"></a>
+## ⏱️ Project Flow
+
+```mermaid
+%%{init: { 'theme': 'base', 'themeVariables': {
+  'activeTaskBkgColor':'#1A5276', 'activeTaskBorderColor':'#0B2E43',
+  'doneTaskBkgColor':'#117864', 'doneTaskBorderColor':'#083D33',
+  'critBkgColor':'#943126', 'critBorderColor':'#571C16',
+  'sectionBkgColor':'#D6DBDF', 'altSectionBkgColor':'#EAECEE',
+  'taskTextColor':'#FFFFFF', 'taskTextOutsideColor':'#1B2631',
+  'taskTextLightColor':'#FFFFFF',
+  'titleColor':'#1B2A4A', 'fontSize':'16px'
+}}}%%
+gantt
+    title Project Flow — Artifact Review to Correlated Timeline
+    dateFormat YYYY-MM-DD
+    axisFormat %b %d
+    section Chrome Artifacts
+    History, Downloads, Cookies, Autofill    :active, 2026-09-12, 1d
+    section LNK Parsing
+    Parse 75 Files                           :done, 2026-09-12, 1d
+    section Correlation
+    Build Chronological Access Timeline      :crit, 2026-09-12, 1d
+```
+<p align="center"><em>Colors distinguish each project stage — all stages complete.</em></p>
+
+---
+
+<a id="module-1"></a>
+## 🔵 Module 1 — Chrome Artifact Review
+
+**Objective:** Review Chrome's history, downloads, cookies, autofill data, and extensions.
+
+### Step 1 — Locate the Chrome profile ✅
+
+<p align="center">
+  <img src="screenshots/Exhibit01_chrome_userdata_folder.png" alt="Exhibit 1 - Chrome User Data folder" width="850"><br>
+  <em>Exhibit 1 — Chrome's <code>User Data\Default</code> folder, showing the artifact set (Cache, Extensions, autofill databases)</em>
+</p>
+
+### Step 2 — Export and review browsing history ✅
+
+<p align="center">
+  <img src="screenshots/Exhibit02_browsing_history_export.png" alt="Exhibit 2 - Browsing history export" width="850"><br>
+  <em>Exhibit 2 — BrowsingHistoryView export showing visit time, visit count, visit type, and the exact source History file for each entry</em>
+</p>
+
+### Step 3 — Review download history ✅
+
+<p align="center">
+  <img src="screenshots/Exhibit03_download_history.png" alt="Exhibit 3 - Download history" width="850"><br>
+  <em>Exhibit 3 — Chrome's Download history showing document, archive, and PDF downloads with direct links back to their source</em>
+</p>
+
+### Step 4 — Review cookies and per-site storage ✅
+
+<p align="center">
+  <img src="screenshots/Exhibit04_cookies_site_data.png" alt="Exhibit 4 - Cookies and site data" width="850"><br>
+  <em>Exhibit 4 — Privacy and Security → All Sites, showing storage usage and cookie counts per domain, sorted by most visited</em>
+</p>
+
+### Step 5 — Review autofill and stored credentials ✅
+
+<p align="center">
+  <img src="screenshots/Exhibit05_autofill_passwords.png" alt="Exhibit 5 - Autofill and passwords" width="850"><br>
+  <em>Exhibit 5 — Autofill and passwords panel, confirming 6 stored passwords and 1 stored address in the profile</em>
+</p>
+
+### Step 6 — Review installed extensions ✅
+
+<p align="center">
+  <img src="screenshots/Exhibit06_extensions_listing.png" alt="Exhibit 6 - Extensions listing" width="850"><br>
+  <em>Exhibit 6 — Installed extension detail view, showing version, size, and extension ID</em>
+</p>
+
+🎯 **Result:** Chrome's history, downloads, cookies, autofill data, and extensions were reviewed.
+
+| Artifact | Reviewed | Key Finding |
+|---|:---:|---|
+| Browsing History | ✅ | History entries exported with visit time, type, and source file |
+| Downloads | ✅ | Task briefs, reports, and one archive tool download |
+| Cookies / Site Data | ✅ | Storage concentrated on a small set of frequently visited domains |
+| Autofill / Passwords | ✅ | 6 stored passwords, 1 stored address |
+| Extensions | ✅ | Google Docs Offline installed and active |
+
+---
+
+<a id="coverage-snapshot"></a>
+## 🌟 Coverage Snapshot
+
+| 🛡️ Layer | ✅ Status | 📌 Detail |
+|---|---|---|
+| Chrome Artifacts | Complete | History, downloads, cookies, autofill, extensions |
+| LNK Parsing | Complete | 75 / 75 files, zero parse errors |
+| Timeline Correlation | Built | `TargetAccessed` sequence across the parsed LNK files |
+
+---
+
+<a id="correlation-pipeline"></a>
+## 🧭 Cross-Artifact Correlation Pipeline
+
+From two independent artifact sets to one timeline
+
+```mermaid
+flowchart TB
+    Browser["🌐 CHROME ARTIFACT SET"]:::browserClass
+    History["🕘 HISTORY + DOWNLOADS"]:::historyClass
+    LNK["🔗 75 LNK FILES"]:::lnkClass
+    Parse["⚙️ PARSED VIA LECMD"]:::parseClass
+    Merge["🧩 CROSS-REFERENCED"]:::mergeClass
+    Timeline["📅 CHRONOLOGICAL TIMELINE"]:::timelineClass
+
+    Browser --> History --> Merge
+    LNK --> Parse --> Merge
+    Merge --> Timeline
+
+    classDef browserClass fill:#2C3E70,stroke:#131B3A,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef historyClass fill:#1A5276,stroke:#0B2E43,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef lnkClass fill:#B9770E,stroke:#6E4409,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef parseClass fill:#76448A,stroke:#432752,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef mergeClass fill:#B7950B,stroke:#6B5807,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+    classDef timelineClass fill:#1E8449,stroke:#0E4A28,stroke-width:5px,color:#FFFFFF,font-weight:bold,font-size:16px
+
+    linkStyle default stroke:#2C3E50,stroke-width:4px
+```
+
+---
+
+<a id="module-2"></a>
+## 🟢 Module 2 — LNK Parsing & Timeline Correlation
+
+**Objective:** Parse every Windows Shortcut file with LECmd and build a single chronological timeline of file access.
+
+### Step 7 — Parse all LNK files with LECmd ✅
+
+```powershell
+LECmd.exe -d "C:\Users\hp\Downloads\LNK_Copy" --csv "C:\Users\hp\Downloads" --csvf LNK_Output.csv
+```
+
+<p align="center">
+  <img src="screenshots/Exhibit07_lecmd_processing_confirmation.png" alt="Exhibit 7 - LECmd processing confirmation" width="850"><br>
+  <em>Exhibit 7 — LECmd confirming all 75 files processed in 32.13 seconds with zero errors, including Tracker Database block metadata (Machine ID, MAC address) from the final file</em>
+</p>
+
+### Step 8 — Review the full parsed output ✅
+
+<p align="center">
+  <img src="screenshots/Exhibit08_lecmd_csv_output.png" alt="Exhibit 8 - LECmd CSV output" width="850"><br>
+  <em>Exhibit 8 — Full LECmd CSV output: source/target timestamps, file size, target path, volume information, and machine/MAC identifiers for every parsed shortcut</em>
+</p>
+
+### Step 9 — Build the chronological access timeline ✅
+
+<p align="center">
+  <img src="screenshots/Exhibit09_chronological_timeline.png" alt="Exhibit 9 - Chronological timeline" width="850"><br>
+  <em>Exhibit 9 — LNK output sorted by <code>TargetAccessed</code>, producing a minute-by-minute sequence of file access (newest first)</em>
+</p>
+
+🎯 **Result:** A complete, zero-error LNK dataset now sits on a single, sortable timeline of file access.
+
+| Check | Method | Outcome |
+|---|---|---|
+| All LNK files parsed | LECmd batch run | ✅ 75 / 75, 0 errors |
+| Timeline built | Sort by `TargetAccessed` | ✅ Complete, newest first |
+
+---
+
+<a id="project-summary"></a>
+## 📝 Project Summary
+
+| Module | Tooling | Key Finding |
+|---|---|---|
+| Chrome Artifact Review | BrowsingHistoryView, Chrome settings pages | History, downloads, cookies, autofill, and extensions reviewed |
+| LNK Parsing & Timeline Correlation | LECmd | 75/75 files parsed with zero errors; timeline built |
+
+---
+
+<a id="challenges-fixes"></a>
+## ⚠️ Challenges & Fixes
+
+| ❌ Challenge | ✅ Fix |
+|---|---|
+| Parsing LNK files in place risks altering their access timestamps | Copied all target LNK files to a working folder (`LNK_Copy`) before parsing |
+| 75 individual LNK files would be impractical to review by hand | Batch-processed with LECmd into a single CSV, then sorted/filtered in a spreadsheet |
+
+---
+
+<a id="scope-limitations"></a>
+## 🚧 Scope & Limitations
+
+- **Chrome only:** This analysis covers Chrome and does not generalize to a multi-browser environment.
+- **LNK targets only, not full filesystem:** Timeline correlation is built from LNK access metadata, not a full filesystem timeline (MFT, event logs, etc.).
+
+---
+
+<a id="what-i-learned"></a>
+## 🧠 What I Learned
+
+- **A forensic review is only as trustworthy as its handling.** Copying the LNK files before parsing, rather than parsing them in place, is what keeps the evidence itself unaltered.
+- **LNK files carry more than a path.** Machine ID and MAC address turn a simple shortcut into a forensic artifact that can place a file access on a specific machine.
+- **Cross-referencing two independent artifact sets is more convincing than either alone.** Browser history shows intent; LNK data shows actual file interaction — together they corroborate each other.
+
+---
+
+<a id="skills-demonstrated"></a>
+## 🛠️ Skills Demonstrated
+
+- Reviewing Chrome artifacts (history, downloads, cookies, autofill, extensions)
+- Batch-parsing Windows Shortcut (LNK) files with LECmd
+- Building a cross-artifact chronological timeline from parsed forensic data
+- Working from copied LNK files to preserve original evidence integrity
+
+---
+
+<a id="screenshot-index"></a>
+## 🖼️ Screenshot Index
+
+| # | File | Shows |
+|:---:|---|---|
+| 1 | `Exhibit01_chrome_userdata_folder.png` | Chrome's User Data folder structure |
+| 2 | `Exhibit02_browsing_history_export.png` | BrowsingHistoryView export of Chrome history |
+| 3 | `Exhibit03_download_history.png` | Chrome download history |
+| 4 | `Exhibit04_cookies_site_data.png` | Cookies and per-site storage usage |
+| 5 | `Exhibit05_autofill_passwords.png` | Autofill and passwords panel |
+| 6 | `Exhibit06_extensions_listing.png` | Installed extension detail view |
+| 7 | `Exhibit07_lecmd_processing_confirmation.png` | LECmd — 75/75 files, zero errors |
+| 8 | `Exhibit08_lecmd_csv_output.png` | Full LECmd CSV output |
+| 9 | `Exhibit09_chronological_timeline.png` | `TargetAccessed` timeline, newest first |
+
+---
+
+<a id="repo-structure"></a>
+## 📁 Repo Structure
+
+```text
+project-17-browser-forensics-lnk-analysis/
+|-- README.md
+|-- INDEX.md
+`-- screenshots/
+    |-- Exhibit01_chrome_userdata_folder.png
+    |-- Exhibit02_browsing_history_export.png
+    |-- Exhibit03_download_history.png
+    |-- Exhibit04_cookies_site_data.png
+    |-- Exhibit05_autofill_passwords.png
+    |-- Exhibit06_extensions_listing.png
+    |-- Exhibit07_lecmd_processing_confirmation.png
+    |-- Exhibit08_lecmd_csv_output.png
+    `-- Exhibit09_chronological_timeline.png
+```
+
+<div align="center">
+
+🌐 **[Chrome](https://www.google.com/chrome/)** · 🔗 **[LECmd](https://ericzimmerman.github.io/#!index.md)** · 🕘 **[BrowsingHistoryView](https://www.nirsoft.net/utils/browsing_history_view.html)** · 🧭 **[Correlation Pipeline](#correlation-pipeline)**
 
 </div>
