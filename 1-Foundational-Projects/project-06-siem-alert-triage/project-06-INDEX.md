@@ -38,10 +38,10 @@
 | 2 | Review the alert queue | 🔵 Module 2 | Alert 8818 picked up | [Exhibit 2](#ex2) |
 | 3 | Assign the alert | 🟠 Module 3 | Assigned to self | [Exhibit 3](#ex3) |
 | 4 | Review alert details | 🟠 Module 4 | Raw email data read | [Exhibit 4](#ex4) |
-| 5 | Investigate domain history | 🟢 Module 5 | Internal ticket found | [Exhibit 5](#ex5) |
-| 6 | File case report — Alert 1 | 🟢 Module 6 | False Positive submitted | [Exhibit 6](#ex6) |
+| 5 | Investigate domain history | 🟢 Module 5 | Internal ticket found | [Exhibit 5](#ex5) · [Exhibit 5 results](#ex5results) |
+| 6 | File case report — Alert 1 | 🟢 Module 6 | False Positive submitted | [Exhibit 6](#ex6) · [Exhibit 6 submitted](#ex6submitted) |
 | 7 | Open the second alert | 🟣 Module 7 | Typosquat domain identified | [Exhibit 7](#ex7) |
-| 8 | Confirm the click | 🔴 Module 8 | Firewall log shows `allowed` | [Exhibit 8](#ex8) |
+| 8 | Confirm the click | 🔴 Module 8 | Firewall log shows `allowed` | [Exhibit 8](#ex8) · [Exhibit 8 continued](#ex8continued) |
 | 9 | File case report — Alert 2 | 🟢 Module 9 | True Positive + escalation | [Exhibit 9](#ex9) |
 
 ---
@@ -62,7 +62,7 @@ Exhibits 1 to 2.
 <a id="ex2"></a>
 <a href="screenshots/SS2_Introduction_to_Phishing_Alert_Queue.PNG"><img src="screenshots/SS2_Introduction_to_Phishing_Alert_Queue.PNG" width="380" alt="Exhibit 2"></a>
 <br><b>Exhibit 2 — Alert queue</b>
-<br><sub>5 pending alerts</sub>
+<br><sub>Queue loading, 4 alerts incoming</sub>
 </td>
 </tr>
 </table>
@@ -102,12 +102,26 @@ Exhibits 5 to 6.
 <a id="ex5"></a>
 <a href="screenshots/SS5_SIEM_Search.PNG"><img src="screenshots/SS5_SIEM_Search.PNG" width="380" alt="Exhibit 5"></a>
 <br><b>Exhibit 5 — Splunk search</b>
-<br><sub>Internal ticket confirms legitimacy</sub>
+<br><sub>Unfiltered search <code>*</code>, 87 events</sub>
 </td>
 <td align="center" valign="top" width="50%">
+<a id="ex5results"></a>
+<a href="screenshots/SS6_SIEM_Results.PNG"><img src="screenshots/SS6_SIEM_Results.PNG" width="380" alt="Exhibit 5 (results)"></a>
+<br><b>Exhibit 5 (results) — Domain search</b>
+<br><sub>Internal IT email names hrconnex.thm as HR partner</sub>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top" width="50%">
 <a id="ex6"></a>
-<a href="screenshots/SS8_Case_Report_Submitted.PNG"><img src="screenshots/SS8_Case_Report_Submitted.PNG" width="380" alt="Exhibit 6"></a>
-<br><b>Exhibit 6 — Verdict filed</b>
+<a href="screenshots/SS7_Filling_Case_Report.PNG"><img src="screenshots/SS7_Filling_Case_Report.PNG" width="380" alt="Exhibit 6"></a>
+<br><b>Exhibit 6 — Case report filled</b>
+<br><sub>False Positive selected, rationale written</sub>
+</td>
+<td align="center" valign="top" width="50%">
+<a id="ex6submitted"></a>
+<a href="screenshots/SS8_Case_Report_Submitted.PNG"><img src="screenshots/SS8_Case_Report_Submitted.PNG" width="380" alt="Exhibit 6 (submitted)"></a>
+<br><b>Exhibit 6 (submitted) — Verdict filed</b>
 <br><sub>False Positive submitted</sub>
 </td>
 </tr>
@@ -129,10 +143,19 @@ Exhibits 7 to 8.
 </td>
 <td align="center" valign="top" width="50%">
 <a id="ex8"></a>
-<a href="screenshots/SS11_SIEM_Phishing_Proof.PNG"><img src="screenshots/SS11_SIEM_Phishing_Proof.PNG" width="380" alt="Exhibit 8"></a>
+<a href="screenshots/SS10_SIEM_Phishing_Search.PNG"><img src="screenshots/SS10_SIEM_Phishing_Search.PNG" width="380" alt="Exhibit 8"></a>
 <br><b>Exhibit 8 — Click confirmed</b>
 <br><sub>Firewall log: action <code>allowed</code></sub>
 </td>
+</tr>
+<tr>
+<td align="center" valign="top" width="50%">
+<a id="ex8continued"></a>
+<a href="screenshots/SS11_SIEM_Phishing_Proof.PNG"><img src="screenshots/SS11_SIEM_Phishing_Proof.PNG" width="380" alt="Exhibit 8 (continued)"></a>
+<br><b>Exhibit 8 (continued) — Phishing email</b>
+<br><sub>Same search, scrolled to the email event</sub>
+</td>
+<td></td>
 </tr>
 </table>
 
@@ -147,8 +170,8 @@ Exhibit 9.
 <td align="center" valign="top" width="50%">
 <a id="ex9"></a>
 <a href="screenshots/SS12_True_Positive_Submitted.PNG"><img src="screenshots/SS12_True_Positive_Submitted.PNG" width="380" alt="Exhibit 9"></a>
-<br><b>Exhibit 9 — True Positive</b>
-<br><sub>Escalated; isolation + password reset</sub>
+<br><b>Exhibit 9 — Both alerts closed</b>
+<br><sub>Alert 8817 and Alert 8818 show Closed</sub>
 </td>
 <td></td>
 </tr>
@@ -164,7 +187,7 @@ Exhibit 9.
 | Alert 1 verdict filed | Case report | Module 6 | ✅ Confirmed (FP) |
 | Alert 2 typosquat identified | Domain string review | Module 7 | ✅ Confirmed |
 | Alert 2 click confirmed | Firewall log | Module 8 | ✅ Confirmed |
-| Alert 2 escalated with remediation | Case report | Module 9 | ✅ Confirmed (TP) |
+| Alert 2 escalated with remediation | Case report | Module 9 | 📝 Documented (report text not shown in a screenshot) |
 
 > [!NOTE]
 > Both alerts shared the identical surface pattern ("external link email") — only SIEM/firewall evidence separated the False Positive from the True Positive.
