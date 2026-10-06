@@ -43,7 +43,7 @@ All 7 steps of the project, with the screenshot that shows each one.
 | 4 | Filter for Logon Type 2 | 🟠 Module 2 | output.csv filtered on Logon Type | [Exhibit 4](#ex4) |
 | 5 | Identify the Type 2 baseline event | 🟠 Module 2 | EventId 4624, 7/24/2026 23:27 | [Exhibit 5](#ex5) |
 | 6 | Locate Event 4625 (failed logon) | 🟢 Module 3 | TimeCreated 9/11/2026 23:23 | [Exhibit 6](#ex6) |
-| 7 | Filter for Logon Type 5 (service noise) | 🟣 Module 4 | `DESKTOP-0O3U1SH$` + local account identified | [Exhibit 7](#ex7) |
+| 7 | Identify Logon Type 5 (service noise) | 🟣 Module 4 | `DESKTOP-0O3U1SH$` + local account identified | [Exhibit 7](#ex7) |
 
 ---
 
@@ -110,7 +110,7 @@ Exhibit 6.
 <tr>
 <td align="center" valign="top" width="50%">
 <a id="ex6"></a>
-<a href="screenshots/ss-06-event-4625-failed-logon.PNG"><img src="screenshots/ss-06-event-4625-failed-logon.PNG" width="380" alt="Exhibit 6"></a>
+<a href="screenshots/ss-07-event-4625-failed-logon.PNG"><img src="screenshots/ss-07-event-4625-failed-logon.PNG" width="380" alt="Exhibit 6"></a>
 <br><b>Exhibit 6 — Event 4625</b>
 <br><sub>Failed logon, TimeCreated 9/11/2026 23:23</sub>
 </td>
@@ -128,7 +128,7 @@ Exhibit 7.
 <tr>
 <td align="center" valign="top" width="50%">
 <a id="ex7"></a>
-<a href="screenshots/ss-07-logontype5-background-accounts.PNG"><img src="screenshots/ss-07-logontype5-background-accounts.PNG" width="380" alt="Exhibit 7"></a>
+<a href="screenshots/ss-08-logontype5-background-accounts.PNG"><img src="screenshots/ss-08-logontype5-background-accounts.PNG" width="380" alt="Exhibit 7"></a>
 <br><b>Exhibit 7 — Logon Type 5 accounts</b>
 <br><sub><code>DESKTOP-0O3U1SH$</code> and local account, service context</sub>
 </td>
@@ -146,7 +146,7 @@ Exhibit 7.
 | Log parsed cleanly | EvtxECmd, 0 errors | Module 1 | ✅ Confirmed |
 | Logon Type 2 baseline identified | Spreadsheet filter | Module 2 | ✅ Confirmed |
 | Event 4625 (failed logon) located | Spreadsheet filter | Module 3 | ✅ Confirmed |
-| Logon Type 5 background accounts explained | Spreadsheet filter | Module 4 | ✅ Confirmed |
+| Logon Type 5 background accounts explained | Spreadsheet search | Module 4 | ✅ Confirmed |
 
 ---
 
