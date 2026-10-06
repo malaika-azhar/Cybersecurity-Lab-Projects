@@ -12,10 +12,10 @@ Python-Automated Port Scanning with Service-Version Detection — python-nmap Br
 ![Difficulty](https://img.shields.io/badge/Difficulty-Foundational-6f42c1?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
 
-Seven steps run end-to-end, building a Python script that wraps Nmap so open ports, host status, and running service versions print automatically — no typing raw Nmap commands or reading terminal output by hand. Three real environment errors were hit and fixed in sequence along the way: a hidden file extension, a half-finished Nmap install, and an invalid scan flag.
+Seven steps run end-to-end, building a Python script that wraps Nmap so host status, open ports, and service versions are printed by the script — no typing raw Nmap commands. The verified localhost run returned host status; no open ports were listed in the 21–80 range. Three real environment errors were hit and fixed in sequence along the way: a hidden file extension, a half-finished Nmap install, and an invalid scan flag.
 
 > [!NOTE]
-> This project focuses on **automating a scan** with a Python script. Project 07 (Nmap Port Scan Reconnaissance) is a different skill — correctly **interpreting** scan results (filtered vs. open) rather than scripting the scan itself.
+> This project focuses on **automating a scan** with a Python script, not on **interpreting** scan results (filtered vs. open).
 
 </div>
 
@@ -175,7 +175,7 @@ pip install python-nmap
 
 <p align="center">
   <img src="screenshots/1_Python_Installation.PNG" alt="Exhibit 1 - Python Installation" width="850"><br>
-  <em>Exhibit 1 — Python installed successfully</em>
+  <em>Exhibit 1 — <code>pip install python-nmap</code> completed (python-nmap 0.7.1 installed)</em>
 </p>
 
 ---
@@ -220,7 +220,7 @@ dir
 
 <p align="center">
   <img src="screenshots/3_Extension_Error_Check.PNG" alt="Exhibit 3 - Extension Error Check" width="850"><br>
-  <em>Exhibit 3 — Hidden .txt extension discovered via dir</em>
+  <em>Exhibit 3 — Command prompt in the project folder beside the script open in Notepad, before diagnosis (the <code>dir</code> output is in Exhibit 3 fix)</em>
 </p>
 
 **Fix:**
@@ -231,7 +231,7 @@ ren scanner.py.txt scanner.py
 
 <p align="center">
   <img src="screenshots/4_File_Renamed_Fix.PNG" alt="Exhibit 3 Fix - File Renamed" width="850"><br>
-  <em>Exhibit 3 (fix) — File renamed correctly to scanner.py</em>
+  <em>Exhibit 3 (fix) — Failed run, <code>dir</code> showing <code>scanner.py.txt</code>, rename with <code>ren</code>, and <code>dir</code> again showing <code>scanner.py</code>; the folder also lists a separate <code>scanner.py.txt.py</code> (868 bytes)</em>
 </p>
 
 ---
@@ -269,7 +269,7 @@ ren scanner.py.txt scanner.py
 ### Step 5 — Identify the Invalid Flag ✅
 
 ```
-nm.scan(target, '21-80', '-xyz')
+nm.scan(target, '21-80', '-sV -xyz')
 
 → Nmap returns no valid output
 → python-nmap cannot parse it:
@@ -279,7 +279,7 @@ xml.etree.ElementTree.ParseError: no element found: line 1, column 0
 
 <p align="center">
   <img src="screenshots/5_Nmap_Path_Error.PNG" alt="Exhibit 5 - Invalid Flag Error" width="850"><br>
-  <em>Exhibit 5 — Invalid flag error before fix</em>
+  <em>Exhibit 5 — Invalid flag error before fix (call shown in the traceback: <code>'-sV -xyz'</code>)</em>
 </p>
 
 ---
@@ -320,7 +320,7 @@ python scanner.py
 
 <p align="center">
   <img src="screenshots/6_Final_Scan_Success.PNG" alt="Exhibit 7 - Final Scan Success" width="850"><br>
-  <em>Exhibit 7 — Successful scan result on localhost</em>
+  <em>Exhibit 7 — Successful scan result on localhost (host status only; no ports listed for 21–80)</em>
 </p>
 
 ---
@@ -372,6 +372,7 @@ python scanner.py
 ## 🚧 Scope & Limitations
 
 - **Localhost only:** current scan target is `127.0.0.1`; no real subnet or test VM scanned yet.
+- **No port output shown:** the localhost run listed no open ports in 21–80, so port and service-version output is not demonstrated in a screenshot.
 - **No vulnerability correlation:** detects open ports and service versions only — does not cross-reference against a CVE database.
 - **Windows-specific fixes:** the PATH/extension issues documented here are Windows behaviors; a Linux/macOS build would hit different environment quirks.
 
@@ -412,9 +413,9 @@ A scanner like this is the starting point for automated asset discovery — runn
 |:---:|---|---|
 | 1 | `1_Python_Installation.PNG` | Python installed successfully |
 | 2 | `2_Scanner_Code.PNG` | scanner.py code in Notepad |
-| 3 | `3_Extension_Error_Check.PNG` | Hidden `.txt` extension discovered via `dir` |
-| 4 | `4_File_Renamed_Fix.PNG` | File renamed correctly to `scanner.py` |
-| 5 | `5_Nmap_Path_Error.PNG` | Nmap/PATH error before fix |
+| 3 | `3_Extension_Error_Check.PNG` | Command prompt in project folder beside the script, before diagnosis |
+| 4 | `4_File_Renamed_Fix.PNG` | Failed run, `dir` showing `scanner.py.txt`, rename, and `dir` after |
+| 5 | `5_Nmap_Path_Error.PNG` | Invalid-flag `ParseError` before fix |
 | 6 | `6_Final_Scan_Success.PNG` | Successful scan result on localhost |
 
 ---
