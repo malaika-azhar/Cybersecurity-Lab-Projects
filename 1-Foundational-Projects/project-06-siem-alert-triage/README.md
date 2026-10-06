@@ -179,7 +179,7 @@ Launch TryHackMe SOC Simulator
 ### Step 2 — Open the Queue ✅
 
 ```
-Alert queue — 5 pending alerts waiting
+Alert queue — first alert listed, 4 more incoming (5 in total by Exhibit 3)
 
 Picked up first alert:
   Alert ID: 8818
@@ -189,7 +189,7 @@ Picked up first alert:
 
 <p align="center">
   <img src="screenshots/SS2_Introduction_to_Phishing_Alert_Queue.PNG" alt="Exhibit 2 - Alert Queue" width="850"><br>
-  <em>Exhibit 2 — Alert queue, 5 pending alerts</em>
+  <em>Exhibit 2 — Alert queue loading: first alert (8814) listed, 4 more incoming</em>
 </p>
 
 ---
@@ -250,11 +250,11 @@ Splunk search: hrconnex.thm
 
 <p align="center">
   <img src="screenshots/SS5_SIEM_Search.PNG" alt="Exhibit 5 - SIEM Search" width="850"><br>
-  <em>Exhibit 5 — Splunk search for hrconnex.thm</em>
+  <em>Exhibit 5 — Splunk search <code>*</code> (all events, 87 matched) before narrowing to the domain</em>
 </p>
 
 ```
-Found two internal emails:
+Search matched 3 events (Exhibit 5 results); the internal one:
   - Employee h.harris filed an IT ticket explaining that
     new hire j.garcia hadn't received the onboarding link
     from the company's third-party HR provider, hrconnex.thm
@@ -265,7 +265,7 @@ Found two internal emails:
 
 <p align="center">
   <img src="screenshots/SS6_SIEM_Results.PNG" alt="Exhibit 5 (results) - SIEM Results" width="850"><br>
-  <em>Exhibit 5 (results) — Internal ticket history confirming legitimacy</em>
+  <em>Exhibit 5 (results) — Search <code>*hrconnex.thm</code>: 3 of 58 events, including the internal IT email that names hrconnex.thm as the HR partner</em>
 </p>
 
 ---
@@ -290,7 +290,7 @@ Reason: Legitimate HR onboarding email, confirmed by
 </p>
 <p align="center">
   <img src="screenshots/SS8_Case_Report_Submitted.PNG" alt="Exhibit 6 (submitted) - Case Report Submitted" width="850"><br>
-  <em>Exhibit 6 (submitted) — False Positive verdict submitted</em>
+  <em>Exhibit 6 (submitted) — False Positive verdict submitted; Alert 8818 now shows Closed</em>
 </p>
 
 ---
@@ -331,7 +331,7 @@ Splunk search: m1crosoftsupport.co
 
 <p align="center">
   <img src="screenshots/SS10_SIEM_Phishing_Search.PNG" alt="Exhibit 8 - SIEM Phishing Search" width="850"><br>
-  <em>Exhibit 8 — Splunk search for m1crosoftsupport.co</em>
+  <em>Exhibit 8 — Splunk search for m1crosoftsupport.co: the firewall event shows Action allowed from 10.20.2.25</em>
 </p>
 
 ```
@@ -343,8 +343,8 @@ Checked firewall logs directly:
 ```
 
 <p align="center">
-  <img src="screenshots/SS11_SIEM_Phishing_Proof.PNG" alt="Exhibit 8 (proof) - SIEM Phishing Proof" width="850"><br>
-  <em>Exhibit 8 (proof) — Firewall log confirming the malicious click</em>
+  <img src="screenshots/SS11_SIEM_Phishing_Proof.PNG" alt="Exhibit 8 (continued) - SIEM Phishing Search, scrolled" width="850"><br>
+  <em>Exhibit 8 (continued) — Same search scrolled down to the phishing email event</em>
 </p>
 
 ---
@@ -365,8 +365,8 @@ Remediation: Isolate 10.20.2.25 from the network,
 ```
 
 <p align="center">
-  <img src="screenshots/SS12_True_Positive_Submitted.PNG" alt="Exhibit 9 - True Positive Submitted" width="850"><br>
-  <em>Exhibit 9 — True Positive verdict, escalation, and remediation steps</em>
+  <img src="screenshots/SS12_True_Positive_Submitted.PNG" alt="Exhibit 9 - Both Alerts Closed" width="850"><br>
+  <em>Exhibit 9 — Alert queue showing Alert 8817 and Alert 8818 both Closed</em>
 </p>
 
 ---
@@ -377,14 +377,14 @@ Remediation: Isolate 10.20.2.25 from the network,
 | 🛡️ Layer | ✅ Status | 📌 Detail |
 |---|---|---|
 | Simulator loaded | Live | Scenario 1 confirmed ready (Exhibit 1) |
-| Alert queue reviewed | Proven | 5 pending alerts, Alert 8818 picked up (Exhibit 2) |
+| Alert queue reviewed | Proven | Queue loading in Exhibit 2; 5 alerts by Exhibit 3; Alert 8818 picked up |
 | Alert 1 assigned | Proven | Alert 8818 assigned to self (Exhibit 3) |
 | Alert 1 details reviewed | Proven | Raw email data read, surface pattern noted (Exhibit 4) |
 | Alert 1 evidence found | Proven | Internal ticket confirms legitimacy (Exhibit 5) |
 | Alert 1 verdict filed | Proven | False Positive submitted (Exhibit 6) |
 | Alert 2 opened | Proven | Typosquat domain identified (Exhibit 7) |
 | Alert 2 click confirmed | Proven | Firewall log shows `allowed` (Exhibit 8) |
-| Alert 2 verdict filed | Proven | True Positive, escalation + remediation submitted (Exhibit 9) |
+| Alert 2 verdict filed | Documented | Alert 8817 shown Closed (Exhibit 9); the True Positive report text is not shown in a screenshot |
 
 ---
 
@@ -474,17 +474,17 @@ This is the daily core of Tier 1 SOC work: high alert volume, most of it benign,
 | # | File | Shows |
 |:---:|---|---|
 | 1 | `SS1_Introduction_to_Phishing_Dashboard.PNG` | SOC Simulator loaded, Scenario 1 ready |
-| 2 | `SS2_Introduction_to_Phishing_Alert_Queue.PNG` | Alert queue, 5 pending alerts |
+| 2 | `SS2_Introduction_to_Phishing_Alert_Queue.PNG` | Alert queue loading, 4 alerts incoming |
 | 3 | `SS3_Assigned_Alert.PNG` | Alert 8818 assigned for investigation |
 | 4 | `SS4_Alert_Details.PNG` | Raw email data for Alert 8818 |
-| 5 | `SS5_SIEM_Search.PNG` | Splunk search for `hrconnex.thm` |
-| 6 | `SS6_SIEM_Results.PNG` | Internal ticket history confirming legitimacy |
+| 5 | `SS5_SIEM_Search.PNG` | Splunk search `*` — 87 events, before filtering by domain |
+| 6 | `SS6_SIEM_Results.PNG` | Search `*hrconnex.thm` — 3 events, incl. the internal IT email naming the HR partner |
 | 7 | `SS7_Filling_Case_Report.PNG` | Case report being completed for Alert 8818 |
-| 8 | `SS8_Case_Report_Submitted.PNG` | False Positive verdict submitted |
+| 8 | `SS8_Case_Report_Submitted.PNG` | False Positive verdict submitted; Alert 8818 shows Closed |
 | 9 | `SS9_Second_Alert_Details.PNG` | Alert 8817 — typosquat phishing domain details |
-| 10 | `SS10_SIEM_Phishing_Search.PNG` | Splunk search for `m1crosoftsupport.co` |
-| 11 | `SS11_SIEM_Phishing_Proof.PNG` | Firewall log confirming the malicious click |
-| 12 | `SS12_True_Positive_Submitted.PNG` | True Positive verdict, escalation, and remediation steps |
+| 10 | `SS10_SIEM_Phishing_Search.PNG` | Splunk search for `m1crosoftsupport.co` — firewall event shows Action allowed, source 10.20.2.25 |
+| 11 | `SS11_SIEM_Phishing_Proof.PNG` | Same search scrolled down to the phishing email event |
+| 12 | `SS12_True_Positive_Submitted.PNG` | Alert queue showing Alert 8817 and Alert 8818 both Closed |
 
 ---
 
