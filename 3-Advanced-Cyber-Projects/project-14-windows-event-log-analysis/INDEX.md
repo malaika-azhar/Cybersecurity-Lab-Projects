@@ -21,9 +21,9 @@
 
 <div align="center">
 
-| 🧩 Parsing Passes | 🖼️ Screenshots | 🎯 Event IDs | 📋 Records (Pass 2) |
+| 🧩 Parsing Passes | 🖼️ Screenshots | 🎯 Event IDs | 📋 Records |
 |:---:|:---:|:---:|:---:|
-| **2** | **8** | **3** | **33,127** |
+| **1** | **7** | **2** | **32,738** |
 
 </div>
 
@@ -33,18 +33,17 @@
 
 ## 📑 Step Index
 
-All 8 steps of the project, with the screenshot that shows each one.
+All 7 steps of the project, with the screenshot that shows each one.
 
 | # | Step | Module | Result | Evidence |
 |:---:|---|:---:|---|:---:|
 | 1 | Copy the log and hash it | 🔵 Module 1 | SHA256 `b84b2dc4…36b9463` | [Exhibit 1](#ex1) |
-| 2 | Parse with EvtxECmd (Pass 1) | 🔵 Module 1 | CSV output path confirmed | [Exhibit 2](#ex2) |
-| 3 | Confirm Pass 1 completion | 🔵 Module 1 | 32,738 records, 0 errors | [Exhibit 3](#ex3) |
+| 2 | Parse with EvtxECmd | 🔵 Module 1 | CSV output path confirmed | [Exhibit 2](#ex2) |
+| 3 | Confirm parsing completion | 🔵 Module 1 | 32,738 records, 0 errors | [Exhibit 3](#ex3) |
 | 4 | Filter for Logon Type 2 | 🟠 Module 2 | output.csv filtered on Logon Type | [Exhibit 4](#ex4) |
 | 5 | Identify the Type 2 baseline event | 🟠 Module 2 | EventId 4624, 7/24/2026 23:27 | [Exhibit 5](#ex5) |
-| 6 | Re-parse after lock/unlock test | 🟠 Module 2 | Pass 2: 33,127 records — still no Type 7 found | [Exhibit 6](#ex6) |
-| 7 | Locate Event 4625 (failed logon) | 🟢 Module 3 | TimeCreated 9/11/2026 23:23 | [Exhibit 7](#ex7) |
-| 8 | Filter for Logon Type 5 (service noise) | 🟣 Module 4 | `DESKTOP-0O3U1SH$` + local account identified | [Exhibit 8](#ex8) |
+| 6 | Locate Event 4625 (failed logon) | 🟢 Module 3 | TimeCreated 9/11/2026 23:23 | [Exhibit 6](#ex6) |
+| 7 | Filter for Logon Type 5 (service noise) | 🟣 Module 4 | `DESKTOP-0O3U1SH$` + local account identified | [Exhibit 7](#ex7) |
 
 ---
 
@@ -71,7 +70,7 @@ Exhibits 1 to 3. Click a screenshot to open it full size.
 <td align="center" valign="top" width="50%">
 <a id="ex3"></a>
 <a href="screenshots/ss-03-evtxecmd-pass1-completion.PNG"><img src="screenshots/ss-03-evtxecmd-pass1-completion.PNG" width="380" alt="Exhibit 3"></a>
-<br><b>Exhibit 3 — Pass 1 completion</b>
+<br><b>Exhibit 3 — Parsing completion</b>
 <br><sub>32,738 records, 0 errors, 0 dropped</sub>
 </td>
 <td></td>
@@ -80,9 +79,9 @@ Exhibits 1 to 3. Click a screenshot to open it full size.
 
 ---
 
-## 🟠 Module 2 — Human Baseline & the Logon Type 7 Finding
+## 🟠 Module 2 — Human Baseline (Logon Type 2)
 
-Exhibits 4 to 6.
+Exhibits 4 and 5.
 
 <table>
 <tr>
@@ -99,29 +98,20 @@ Exhibits 4 to 6.
 <br><sub>EventId 4624, 7/24/2026 23:27</sub>
 </td>
 </tr>
-<tr>
-<td align="center" valign="top" width="50%">
-<a id="ex6"></a>
-<a href="screenshots/ss-06-evtxecmd-pass2-completion.PNG"><img src="screenshots/ss-06-evtxecmd-pass2-completion.PNG" width="380" alt="Exhibit 6"></a>
-<br><b>Exhibit 6 — Pass 2 completion</b>
-<br><sub>33,127 records, post lock/unlock test</sub>
-</td>
-<td></td>
-</tr>
 </table>
 
 ---
 
-## 🟢 Module 3 — Failed Logon & Privilege Tracking
+## 🟢 Module 3 — Failed Logon Tracking
 
-Exhibit 7.
+Exhibit 6.
 
 <table>
 <tr>
 <td align="center" valign="top" width="50%">
-<a id="ex7"></a>
-<a href="screenshots/ss-07-event-4625-failed-logon.PNG"><img src="screenshots/ss-07-event-4625-failed-logon.PNG" width="380" alt="Exhibit 7"></a>
-<br><b>Exhibit 7 — Event 4625</b>
+<a id="ex6"></a>
+<a href="screenshots/ss-06-event-4625-failed-logon.PNG"><img src="screenshots/ss-06-event-4625-failed-logon.PNG" width="380" alt="Exhibit 6"></a>
+<br><b>Exhibit 6 — Event 4625</b>
 <br><sub>Failed logon, TimeCreated 9/11/2026 23:23</sub>
 </td>
 <td></td>
@@ -132,14 +122,14 @@ Exhibit 7.
 
 ## 🟣 Module 4 — Background Noise (Logon Type 5)
 
-Exhibit 8.
+Exhibit 7.
 
 <table>
 <tr>
 <td align="center" valign="top" width="50%">
-<a id="ex8"></a>
-<a href="screenshots/ss-08-logontype5-background-accounts.PNG"><img src="screenshots/ss-08-logontype5-background-accounts.PNG" width="380" alt="Exhibit 8"></a>
-<br><b>Exhibit 8 — Logon Type 5 accounts</b>
+<a id="ex7"></a>
+<a href="screenshots/ss-07-logontype5-background-accounts.PNG"><img src="screenshots/ss-07-logontype5-background-accounts.PNG" width="380" alt="Exhibit 7"></a>
+<br><b>Exhibit 7 — Logon Type 5 accounts</b>
 <br><sub><code>DESKTOP-0O3U1SH$</code> and local account, service context</sub>
 </td>
 <td></td>
@@ -155,13 +145,8 @@ Exhibit 8.
 | Source log integrity hashed before analysis | `certutil` SHA256 | Module 1 | ✅ Confirmed |
 | Log parsed cleanly | EvtxECmd, 0 errors | Module 1 | ✅ Confirmed |
 | Logon Type 2 baseline identified | Spreadsheet filter | Module 2 | ✅ Confirmed |
-| Logon Type 7 event found | Deliberate lock/unlock test, re-parse | Module 2 | ❌ Not found — documented as a finding |
 | Event 4625 (failed logon) located | Spreadsheet filter | Module 3 | ✅ Confirmed |
-| Event 4672 correctly attributed to SYSTEM startup | Timestamp clustering | Module 3 | ✅ Confirmed |
 | Logon Type 5 background accounts explained | Spreadsheet filter | Module 4 | ✅ Confirmed |
-
-> [!NOTE]
-> The Logon Type 7 absence is reported exactly as observed, even after a deliberate test designed to produce one — this is treated as an open investigative item, not a resolved result.
 
 ---
 
@@ -169,6 +154,6 @@ Exhibit 8.
 
 [⬆️ Back to top](#top) &nbsp;·&nbsp; [📖 Full README](README.md)
 
-🪟 **[Windows Security Event IDs](https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/basic-audit-logon-events)** · 🧰 **[EZ Tools](https://ericzimmerman.github.io/)** · 🧭 **[Troubleshooting Pipeline](README.md#troubleshooting-pipeline)**
+🪟 **[Windows Security Event IDs](https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/basic-audit-logon-events)** · 🧰 **[EZ Tools](https://ericzimmerman.github.io/)**
 
 </div>
