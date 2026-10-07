@@ -6,7 +6,7 @@
 **Project 02 of 10 — Foundational Projects**
 
 ![Cisco](https://img.shields.io/badge/Cisco_Packet_Tracer-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white)
-![ACL](https://img.shields.io/badge/ACL-Default--Deny-943126?style=for-the-badge)
+![ACL](https://img.shields.io/badge/ACL-Scope_Error_Fix-943126?style=for-the-badge)
 ![Cost](https://img.shields.io/badge/Cost-Free-2EA043?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
 
@@ -20,9 +20,9 @@
 
 <div align="center">
 
-| 🧩 Modules | 🖼️ Screenshots | 🔒 ACL Rules | 🚨 Bypass Found |
+| 🧩 Modules | 🖼️ Screenshots | 🔒 ACL Rule Lines | 🚨 Scope Error |
 |:---:|:---:|:---:|:---:|
-| **9** | **9** | **2** | **1** |
+| **9** | **9** | **3** | **1** |
 
 </div>
 
@@ -40,8 +40,8 @@
 | 4 | Assign static IPs | 🟠 Module 4 | PC0/PC1/PC2 addressed on 192.168.1.0/24 | [Exhibit 4](#ex4) |
 | 5 | Test baseline connectivity | 🟢 Module 5 | PC0 → router, 4/4 replies | [Exhibit 5](#ex5) |
 | 6 | Deploy first ACL | 🔴 Module 6 | `deny host 192.168.1.30` + `permit any` | [Exhibit 6](#ex6) |
-| 7 | Investigate the ACL bypass | 🔴 Module 7 | PC1 ping succeeds unexpectedly | [Exhibit 7](#ex7) |
-| 8 | Harden the ACL | 🟢 Module 8 | Replaced with `access-list 10 deny any` | [Exhibit 8](#ex8) |
+| 7 | Investigate the ACL scope error | 🔴 Module 7 | PC1 ping succeeds (expected under `permit any`) | [Exhibit 7](#ex7) |
+| 8 | Replace the ACL | 🟢 Module 8 | Replaced with `access-list 10 deny any` | [Exhibit 8](#ex8) |
 | 9 | Final verification | 🟢 Module 9 | PC1 re-test blocked as intended | [Exhibit 9](#ex9) |
 
 ---
@@ -110,7 +110,7 @@ Exhibit 5.
 
 ---
 
-## 🔴 Module 6–7 — First ACL & Bypass
+## 🔴 Module 6–7 — First ACL & Scope Error
 
 Exhibits 6 to 7.
 
@@ -125,15 +125,15 @@ Exhibits 6 to 7.
 <td align="center" valign="top" width="50%">
 <a id="ex7"></a>
 <a href="screenshots/7_PC1_Firewall_Bypass_Ping_Success.PNG"><img src="screenshots/7_PC1_Firewall_Bypass_Ping_Success.PNG" width="380" alt="Exhibit 7"></a>
-<br><b>Exhibit 7 — Bypass found</b>
-<br><sub>PC1 (untested host) still gets through</sub>
+<br><b>Exhibit 7 — PC1 passes</b>
+<br><sub>PC1 is not named in the rule, so it gets through</sub>
 </td>
 </tr>
 </table>
 
 ---
 
-## 🟢 Module 8–9 — Harden & Verify
+## 🟢 Module 8–9 — Replace & Verify
 
 Exhibits 8 to 9.
 
@@ -142,14 +142,14 @@ Exhibits 8 to 9.
 <td align="center" valign="top" width="50%">
 <a id="ex8"></a>
 <a href="screenshots/8_Router_Firewall_Fix_Commands.PNG"><img src="screenshots/8_Router_Firewall_Fix_Commands.PNG" width="380" alt="Exhibit 8"></a>
-<br><b>Exhibit 8 — ACL hardened</b>
+<br><b>Exhibit 8 — ACL replaced</b>
 <br><sub><code>access-list 10 deny any</code> replaces the old rule</sub>
 </td>
 <td align="center" valign="top" width="50%">
 <a id="ex9"></a>
 <a href="screenshots/9_Firewall_Block_Success.PNG"><img src="screenshots/9_Firewall_Block_Success.PNG" width="380" alt="Exhibit 9"></a>
 <br><b>Exhibit 9 — Fix verified</b>
-<br><sub>PC1 re-test now blocked as intended</sub>
+<br><sub>PC1 re-test now blocked (other hosts not tested)</sub>
 </td>
 </tr>
 </table>
@@ -163,11 +163,11 @@ Exhibits 8 to 9.
 | Interface activated | `no shutdown`, `show ip route` | Module 3 | ✅ Confirmed |
 | Static IPs assigned | Desktop → IP Configuration | Module 4 | ✅ Confirmed |
 | Baseline connectivity | `ping` from PC0 | Module 5 | ✅ Confirmed |
-| First ACL scope tested on non-target host | `ping` from PC1 | Module 7 | ✅ Confirmed (bypass found) |
-| Hardened ACL re-verified | `ping` from PC1 | Module 9 | ✅ Confirmed (blocked) |
+| First ACL scope tested on non-target host | `ping` from PC1 | Module 7 | ✅ Confirmed (PC1 passes, as the rule allows) |
+| `deny any` re-tested on PC1 | `ping` from PC1 | Module 9 | ✅ Confirmed (PC1 blocked; PC0/PC2 not tested) |
 
 > [!NOTE]
-> The ACL bypass in Module 7 was found by testing a host that was not the rule's explicit target — this is documented as a real scope error, not staged.
+> The scope error in Module 7 was found by testing a host that was not the rule's explicit target — it is documented as a real mistake in my assumption, not staged.
 
 ---
 
