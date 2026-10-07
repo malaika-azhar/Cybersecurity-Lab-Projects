@@ -4,15 +4,15 @@
 
 **Project 02 of 10 — Foundational Projects — Network Infrastructure & Security**
 
-Router & Switch Configuration, Static IP Assignment, and Access Control List Hardening on a 3-PC Small Company Network — Cisco Packet Tracer Build, ACL Scope Error Discovery, and Deny-Any Replacement
+Router & Switch Configuration, Static IP Assignment, and Access Control List Configuration on a 3-PC Small Company Network — Cisco Packet Tracer Build and Host-Specific ACL Verification
 
 ![Cisco](https://img.shields.io/badge/Cisco_Packet_Tracer-Network_Build-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white)
 ![Router](https://img.shields.io/badge/Router-2911-0078D6?style=for-the-badge)
-![ACL](https://img.shields.io/badge/ACL-Scope_Error_Fix-943126?style=for-the-badge)
+![ACL](https://img.shields.io/badge/ACL-Host--Specific_Block-943126?style=for-the-badge)
 ![Difficulty](https://img.shields.io/badge/Difficulty-Foundational-6f42c1?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
 
-Nine steps run end-to-end in Cisco Packet Tracer, building a small company network from a blank workspace to a tested ACL: router and switch placement, interface activation, static IP assignment, a baseline connectivity test, a first Access Control List that looked right but wasn't, the scope error that testing exposed, and a deny-any rule that replaced it.
+Eight steps run end-to-end in Cisco Packet Tracer, building a small company network from a blank workspace to a tested ACL: router and switch placement, interface activation, static IP assignment, a baseline connectivity test, a standard numbered ACL that blocks one host (PC2), and a test on PC1 that shows the rule leaves other hosts allowed. PC2's block follows from the deny rule (no screenshot captured for it).
 
 > [!NOTE]
 > **Project 10** in this portfolio builds directly on this same topology, adding VLAN segmentation, VTP synchronization, and further security hardening.
@@ -29,24 +29,23 @@ Nine steps run end-to-end in Cisco Packet Tracer, building a small company netwo
 4. [Lab Environment](#lab-environment)
 5. [Network Build Map](#network-build-map)
 6. [Simulated Issues](#simulated-issues)
-7. [Build & Harden Timeline](#build-harden-timeline)
+7. [Build & Verify Timeline](#build-harden-timeline)
 8. [Module 1 — Open the Workspace](#module-1)
 9. [Module 2 — Design the Network Topology](#module-2)
 10. [Module 3 — Configure the Router Interface](#module-3)
 11. [Module 4 — Assign Static IPs to PCs](#module-4)
 12. [Module 5 — Test Baseline Connectivity](#module-5)
-13. [Module 6 — Deploy the First ACL Rule](#module-6)
-14. [Module 7 — Investigate the ACL Scope Error](#module-7)
-15. [Module 8 — Replace the ACL](#module-8)
-16. [Module 9 — Final Verification](#module-9)
-17. [Coverage Snapshot](#coverage-snapshot)
-18. [Command Summary](#command-summary)
-19. [Challenges & Fixes](#challenges-fixes)
-20. [Scope & Limitations](#scope-limitations)
-21. [What I Learned](#what-i-learned)
-22. [Skills Demonstrated](#skills-demonstrated)
-23. [Screenshot Index](#screenshot-index)
-24. [Repo Structure](#repo-structure)
+13. [Module 6 — Deploy the ACL Rule](#module-6)
+14. [Module 7 — Test PC1 (Allowed)](#module-7)
+15. [Module 8 — PC2 (Blocked by Rule)](#module-8)
+16. [Coverage Snapshot](#coverage-snapshot)
+17. [Command Summary](#command-summary)
+18. [Challenges & Fixes](#challenges-fixes)
+19. [Scope & Limitations](#scope-limitations)
+20. [What I Learned](#what-i-learned)
+21. [Skills Demonstrated](#skills-demonstrated)
+22. [Screenshot Index](#screenshot-index)
+23. [Repo Structure](#repo-structure)
 
 ---
 
@@ -57,7 +56,7 @@ Nine steps run end-to-end in Cisco Packet Tracer, building a small company netwo
 
 | 🖥️ End Devices | 🧩 Modules | 🔒 ACL Rules Written | 🖼️ Screenshots |
 |:---:|:---:|:---:|:---:|
-| **3 (PC0, PC1, PC2)** | **9** | **3 lines (2 in first ACL, 1 in second)** | **9** |
+| **3 (PC0, PC1, PC2)** | **8** | **2 (1 deny, 1 permit)** | **7** |
 
 </div>
 
@@ -66,18 +65,18 @@ Nine steps run end-to-end in Cisco Packet Tracer, building a small company netwo
 <a id="project-background"></a>
 ## 📖 Project Background
 
-This project starts where a real small-business network build starts — an empty workspace — and works forward through the same order an IT tech would follow on-site: place and cable the hardware, bring the router interface up, hand out static addressing, prove the network works before touching security, then deploy an Access Control List. The ACL didn't work as assumed on the first pass. The rule itself behaved correctly, but my assumption about its scope was wrong. Testing a host that wasn't the explicit target exposed this, and the ACL was replaced with a deny-any rule and re-tested on that same host.
+This project starts where a real small-business network build starts — an empty workspace — and works forward through the same order an IT tech would follow on-site: place and cable the hardware, bring the router interface up, hand out static addressing, prove the network works before touching security, then deploy an Access Control List. I configured a standard numbered ACL to block a specific host, PC2 (192.168.1.30), while allowing other hosts. I tested PC1 to confirm that other hosts were still permitted. PC2's block follows directly from the deny rule, but it was not captured in a screenshot. This demonstrated that ACL rules must be understood according to their exact scope rather than assumed to affect the entire network.
 
 | Module Group | Focus |
 |---|---|
 | 🖧 **Build (Modules 1–2)** | Workspace setup, device placement, and cabling |
 | ⚙️ **Addressing (Modules 3–4)** | Router interface activation, static IP assignment across 3 PCs |
 | ✅ **Baseline Test (Module 5)** | Confirm connectivity before any security rule exists |
-| 🔒 **First ACL & Scope Error (Modules 6–7)** | Deploy a host-specific ACL, then discover it only affects the one host it names |
-| 🔧 **Replace & Verify (Modules 8–9)** | Replace with a deny-any rule, re-test the host that passed earlier |
+| 🔒 **ACL Deployment (Module 6)** | Deploy a host-specific ACL that blocks PC2 and permits all other hosts |
+| 🎯 **Scope Testing (Modules 7–8)** | Test PC1 (allowed); PC2's block explained from the rule |
 
 > [!NOTE]
-> The scope error in Module 7 was not staged — it was found by testing a host that wasn't the ACL's explicit target, which is exactly the gap a real firewall audit is meant to catch.
+> Testing a host that is not named in the rule is what shows an ACL's exact scope. Testing only the blocked host would not show whether other hosts are still permitted.
 
 ---
 
@@ -137,13 +136,12 @@ flowchart LR
 | # | Issue | Type |
 |---|-------|------|
 | 1 | Router-switch link showing red lights after cabling | Inactive interface |
-| 2 | First ACL only blocked its named host | ACL scope misconfiguration (permit-any gap) |
-| 3 | PC1 passing traffic because it was not named in the rule | Wrong assumption about rule scope, found through testing |
+| 2 | Assumed the ACL might restrict more than the one named host | ACL scope assumption, checked through testing |
 
 ---
 
 <a id="build-harden-timeline"></a>
-## 🔧 Build & Harden Timeline
+## 🔧 Build & Verify Timeline
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '15px'}, 'timeline': {'disableMulticolor': false}}}%%
@@ -152,10 +150,10 @@ timeline
     Stage 1 — Build : Place devices : Cable connections : Activate router interface
     Stage 2 — Addressing : Static IPs on PC0, PC1, PC2
     Stage 3 — Baseline Test : Ping router from PC0 — 4/4 success
-    Stage 4 — First ACL : Deploy deny-PC2 rule : Find PC1 still passes
-    Stage 5 — Harden & Verify : Replace with deny-any : Re-test PC1 — blocked
+    Stage 4 — ACL : Deploy deny-PC2 + permit-any rule
+    Stage 5 — Verify Scope : PC1 allowed : PC2 blocked by rule
 ```
-<p align="center"><em>A Mermaid timeline instead of a flowchart — five stages read left to right, from an empty workspace to a replaced, re-tested ACL.</em></p>
+<p align="center"><em>A Mermaid timeline instead of a flowchart — five stages read left to right, from an empty workspace to a host-specific ACL with its scope checked on PC1.</em></p>
 
 ---
 
@@ -284,11 +282,11 @@ ping 192.168.1.1
 ---
 
 <a id="module-6"></a>
-## 🔒 Module 6 — Deploy the First ACL Rule
+## 🔒 Module 6 — Deploy the ACL Rule
 
 **Objective:** Add a router password and a firewall rule intended to block PC2.
 
-### Step 6 — Deploy First ACL ✅
+### Step 6 — Deploy the ACL ✅
 
 ```
 enable
@@ -302,85 +300,62 @@ ip access-group 10 in
 
 <p align="center">
   <img src="screenshots/6_Router_First_Firewall_Rules.PNG" alt="Exhibit 6 - Router First Firewall Rules" width="850"><br>
-  <em>Exhibit 6 — First ACL rule blocking PC2</em>
+  <em>Exhibit 6 — ACL blocking PC2 and permitting all other hosts</em>
 </p>
+
+**How the rule works:**
+
+- `access-list 10 deny host 192.168.1.30` blocks traffic from PC2 only.
+- `access-list 10 permit any` allows traffic from every other host (PC0 and PC1).
+- `ip access-group 10 in` applies the ACL to traffic entering Gig 0/0.
+- A standard ACL checks only the source address, and rules are read top to bottom.
 
 ---
 
 <a id="module-7"></a>
-## 🚨 Module 7 — Investigate the ACL Scope Error
+## ✅ Module 7 — Test PC1 (Allowed)
 
-**Objective:** Test a host that wasn't the ACL's explicit target, to confirm the rule's real scope.
+**Objective:** Test a host that is not named in the ACL, to confirm other hosts are still permitted.
 
-### Step 7 — Test PC1 (Not the Named Target) ❌
+### Step 7 — Ping the Router from PC1 ✅
 
 ```
 PC1 → Command Prompt
 ping 192.168.1.1
 
 → Reply from 192.168.1.1: bytes=32 time<1ms TTL=255  (×4)
-→ Ping succeeded — expected under this rule: PC1 was never explicitly denied
-→ My assumption (rule restricts the network) was wrong, not the router
-```
-
-```
-Root cause:
-  "access-list 10 deny host 192.168.1.30" only denies PC2.
-  "access-list 10 permit any" allows every other host — PC1 included.
-  The rule did exactly what it was written to do; the assumption that
-  it would restrict the network more broadly was the actual error.
+→ Allowed — PC1 is not named in the ACL, so "permit any" lets it through
 ```
 
 <p align="center">
-  <img src="screenshots/7_PC1_Firewall_Bypass_Ping_Success.PNG" alt="Exhibit 7 - PC1 Ping Succeeds" width="850"><br>
-  <em>Exhibit 7 — PC1 ping succeeds: rule only affects the named host</em>
+  <img src="screenshots/7_PC1_Firewall_Bypass_Ping_Success.PNG" alt="Exhibit 7 - PC1 Ping Allowed" width="850"><br>
+  <em>Exhibit 7 — PC1 ping succeeds: the ACL only affects the named host</em>
 </p>
 
 ---
 
 <a id="module-8"></a>
-## 🔧 Module 8 — Replace the ACL
+## 🚫 Module 8 — PC2 (Blocked by Rule)
 
-**Objective:** Replace the host-specific rule with a deny-any rule so no host is allowed through.
+**Objective:** Explain why the host named in the ACL is blocked.
 
-### Step 8 — Replace with Deny Any ✅
-
-```
-enable
-configure terminal
-no access-list 10
-access-list 10 deny any
-interface gigabitEthernet 0/0
-ip access-group 10 in
-```
-
-<p align="center">
-  <img src="screenshots/8_Router_Firewall_Fix_Commands.PNG" alt="Exhibit 8 - Router Firewall Fix Commands" width="850"><br>
-  <em>Exhibit 8 — ACL replaced with deny any</em>
-</p>
-
----
-
-<a id="module-9"></a>
-## ✅ Module 9 — Final Verification
-
-**Objective:** Re-test the host that passed earlier (PC1), to confirm it is now blocked.
-
-### Step 9 — Re-test PC1 ✅
+### Step 8 — PC2 Under the ACL
 
 ```
-PC1 → Command Prompt
-ping 192.168.1.1
-
-→ Request timed out. / Destination host unreachable.
-→ Confirmed: PC1 is now blocked
-→ Note: deny any blocks every host, so PC0 and PC2 are blocked too (not tested here)
+access-list 10 deny host 192.168.1.30   ← PC2's address matches this rule first
+→ PC2's traffic into Gig 0/0 is denied before "permit any" is reached
+→ Expected: ping 192.168.1.1 from PC2 gets no replies
 ```
 
-<p align="center">
-  <img src="screenshots/9_Firewall_Block_Success.PNG" alt="Exhibit 9 - Firewall Block Success" width="850"><br>
-  <em>Exhibit 9 — Final verification: ping blocked as intended</em>
-</p>
+```
+Result:
+  PC2 (named in the rule)      → blocked by the deny line (Exhibit 6 shows the rule)
+  PC1 (not named in the rule)  → allowed (Exhibit 7)
+  The ACL blocks only the specified host and permits all others.
+```
+
+> [!NOTE]
+> No screenshot of a PC2 ping was captured, so PC2's block is explained from the rule shown in Exhibit 6, not from a test result.
 
 ---
 
@@ -393,10 +368,9 @@ ping 192.168.1.1
 | Router interface | Proven | GigabitEthernet 0/0 activated, routing table verified (Exhibit 3) |
 | Static addressing | Proven | All 3 PCs assigned static IP/mask/gateway (Exhibit 4) |
 | Baseline connectivity | Proven | PC0 → router, 4/4 replies pre-firewall (Exhibit 5) |
-| First ACL deployed | Proven | Host-specific deny rule applied inbound (Exhibit 6) |
-| Scope error identified | Proven | PC1 (not named in rule) passed traffic under permit any (Exhibit 7) |
-| ACL replaced | Proven | Deny-any rule replaces host-specific rule; blocks all hosts (Exhibit 8) |
-| Block re-verified | Proven | PC1 re-test confirms traffic blocked; other hosts not tested (Exhibit 9) |
+| ACL deployed | Proven | Host-specific deny rule + permit any applied inbound (Exhibit 6) |
+| Allowed host verified | Proven | PC1 (not named in the rule) still reaches the router (Exhibit 7) |
+| Blocked host | By rule | PC2 matches the deny line; no ping screenshot captured (Exhibit 6) |
 
 ---
 
@@ -411,10 +385,8 @@ ping 192.168.1.1
 | `show ip route` | Confirm the network is directly connected |
 | `enable secret <password>` | Set the router's privileged-mode password |
 | `access-list 10 deny host <ip>` | Deny a specific host in a numbered standard ACL |
-| `access-list 10 permit any` | Permit all other traffic (leaves a default-allow gap) |
-| `access-list 10 deny any` | Deny all traffic; with no permit line above it, every host is blocked |
+| `access-list 10 permit any` | Permit all other traffic (every host not denied above) |
 | `ip access-group 10 in` | Apply ACL 10 to inbound traffic on an interface |
-| `no access-list 10` | Remove an existing numbered ACL |
 | `ping <ip>` | Test connectivity / verify ACL scope from a PC |
 
 ---
@@ -425,8 +397,7 @@ ping 192.168.1.1
 | ❌ Challenge | ✅ Solution |
 |---|---|
 | Router-switch link showed red lights after cabling | Ran `no shutdown` on GigabitEthernet 0/0 to activate the interface |
-| First ACL blocked only the named host, left everything else open by default | Replaced with `access-list 10 deny any`, which blocks every host |
-| Assumed the first ACL would restrict the whole network | Tested PC1, a host not named in the rule, which exposed the real scope of the rule |
+| Assumed the ACL might restrict more than the named host | Tested PC1 (not named in the rule) to confirm the rule's exact scope |
 
 ---
 
@@ -435,7 +406,7 @@ ping 192.168.1.1
 
 - **Simulated environment only:** built and tested in Cisco Packet Tracer, not on physical hardware.
 - **Single subnet:** no VLAN segmentation in this project — that's covered separately in Project 10.
-- **Final ACL blocks all hosts:** `deny any` has no permit line, so no host can reach the router. A rule that permits only chosen hosts was not built or tested here.
+- **PC2 block not screenshot-verified:** the block follows from the deny rule, but no PC2 ping result was captured.
 - **Basic ACL only:** standard numbered ACL (source-based); no extended ACL, NAT, or routing protocol configuration included.
 
 ---
@@ -443,11 +414,9 @@ ping 192.168.1.1
 <a id="what-i-learned"></a>
 ## 🧠 What I Learned
 
-- **ACLs are explicit, not assumed.** Every host not specifically denied is implicitly permitted unless a default-deny rule is added — the first ACL did exactly what it was written to do, not what it looked like it should do.
-- **Test hosts that are not named in the rule.** The scope error only showed because PC1, which the rule never mentions, was tested. Testing only the named target would have missed it.
+- **ACLs are explicit, not assumed.** A rule only affects what it names. With `permit any` at the end, every host not denied is still allowed — the ACL did exactly what it was written to do.
+- **Test a host the rule does not name.** PC1 showed the exact scope of the rule. Testing only the blocked host would not show whether other hosts are still permitted.
 - **Interface activation is easy to overlook.** Red link lights after cabling are a physical-layer symptom with a one-line fix (`no shutdown`) — worth checking before assuming a deeper connectivity problem.
-- **Re-test the host that exposed the problem.** Re-testing PC1, the host that passed earlier, confirms it is now blocked.
-- **`deny any` alone blocks everyone.** A real default-deny setup needs permit lines for allowed hosts first, then a deny at the end.
 
 ---
 
@@ -456,8 +425,8 @@ ping 192.168.1.1
 
 - Building a router/switch/end-device topology from scratch in Packet Tracer
 - Router CLI configuration: interface activation, static IP assignment, `enable secret`
-- Writing and deploying numbered ACLs, including a deny-any rule
-- Diagnosing a firewall rule that "looks right" but doesn't behave as scoped
+- Writing and deploying a standard numbered ACL that blocks one host
+- Understanding the exact scope of a firewall rule
 - Testing an ACL against a host that is not named in the rule
 
 ---
@@ -472,10 +441,8 @@ ping 192.168.1.1
 | 3 | `3_Router_IP_and_Routing_Table.PNG` | Router interface activated, routing table verified |
 | 4 | `4_PC_IP_Configuration.PNG` | Static IP configuration on all 3 PCs |
 | 5 | `5_Ping_Success_Test.PNG` | Initial connectivity test, pre-firewall |
-| 6 | `6_Router_First_Firewall_Rules.PNG` | First ACL rule blocking PC2 |
-| 7 | `7_PC1_Firewall_Bypass_Ping_Success.PNG` | PC1 ping succeeds — rule only affects the named host |
-| 8 | `8_Router_Firewall_Fix_Commands.PNG` | ACL replaced with deny any |
-| 9 | `9_Firewall_Block_Success.PNG` | Final verification — ping blocked as intended |
+| 6 | `6_Router_First_Firewall_Rules.PNG` | ACL blocking PC2, permitting all other hosts |
+| 7 | `7_PC1_Firewall_Bypass_Ping_Success.PNG` | PC1 ping succeeds — allowed by `permit any` |
 
 ---
 
@@ -493,9 +460,7 @@ ping 192.168.1.1
     |-- 4_PC_IP_Configuration.PNG
     |-- 5_Ping_Success_Test.PNG
     |-- 6_Router_First_Firewall_Rules.PNG
-    |-- 7_PC1_Firewall_Bypass_Ping_Success.PNG
-    |-- 8_Router_Firewall_Fix_Commands.PNG
-    `-- 9_Firewall_Block_Success.PNG
+    `-- 7_PC1_Firewall_Bypass_Ping_Success.PNG
 ```
 
 <div align="center">
