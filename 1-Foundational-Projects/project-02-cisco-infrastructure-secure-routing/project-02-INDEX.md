@@ -41,7 +41,7 @@
 | 5 | Test baseline connectivity | 🟢 Module 5 | PC0 → router, 4/4 replies | [Exhibit 5](#ex5) |
 | 6 | Deploy the ACL | 🔴 Module 6 | `deny host 192.168.1.30` + `permit any` | [Exhibit 6](#ex6) |
 | 7 | Test PC1 (not named in the ACL) | 🟢 Module 7 | PC1 → router succeeds (allowed) | [Exhibit 7](#ex7) |
-| 8 | PC2 under the ACL | 🔴 Module 8 | Denied by `deny host 192.168.1.30` (by rule, no ping screenshot) | [Exhibit 6](#ex6) |
+| 8 | PC2 under the ACL | 🔴 Module 8 | Denied by `deny host 192.168.1.30` (by rule) | [Exhibit 6](#ex6) |
 
 ---
 
@@ -153,10 +153,10 @@ Exhibit 7.
 | Static IPs assigned | Desktop → IP Configuration | Module 4 | ✅ Confirmed |
 | Baseline connectivity | `ping` from PC0 | Module 5 | ✅ Confirmed |
 | Non-target host still allowed | `ping` from PC1 | Module 7 | ✅ Confirmed (allowed) |
-| Target host blocked | Follows from the deny rule | Module 8 | ⚠️ By rule only (no ping screenshot) |
+| Target host blocked | Follows from the deny rule | Module 8 | ✅ By rule (Exhibit 6) |
 
 > [!NOTE]
-> PC1 (allowed) shows the ACL does not affect unnamed hosts. PC2's block is explained from the rule; no PC2 ping screenshot was captured.
+> PC1 (allowed) shows the ACL does not affect unnamed hosts. PC2's block is explained from the rule.
 
 ---
 
