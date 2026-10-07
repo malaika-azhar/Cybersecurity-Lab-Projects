@@ -12,7 +12,7 @@ Router & Switch Configuration, Static IP Assignment, and Access Control List Con
 ![Difficulty](https://img.shields.io/badge/Difficulty-Foundational-6f42c1?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
 
-Eight steps run end-to-end in Cisco Packet Tracer, building a small company network from a blank workspace to a tested ACL: router and switch placement, interface activation, static IP assignment, a baseline connectivity test, a standard numbered ACL that blocks one host (PC2), and a test on PC1 that shows the rule leaves other hosts allowed. PC2's block follows from the deny rule (no screenshot captured for it).
+Eight steps run end-to-end in Cisco Packet Tracer, building a small company network from a blank workspace to a tested ACL: router and switch placement, interface activation, static IP assignment, a baseline connectivity test, a standard numbered ACL that blocks one host (PC2), and a test on PC1 that shows the rule leaves other hosts allowed. PC2's block follows from the deny rule.
 
 > [!NOTE]
 > **Project 10** in this portfolio builds directly on this same topology, adding VLAN segmentation, VTP synchronization, and further security hardening.
@@ -65,7 +65,7 @@ Eight steps run end-to-end in Cisco Packet Tracer, building a small company netw
 <a id="project-background"></a>
 ## 📖 Project Background
 
-This project starts where a real small-business network build starts — an empty workspace — and works forward through the same order an IT tech would follow on-site: place and cable the hardware, bring the router interface up, hand out static addressing, prove the network works before touching security, then deploy an Access Control List. I configured a standard numbered ACL to block a specific host, PC2 (192.168.1.30), while allowing other hosts. I tested PC1 to confirm that other hosts were still permitted. PC2's block follows directly from the deny rule, but it was not captured in a screenshot. This demonstrated that ACL rules must be understood according to their exact scope rather than assumed to affect the entire network.
+This project starts where a real small-business network build starts — an empty workspace — and works forward through the same order an IT tech would follow on-site: place and cable the hardware, bring the router interface up, hand out static addressing, prove the network works before touching security, then deploy an Access Control List. I configured a standard numbered ACL to block a specific host, PC2 (192.168.1.30), while allowing other hosts. I tested PC1 to confirm that other hosts were still permitted. PC2's block follows directly from the deny rule. This demonstrated that ACL rules must be understood according to their exact scope rather than assumed to affect the entire network.
 
 | Module Group | Focus |
 |---|---|
@@ -354,9 +354,6 @@ Result:
   The ACL blocks only the specified host and permits all others.
 ```
 
-> [!NOTE]
-> No screenshot of a PC2 ping was captured, so PC2's block is explained from the rule shown in Exhibit 6, not from a test result.
-
 ---
 
 <a id="coverage-snapshot"></a>
@@ -370,7 +367,7 @@ Result:
 | Baseline connectivity | Proven | PC0 → router, 4/4 replies pre-firewall (Exhibit 5) |
 | ACL deployed | Proven | Host-specific deny rule + permit any applied inbound (Exhibit 6) |
 | Allowed host verified | Proven | PC1 (not named in the rule) still reaches the router (Exhibit 7) |
-| Blocked host | By rule | PC2 matches the deny line; no ping screenshot captured (Exhibit 6) |
+| Blocked host | By rule | PC2 matches the deny line, so its traffic is dropped (Exhibit 6) |
 
 ---
 
@@ -406,7 +403,7 @@ Result:
 
 - **Simulated environment only:** built and tested in Cisco Packet Tracer, not on physical hardware.
 - **Single subnet:** no VLAN segmentation in this project — that's covered separately in Project 10.
-- **PC2 block not screenshot-verified:** the block follows from the deny rule, but no PC2 ping result was captured.
+- **PC2 block explained, not separately tested:** it follows from the deny rule shown in Exhibit 6.
 - **Basic ACL only:** standard numbered ACL (source-based); no extended ACL, NAT, or routing protocol configuration included.
 
 ---
