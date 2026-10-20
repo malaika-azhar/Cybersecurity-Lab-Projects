@@ -17,7 +17,7 @@ Phishing Investigation · Network Infrastructure · Reconnaissance · Threat Fra
 ![MITRE](https://img.shields.io/badge/MITRE_ATT%26CK-C6501F?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-orange?style=for-the-badge)
 
-> 📌 **Note:** These are the concept-building projects — the phase where core cybersecurity skills (SOC triage, network forensics, vulnerability assessment, secure network design) were learned hands-on. They lead into the [`2-Blue-Team-Cybersecurity-Internship`](../2-Blue-Team-Cybersecurity-Internship) reports and the [`3-Advanced-Cyber-Projects`](../3-Advanced-Cyber-Projects) labs. Each project's own README states its scope and limitations.
+> 📌 **Note:** These are the concept-building projects — the phase where core cybersecurity skills (SOC triage, network forensics, vulnerability assessment, secure network design) were learned hands-on. They lead into the [`2-Blue-Team-Cybersecurity-Internship`](../2-Blue-Team-Cybersecurity-Internship) reports and the [`3-Blue-Team-Defense-Projects`](../3-Blue-Team-Defense-Projects) labs. Each project's own README states its scope and limitations.
 
 </div>
 
@@ -292,7 +292,7 @@ Short routes through the folder, depending on what you want to see.
 
 1. Pick a project from the [Projects Overview](#projects) tables.
 2. Open the project's `INDEX.md` for the step-by-step guide and screenshots, or its `README.md` for the full write-up.
-3. When you are done here, continue to the [Blue Team Internship](../2-Blue-Team-Cybersecurity-Internship) reports or the [Advanced Cyber Projects](../3-Advanced-Cyber-Projects), which build on these foundations.
+3. When you are done here, continue to the [Blue Team Internship](../2-Blue-Team-Cybersecurity-Internship) reports or the [Blue Team Defense Projects](../3-Blue-Team-Defense-Projects), which build on these foundations.
 
 ---
 

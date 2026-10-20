@@ -31,7 +31,7 @@ Ten foundational projects, a twelve-week Blue Team internship, and eighteen adva
 4. [Portfolio Map](#portfolio-map)
 5. [Section 1 — Foundational Projects](#section-1)
 6. [Section 2 — Blue Team Internship](#section-2)
-7. [Section 3 — Advanced Cyber Projects](#section-3)
+7. [Section 3 — Blue Team Defense Projects](#section-3)
 8. [Coverage Snapshot](#coverage-snapshot)
 9. [Detection-to-Response Pipeline](#pipeline)
 10. [Verification, Not Assumption](#verification)
@@ -152,7 +152,7 @@ flowchart LR
 |:---:|---|---|
 | **1** | [`1-Foundational-Projects`](1-Foundational-Projects) | 10 foundational projects |
 | **2** | [`2-Blue-Team-Cybersecurity-Internship`](2-Blue-Team-Cybersecurity-Internship) | 12 weekly PDF reports, Executive Summary, INDEX |
-| **3** | [`3-Advanced-Cyber-Projects`](3-Advanced-Cyber-Projects) | 18 advanced lab projects |
+| **3** | [`3-Blue-Team-Defense-Projects`](3-Blue-Team-Defense-Projects) | 18 advanced lab projects |
 
 ---
 
@@ -206,9 +206,9 @@ flowchart LR
 ---
 
 <a id="section-3"></a>
-## 🟣 Section 3 — Advanced Cyber Projects
+## 🟣 Section 3 — Blue Team Defense Projects
 
-**Goal:** Take the internship topics and give each one its own folder — README, INDEX, and numbered screenshots — so every claim can be checked against evidence. Browse the [section README](3-Advanced-Cyber-Projects/README.md) for the overview.
+**Goal:** Take the internship topics and give each one its own folder — README, INDEX, and numbered screenshots — so every claim can be checked against evidence. Browse the [section README](3-Blue-Team-Defense-Projects/README.md) for the overview.
 
 **Status legend:** ✅ Complete within the scope each project states — limits are documented in the project and under [Scope & Limitations](#scope-limitations)
 
@@ -216,39 +216,39 @@ flowchart LR
 
 | # | Project | Status | Highlights |
 |:---:|---|:---:|---|
-| **01** | [Home SOC Lab Setup](3-Advanced-Cyber-Projects/project-01-home-soc-lab-setup) | ✅ | One Ubuntu VM, Wazuh Cloud, two agents; every hardware-driven substitution disclosed |
-| **02** | [FIM & Custom Detection Rules](3-Advanced-Cyber-Projects/project-02-fim-custom-detection-rules) | ✅ | FIM and custom rules verified on the Linux scope; Windows and USB rule left untested |
-| **06** | [SSH BruteForce Detection Lab](3-Advanced-Cyber-Projects/project-06-ssh-bruteforce-detection-lab) | ✅ | 2 custom rules; wrong base rule caught and fixed with `wazuh-logtest` |
-| **08** | [SIEM Log Analysis & Alert Tuning](3-Advanced-Cyber-Projects/project-08-siem-log-analysis-alert-tuning) | ✅ | Real Linux logs plus clearly labelled simulated Windows events, exported to CSV |
-| **09** | [SIEM Dashboard](3-Advanced-Cyber-Projects/project-09-siem-dashboard) | ✅ | Custom dashboard and reporting |
+| **01** | [Home SOC Lab Setup](3-Blue-Team-Defense-Projects/project-01-home-soc-lab-setup) | ✅ | One Ubuntu VM, Wazuh Cloud, two agents; every hardware-driven substitution disclosed |
+| **02** | [FIM & Custom Detection Rules](3-Blue-Team-Defense-Projects/project-02-fim-custom-detection-rules) | ✅ | FIM and custom rules verified on the Linux scope; Windows and USB rule left untested |
+| **06** | [SSH BruteForce Detection Lab](3-Blue-Team-Defense-Projects/project-06-ssh-bruteforce-detection-lab) | ✅ | 2 custom rules; wrong base rule caught and fixed with `wazuh-logtest` |
+| **08** | [SIEM Log Analysis & Alert Tuning](3-Blue-Team-Defense-Projects/project-08-siem-log-analysis-alert-tuning) | ✅ | Real Linux logs plus clearly labelled simulated Windows events, exported to CSV |
+| **09** | [SIEM Dashboard](3-Blue-Team-Defense-Projects/project-09-siem-dashboard) | ✅ | Custom dashboard and reporting |
 
 ### 🟠 Network Defense & Traffic Analysis
 
 | # | Project | Status | Highlights |
 |:---:|---|:---:|---|
-| **03** | [Network Perimeter Defense](3-Advanced-Cyber-Projects/project-03-network-perimeter-defense) | ✅ | Perimeter hardening |
-| **04** | [Firewall Rules Configuration](3-Advanced-Cyber-Projects/project-04-firewall-rules-configuration) | ✅ | Rule design and logging |
-| **05** | [Suricata Custom Rule Detection Lab](3-Advanced-Cyber-Projects/project-05-suricata-custom-rule-detection-lab) | ✅ | 2 custom signatures (NULL scan, ICMP flood) loaded live without a restart and fired on real traffic |
-| **10** | [Network Traffic Analysis (Wireshark)](3-Advanced-Cyber-Projects/project-10-network-traffic-analysis-wireshark) | ✅ | ARP, DNS, HTTP, HTTPS/TLS and ICMP captured live, normal vs suspicious |
+| **03** | [Network Perimeter Defense](3-Blue-Team-Defense-Projects/project-03-network-perimeter-defense) | ✅ | Perimeter hardening |
+| **04** | [Firewall Rules Configuration](3-Blue-Team-Defense-Projects/project-04-firewall-rules-configuration) | ✅ | Rule design and logging |
+| **05** | [Suricata Custom Rule Detection Lab](3-Blue-Team-Defense-Projects/project-05-suricata-custom-rule-detection-lab) | ✅ | 2 custom signatures (NULL scan, ICMP flood) loaded live without a restart and fired on real traffic |
+| **10** | [Network Traffic Analysis (Wireshark)](3-Blue-Team-Defense-Projects/project-10-network-traffic-analysis-wireshark) | ✅ | ARP, DNS, HTTP, HTTPS/TLS and ICMP captured live, normal vs suspicious |
 
 ### 🟣 Threat Intelligence, Malware & Incident Response
 
 | # | Project | Status | Highlights |
 |:---:|---|:---:|---|
-| **07** | [Threat Intelligence Enrichment & Vulnerability Assessment](3-Advanced-Cyber-Projects/project-07-threat-intelligence-enrichment-and-vulnerability-assessment) | ✅ | Feed enrichment plus patch-and-rescan |
-| **11** | [Malware Sample Acquisition & Static Analysis](3-Advanced-Cyber-Projects/project-11-malware-sample-acquisition-static-analysis) | ✅ | 2 samples hashed, isolated and analysed statically; njRAT flagged 62/70 on VirusTotal |
-| **12** | [Insider Threat Detection System](3-Advanced-Cyber-Projects/project-12-insider-threat-detection-system) | ✅ | Detecting insider activity; sudo audit log used as a compensating control |
-| **13** | [SOC Red vs Blue Capstone](3-Advanced-Cyber-Projects/project-13-soc-redvsblue-capstone) | ✅ | Full attack chain, decoded evidence, custom rule 100050 verified live |
+| **07** | [Threat Intelligence Enrichment & Vulnerability Assessment](3-Blue-Team-Defense-Projects/project-07-threat-intelligence-enrichment-and-vulnerability-assessment) | ✅ | Feed enrichment plus patch-and-rescan |
+| **11** | [Malware Sample Acquisition & Static Analysis](3-Blue-Team-Defense-Projects/project-11-malware-sample-acquisition-static-analysis) | ✅ | 2 samples hashed, isolated and analysed statically; njRAT flagged 62/70 on VirusTotal |
+| **12** | [Insider Threat Detection System](3-Blue-Team-Defense-Projects/project-12-insider-threat-detection-system) | ✅ | Detecting insider activity; sudo audit log used as a compensating control |
+| **13** | [SOC Red vs Blue Capstone](3-Blue-Team-Defense-Projects/project-13-soc-redvsblue-capstone) | ✅ | Full attack chain, decoded evidence, custom rule 100050 verified live |
 
 ### 🔍 Digital Forensics
 
 | # | Project | Status | Highlights |
 |:---:|---|:---:|---|
-| **14** | [🔐 Windows Event Log Analysis](3-Advanced-Cyber-Projects/project-14-windows-event-log-analysis) | ✅ | Hash-verified Security.evtx parsed twice; Logon Type 7 absence documented |
-| **15** | [DFIR Disk Imaging](3-Advanced-Cyber-Projects/project-15-dfir-disk-imaging) | ✅ | Forensic imaging with verification |
-| **16** | [Windows Artifacts — Prefetch, Thumbcache & Recycle Bin](3-Advanced-Cyber-Projects/project-16-windows-artifacts-prefetch) | ✅ | 362 of 363 Prefetch files parsed; Temp-path installer closed by context |
-| **17** | [Browser Forensics & LNK Analysis](3-Advanced-Cyber-Projects/project-17-browser-forensics-lnk-analysis) | ✅ | Browser and shortcut artefacts |
-| **18** | [Mantooth Investigation & Registry Analysis](3-Advanced-Cyber-Projects/project-18-mantooth-investigation-registry-analysis) | ✅ | Autopsy triage of a fraud image, 276 deleted files surfaced; Lab 1 scope |
+| **14** | [🔐 Windows Event Log Analysis](3-Blue-Team-Defense-Projects/project-14-windows-event-log-analysis) | ✅ | Hash-verified Security.evtx parsed twice; Logon Type 7 absence documented |
+| **15** | [DFIR Disk Imaging](3-Blue-Team-Defense-Projects/project-15-dfir-disk-imaging) | ✅ | Forensic imaging with verification |
+| **16** | [Windows Artifacts — Prefetch, Thumbcache & Recycle Bin](3-Blue-Team-Defense-Projects/project-16-windows-artifacts-prefetch) | ✅ | 362 of 363 Prefetch files parsed; Temp-path installer closed by context |
+| **17** | [Browser Forensics & LNK Analysis](3-Blue-Team-Defense-Projects/project-17-browser-forensics-lnk-analysis) | ✅ | Browser and shortcut artefacts |
+| **18** | [Mantooth Investigation & Registry Analysis](3-Blue-Team-Defense-Projects/project-18-mantooth-investigation-registry-analysis) | ✅ | Autopsy triage of a fraud image, 276 deleted files surfaced; Lab 1 scope |
 
 ---
 
@@ -257,12 +257,12 @@ flowchart LR
 
 | 🛡️ Domain | 📌 Where It Appears | ✅ What Was Demonstrated |
 |---|---|---|
-| SIEM & Host Monitoring | Advanced 01, 02, 06, 08, 09 · Internship Weeks 1, 2, 4 | Wazuh deployment, FIM, custom rules, dashboards |
-| Network Defense | Advanced 03, 04, 05 · Foundations 02, 10 · Internship Weeks 3, 4 | Suricata rules, firewalling, perimeter and segmentation |
-| Traffic & Packet Analysis | Advanced 10 · Foundations 05 | Live capture and normal-vs-suspicious protocol reading |
-| Threat Intelligence & Vulnerability Mgmt | Advanced 07 · Foundations 09 · Internship Week 4 | Feed enrichment, MITRE mapping, verified patching |
-| Malware Analysis & IR | Advanced 11, 12, 13 · Internship Weeks 5, 6 | Static + dynamic analysis, IOC/IOA extraction, red-vs-blue |
-| Disk, Windows & Registry Forensics | Advanced 14–18 · Internship Weeks 7–12 | Imaging, event logs, Prefetch, browser, LNK, Autopsy |
+| SIEM & Host Monitoring | Defense 01, 02, 06, 08, 09 · Internship Weeks 1, 2, 4 | Wazuh deployment, FIM, custom rules, dashboards |
+| Network Defense | Defense 03, 04, 05 · Foundations 02, 10 · Internship Weeks 3, 4 | Suricata rules, firewalling, perimeter and segmentation |
+| Traffic & Packet Analysis | Defense 10 · Foundations 05 | Live capture and normal-vs-suspicious protocol reading |
+| Threat Intelligence & Vulnerability Mgmt | Defense 07 · Foundations 09 · Internship Week 4 | Feed enrichment, MITRE mapping, verified patching |
+| Malware Analysis & IR | Defense 11, 12, 13 · Internship Weeks 5, 6 | Static + dynamic analysis, IOC/IOA extraction, red-vs-blue |
+| Disk, Windows & Registry Forensics | Defense 14–18 · Internship Weeks 7–12 | Imaging, event logs, Prefetch, browser, LNK, Autopsy |
 
 ---
 
@@ -303,12 +303,12 @@ A recurring rule across the portfolio: a step is not done until it has been prov
 
 | Check | Method | Where |
 |---|---|---|
-| Custom rule loads and fires | Live reload through the Suricata socket returned OK, then alerts appeared in `fast.log` | Advanced 05 |
-| Lab is truly isolated | A *failed* ping after disabling the adapter at the hypervisor | Advanced 11 |
-| Downloaded samples are intact | Hashes recorded immediately after download, before any analysis | Advanced 11 |
-| Evidence log is untouched | SHA256 generated immediately after copying, before any parsing | Advanced 14 |
-| A rule's base pattern is right | `wazuh-logtest` against the raw log line | Advanced 06 |
-| Custom rule fires in production conditions | Re-running the attack steps and confirming the alert | Advanced 13 |
+| Custom rule loads and fires | Live reload through the Suricata socket returned OK, then alerts appeared in `fast.log` | Defense 05 |
+| Lab is truly isolated | A *failed* ping after disabling the adapter at the hypervisor | Defense 11 |
+| Downloaded samples are intact | Hashes recorded immediately after download, before any analysis | Defense 11 |
+| Evidence log is untouched | SHA256 generated immediately after copying, before any parsing | Defense 14 |
+| A rule's base pattern is right | `wazuh-logtest` against the raw log line | Defense 06 |
+| Custom rule fires in production conditions | Re-running the attack steps and confirming the alert | Defense 13 |
 
 ---
 
@@ -319,12 +319,12 @@ Figures below are taken directly from the project READMEs.
 
 | Project | Highlight |
 |:---:|---|
-| Advanced 05 | **2** custom Suricata signatures, both fired on real traffic after a live reload |
-| Advanced 06 | **2** custom Wazuh rules; base pattern corrected **5716 → 5710** before the rule fired |
-| Advanced 11 | **2** malware samples analysed statically; njRAT flagged **62 / 70** on VirusTotal; **15** screenshots |
-| Advanced 14 | **32,738 → 33,127** records parsed across two passes of the same Security log |
-| Advanced 16 | **362 of 363** Prefetch files parsed; **149** `$R` and **74** `$I` Recycle Bin records enumerated |
-| Advanced 18 | **276** deleted files surfaced in one image; Xcopy run count of **15** |
+| Defense 05 | **2** custom Suricata signatures, both fired on real traffic after a live reload |
+| Defense 06 | **2** custom Wazuh rules; base pattern corrected **5716 → 5710** before the rule fired |
+| Defense 11 | **2** malware samples analysed statically; njRAT flagged **62 / 70** on VirusTotal; **15** screenshots |
+| Defense 14 | **32,738 → 33,127** records parsed across two passes of the same Security log |
+| Defense 16 | **362 of 363** Prefetch files parsed; **149** `$R` and **74** `$I` Recycle Bin records enumerated |
+| Defense 18 | **276** deleted files surfaced in one image; Xcopy run count of **15** |
 | Internship | **12** reports totalling **298** pages |
 
 ---
@@ -334,12 +334,12 @@ Figures below are taken directly from the project READMEs.
 
 | ❌ Challenge | ✅ Fix |
 |---|---|
-| Local hardware could not run the full Wazuh stack | Documented the pre-flight failure and moved the Manager to a hosted trial (Advanced 01) |
-| An assumed base rule ID was wrong | Tested against the raw log with `wazuh-logtest` and corrected it (Advanced 06) |
-| No Windows VM was available for the capstone | Substituted Kali with Bash equivalents and disclosed it up front (Advanced 13) |
-| The dedicated FIM deletion rule never fired | Diagnosed step by step, then used the sudo audit log as a compensating control (Advanced 12) |
-| Thumbcache files were locked by a live Explorer | Copied with `robocopy /B` backup mode (Advanced 16) |
-| Autopsy case was created in the wrong time zone | Kept times as recorded and documented the offset (Advanced 18) |
+| Local hardware could not run the full Wazuh stack | Documented the pre-flight failure and moved the Manager to a hosted trial (Defense 01) |
+| An assumed base rule ID was wrong | Tested against the raw log with `wazuh-logtest` and corrected it (Defense 06) |
+| No Windows VM was available for the capstone | Substituted Kali with Bash equivalents and disclosed it up front (Defense 13) |
+| The dedicated FIM deletion rule never fired | Diagnosed step by step, then used the sudo audit log as a compensating control (Defense 12) |
+| Thumbcache files were locked by a live Explorer | Copied with `robocopy /B` backup mode (Defense 16) |
+| Autopsy case was created in the wrong time zone | Kept times as recorded and documented the offset (Defense 18) |
 
 ---
 
@@ -348,12 +348,12 @@ Figures below are taken directly from the project READMEs.
 
 Each project is complete within the scope it states. The limits of that scope are listed here:
 
-- **Advanced 02:** FIM and custom rules are verified on the Linux scope; Windows endpoint monitoring and the USB rule were left out because the lab had two VMs.
-- **Advanced 08:** The Windows Event IDs are simulated with `logger` to test decoders, not captured from a live Windows host — labelled that way wherever they appear.
-- **Advanced 11:** Scope is sample acquisition and static analysis; samples were not executed. `binwalk` extraction of the embedded payloads failed and is documented as a tooling gap.
-- **Advanced 12:** The dedicated deletion rule did not fire in this environment; the sudo audit log is documented as the compensating control.
-- **Advanced 13:** Run on Kali rather than the specified Windows endpoint, and disclosed up front.
-- **Advanced 18:** Scope is Lab 1; Questions 8 and 9 are not covered, and the registry lab is a written methodology rather than executed work.
+- **Defense 02:** FIM and custom rules are verified on the Linux scope; Windows endpoint monitoring and the USB rule were left out because the lab had two VMs.
+- **Defense 08:** The Windows Event IDs are simulated with `logger` to test decoders, not captured from a live Windows host — labelled that way wherever they appear.
+- **Defense 11:** Scope is sample acquisition and static analysis; samples were not executed. `binwalk` extraction of the embedded payloads failed and is documented as a tooling gap.
+- **Defense 12:** The dedicated deletion rule did not fire in this environment; the sudo audit log is documented as the compensating control.
+- **Defense 13:** Run on Kali rather than the specified Windows endpoint, and disclosed up front.
+- **Defense 18:** Scope is Lab 1; Questions 8 and 9 are not covered, and the registry lab is a written methodology rather than executed work.
 - **Internship Weeks 11–12:** Week 11 documents methodology because the evidence image was inaccessible that week; Week 12 covers USB scope, with disk and RAM analysis pending.
 - **Screenshots:** Sensitive identifiers such as API keys and personal content are redacted.
 
@@ -413,7 +413,7 @@ Cybersecurity-Lab-Projects/
 |   |-- INDEX.md
 |   |-- Executive-Summary.md
 |   `-- Week01_Report.pdf ... Week12_Report.pdf
-`-- 3-Advanced-Cyber-Projects/
+`-- 3-Blue-Team-Defense-Projects/
     |-- README.md
     |-- project-01-home-soc-lab-setup/
     |-- project-02-fim-custom-detection-rules/
