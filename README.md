@@ -4,11 +4,12 @@
 
 **Malaika Azhar · Blue Team Portfolio**
 
-**Foundations → Internship → Advanced SOC & Forensics Labs**
+**Foundations → Internship → Blue Team Defense Projects**
 
-Ten foundational projects, a twelve-week Blue Team internship, and eighteen advanced labs covering SIEM, network defense, malware analysis, and digital forensics — every project written around what was actually run, what was actually observed, and what was honestly left unfinished.
+Ten foundational projects, a twelve-week Blue Team internship, and twenty Blue Team defense projects covering SIEM, network defense, malware analysis, and digital forensics — every project written around what was actually run, what was actually observed, and what was honestly left unfinished.
 
 ![Wazuh](https://img.shields.io/badge/SIEM-Wazuh-005EB8?style=for-the-badge&logo=wazuh&logoColor=white)
+![Azure](https://img.shields.io/badge/Cloud_Lab-Microsoft_Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
 ![Suricata](https://img.shields.io/badge/NIDS-Suricata-EF3B2D?style=for-the-badge)
 ![pfSense](https://img.shields.io/badge/Firewall-pfSense-212121?style=for-the-badge&logo=pfsense&logoColor=white)
 ![Wireshark](https://img.shields.io/badge/Packets-Wireshark-1679A7?style=for-the-badge&logo=wireshark&logoColor=white)
@@ -47,27 +48,27 @@ Ten foundational projects, a twelve-week Blue Team internship, and eighteen adva
 <a id="at-a-glance"></a>
 ## 📊 At a Glance
 
-| 🧩 Sections | 🧪 Foundational Projects | 📄 Internship Reports | 🔬 Advanced Labs | 📚 Report Pages |
+| 🧩 Sections | 🧪 Foundational Projects | 📄 Internship Reports | 🛡️ Defense Projects | 📚 Report Pages |
 |:---:|:---:|:---:|:---:|:---:|
-| **3** | **10** | **12** | **18** | **298** |
+| **3** | **10** | **12** | **20** | **298** |
 
 ---
 
 <a id="about"></a>
 ## 📖 About This Repository
 
-This repository is one portfolio told in three steps. It starts with ten self-contained foundational projects, moves into a twelve-week Blue Team internship documented as weekly technical reports, and finishes with eighteen advanced labs that turn that internship work into standalone, evidence-backed case files.
+This repository is one portfolio told in three steps. It starts with ten self-contained foundational projects, moves into a twelve-week Blue Team internship documented as weekly technical reports, and finishes with twenty Blue Team defense projects: eighteen that turn that internship work into standalone, evidence-backed case files, and two later Wazuh labs deployed on an Azure VM.
 
 - **Section 1 — Foundations:** phishing investigation, secure network design, scanning, framework mapping, packet forensics, log analysis, cracking, assessment, and segmentation.
 - **Section 2 — Internship:** SOC operations first (SIEM, FIM, IDS, perimeter, threat intel, malware), then digital forensics and incident response (imaging, artefacts, timelines, a final multi-source case).
-- **Section 3 — Advanced Labs:** each internship topic rebuilt as its own project folder with a README, a visual INDEX, and numbered screenshot evidence.
+- **Section 3 — Blue Team Defense Projects:** each internship topic rebuilt as its own project folder with a README, a visual INDEX, and numbered screenshot evidence, plus two Azure-hosted Wazuh SIEM labs.
 
 > [!NOTE]
 > Every project states plainly where a task was only partly finished and why. That is deliberate — a documented gap with a diagnosed cause is more useful than a result that only looks clean.
 
 <div align="center">
 
-### 🧩 How Each Advanced Project Is Laid Out
+### 🧩 How Each Defense Project Is Laid Out
 
 <table>
 <tr>
@@ -112,6 +113,7 @@ This repository is one portfolio told in three steps. It starts with ten self-co
 | Area | Tools Used |
 |---|---|
 | **Virtualization & Lab** | VMware Workstation, VirtualBox, Kali Linux, Ubuntu and Windows endpoints |
+| **Cloud Lab** | Azure VM (Ubuntu Server 24.04) running a single-node Wazuh Manager, Indexer and Dashboard, with a Windows 10 endpoint agent |
 | **SIEM & Endpoint Monitoring** | Wazuh (Manager, Indexer, Dashboard, agents), File Integrity Monitoring, Active Response |
 | **Network Defense** | Suricata (IDS), pfSense (firewall), iptables / ipset |
 | **Packet Analysis** | Wireshark |
@@ -124,35 +126,59 @@ This repository is one portfolio told in three steps. It starts with ten self-co
 <a id="portfolio-map"></a>
 ## 🗺️ Portfolio Map
 
-```mermaid
-flowchart LR
-    subgraph S1["🟢 SECTION 1 — FOUNDATIONS"]
-        direction TB
-        F1["10 self-contained<br/>projects"]
-    end
-    subgraph S2["🔵 SECTION 2 — INTERNSHIP"]
-        direction TB
-        I1["Phase One<br/>SOC Operations<br/>Weeks 1–6"] --> I2["Phase Two<br/>DFIR<br/>Weeks 7–12"]
-    end
-    subgraph S3["🟣 SECTION 3 — ADVANCED LABS"]
-        direction TB
-        A1["18 evidence-backed<br/>project folders"]
-    end
-    S1 ==> S2 ==> S3
+<div align="center">
 
-    classDef one fill:#eef7ee,stroke:#2ea44f,stroke-width:2px,color:#000
-    classDef two fill:#e8f1fb,stroke:#005EB8,stroke-width:2px,color:#000
-    classDef three fill:#f0eaf8,stroke:#6f42c1,stroke-width:2px,color:#000
-    class F1 one
-    class I1,I2 two
-    class A1 three
-```
+<table>
+<tr>
+<td align="center" valign="top" width="30%">
 
-| Section | Folder | Contents |
-|:---:|---|---|
-| **1** | [`1-Foundational-Projects`](1-Foundational-Projects) | 10 foundational projects |
-| **2** | [`2-Blue-Team-Cybersecurity-Internship`](2-Blue-Team-Cybersecurity-Internship) | 12 weekly PDF reports, Executive Summary, INDEX |
-| **3** | [`3-Blue-Team-Defense-Projects`](3-Blue-Team-Defense-Projects) | 18 advanced lab projects |
+### 🟢 SECTION 1
+**Foundations**<br>
+<sub>10 self-contained projects</sub>
+
+<sub>Investigation, scanning,<br>packet and log forensics,<br>network design</sub>
+
+<a href="1-Foundational-Projects"><b>📂 1-Foundational-Projects</b></a>
+
+</td>
+<td align="center" valign="middle" width="5%">
+
+**➜**
+
+</td>
+<td align="center" valign="top" width="30%">
+
+### 🔵 SECTION 2
+**Internship**<br>
+<sub>12 weekly reports · 298 pages</sub>
+
+<sub>Phase One — SOC Operations<br>Weeks 1–6</sub>
+
+<sub>Phase Two — DFIR<br>Weeks 7–12</sub>
+
+<a href="2-Blue-Team-Cybersecurity-Internship"><b>📂 2-Blue-Team-Cybersecurity-Internship</b></a>
+
+</td>
+<td align="center" valign="middle" width="5%">
+
+**➜**
+
+</td>
+<td align="center" valign="top" width="30%">
+
+### 🟣 SECTION 3
+**Defense Projects**<br>
+<sub>20 project folders</sub>
+
+<sub>🔵 Detection & Monitoring · 7<br>🟠 Network Defense · 4<br>🟣 Threat Intel, Malware & IR · 4<br>🔍 Digital Forensics · 5</sub>
+
+<a href="3-Blue-Team-Defense-Projects"><b>📂 3-Blue-Team-Defense-Projects</b></a>
+
+</td>
+</tr>
+</table>
+
+</div>
 
 ---
 
@@ -221,6 +247,8 @@ flowchart LR
 | **06** | [SSH BruteForce Detection Lab](3-Blue-Team-Defense-Projects/project-06-ssh-bruteforce-detection-lab) | ✅ | 2 custom rules; wrong base rule caught and fixed with `wazuh-logtest` |
 | **08** | [SIEM Log Analysis & Alert Tuning](3-Blue-Team-Defense-Projects/project-08-siem-log-analysis-alert-tuning) | ✅ | Real Linux logs plus clearly labelled simulated Windows events, exported to CSV |
 | **09** | [SIEM Dashboard](3-Blue-Team-Defense-Projects/project-09-siem-dashboard) | ✅ | Custom dashboard and reporting |
+| **19** | [SIEM Dashboard & Visualizations on Azure](3-Blue-Team-Defense-Projects/project-19-wazuh-siem-dashboard-azure) | ✅ | Single-node Wazuh on an Azure VM, one Windows agent, saved "Top Attacker IPs" visualization; 22 screenshots |
+| **20** | [Windows Brute Force Detection with Wazuh](3-Blue-Team-Defense-Projects/project-20-windows-bruteforce-detection-wazuh) | ✅ | Windows 10 agent enrolled, simulated brute force (MITRE T1110), 12 alerts found, saved and exported; 25 screenshots |
 
 ### 🟠 Network Defense & Traffic Analysis
 
@@ -257,7 +285,7 @@ flowchart LR
 
 | 🛡️ Domain | 📌 Where It Appears | ✅ What Was Demonstrated |
 |---|---|---|
-| SIEM & Host Monitoring | Defense 01, 02, 06, 08, 09 · Internship Weeks 1, 2, 4 | Wazuh deployment, FIM, custom rules, dashboards |
+| SIEM & Host Monitoring | Defense 01, 02, 06, 08, 09, 19, 20 · Internship Weeks 1, 2, 4 | Wazuh deployment (local and on Azure), FIM, custom rules, dashboards, Windows agent enrollment |
 | Network Defense | Defense 03, 04, 05 · Foundations 02, 10 · Internship Weeks 3, 4 | Suricata rules, firewalling, perimeter and segmentation |
 | Traffic & Packet Analysis | Defense 10 · Foundations 05 | Live capture and normal-vs-suspicious protocol reading |
 | Threat Intelligence & Vulnerability Mgmt | Defense 07 · Foundations 09 · Internship Week 4 | Feed enrichment, MITRE mapping, verified patching |
@@ -269,30 +297,31 @@ flowchart LR
 <a id="pipeline"></a>
 ## 🧭 Detection-to-Response Pipeline
 
-How the portfolio fits together — from raw telemetry to a finished report
+How the portfolio fits together, from raw telemetry to a finished report.
 
 ```mermaid
-flowchart TB
-    Tel["📡 TELEMETRY<br/>Host logs · Network traffic"]:::telClass
-    Det["🚨 DETECTION<br/>Wazuh rules · Suricata signatures"]:::detClass
-    Enr["🧬 ENRICHMENT<br/>VirusTotal · URLhaus · MITRE ATT&CK"]:::enrClass
-    Tri["🧭 TRIAGE<br/>Severity · Scope · Priority"]:::triClass
-    Ana["🔬 ANALYSIS<br/>Malware sandbox · Disk and memory artefacts"]:::anaClass
-    Tim["⏱️ TIMELINE<br/>Filtered, correlated events"]:::timClass
-    Rep["📝 REPORT<br/>README · INDEX · screenshot evidence"]:::repClass
-
-    Tel --> Det --> Enr --> Tri --> Ana --> Tim --> Rep
-
-    classDef telClass fill:#2C3E70,stroke:#131B3A,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef detClass fill:#1A5276,stroke:#0B2E43,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef enrClass fill:#76448A,stroke:#432752,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef triClass fill:#B9770E,stroke:#6E4409,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef anaClass fill:#943126,stroke:#571C16,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef timClass fill:#1E8449,stroke:#0E4A28,stroke-width:4px,color:#FFFFFF,font-weight:bold
-    classDef repClass fill:#148F77,stroke:#0B5142,stroke-width:4px,color:#FFFFFF,font-weight:bold
-
-    linkStyle default stroke:#2C3E50,stroke-width:3px
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}, 'flowchart': {'nodeSpacing': 16, 'rankSpacing': 24, 'padding': 6}}}%%
+flowchart LR
+    A["📡 Telemetry"]:::c1 --> B["🚨 Detection"]:::c2 --> C["🧬 Enrichment"]:::c3 --> D["🧭 Triage"]:::c4 --> E["🔬 Analysis"]:::c5 --> F["⏱️ Timeline"]:::c6 --> G["📝 Report"]:::c7
+    classDef c1 fill:#2C3E70,stroke:#131B3A,stroke-width:2px,color:#FFFFFF
+    classDef c2 fill:#1A5276,stroke:#0B2E43,stroke-width:2px,color:#FFFFFF
+    classDef c3 fill:#76448A,stroke:#432752,stroke-width:2px,color:#FFFFFF
+    classDef c4 fill:#B9770E,stroke:#6E4409,stroke-width:2px,color:#FFFFFF
+    classDef c5 fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
+    classDef c6 fill:#1E8449,stroke:#0E4A28,stroke-width:2px,color:#FFFFFF
+    classDef c7 fill:#148F77,stroke:#0B5142,stroke-width:2px,color:#FFFFFF
+    linkStyle default stroke:#2C3E50,stroke-width:2px
 ```
+
+| Stage | What happens |
+|---|---|
+| 📡 **Telemetry** | Host logs and network traffic |
+| 🚨 **Detection** | Wazuh rules and Suricata signatures |
+| 🧬 **Enrichment** | VirusTotal, URLhaus and MITRE ATT&CK |
+| 🧭 **Triage** | Severity, scope and priority |
+| 🔬 **Analysis** | Malware sandbox, disk and memory artefacts |
+| ⏱️ **Timeline** | Filtered, correlated events |
+| 📝 **Report** | README, INDEX and screenshot evidence |
 
 ---
 
@@ -325,6 +354,8 @@ Figures below are taken directly from the project READMEs.
 | Defense 14 | **32,738 → 33,127** records parsed across two passes of the same Security log |
 | Defense 16 | **362 of 363** Prefetch files parsed; **149** `$R` and **74** `$I` Recycle Bin records enumerated |
 | Defense 18 | **276** deleted files surfaced in one image; Xcopy run count of **15** |
+| Defense 19 | **1** Azure VM, **1** agent, **1** saved visualization; **22** screenshots |
+| Defense 20 | **12** high-severity alerts from a simulated brute force; **25** screenshots |
 | Internship | **12** reports totalling **298** pages |
 
 ---
@@ -340,6 +371,8 @@ Figures below are taken directly from the project READMEs.
 | The dedicated FIM deletion rule never fired | Diagnosed step by step, then used the sudo audit log as a compensating control (Defense 12) |
 | Thumbcache files were locked by a live Explorer | Copied with `robocopy /B` backup mode (Defense 16) |
 | Autopsy case was created in the wrong time zone | Kept times as recorded and documented the offset (Defense 18) |
+| Dashboard install failed with `No space left on device` | Resized the OS disk from 30 GiB to 64 GiB and verified with `df -h` (Defense 19) |
+| Agent would not register: version higher than the manager | Uninstalled it and reinstalled version 4.9.2 to match the manager (Defense 20) |
 
 ---
 
@@ -355,7 +388,9 @@ Each project is complete within the scope it states. The limits of that scope ar
 - **Defense 13:** Run on Kali rather than the specified Windows endpoint, and disclosed up front.
 - **Defense 18:** Scope is Lab 1; Questions 8 and 9 are not covered, and the registry lab is a written methodology rather than executed work.
 - **Internship Weeks 11–12:** Week 11 documents methodology because the evidence image was inaccessible that week; Week 12 covers USB scope, with disk and RAM analysis pending.
-- **Screenshots:** Sensitive identifiers such as API keys and personal content are redacted.
+- **Defense 19:** Failed logins were simulated from my own laptop against my own VM, so the chart shows one source IP. The alerts came from the VM's own SSH log, and the host is undersized (4 GiB RAM).
+- **Defense 20:** All failed logons came from `127.0.0.1` on the endpoint itself, and only one endpoint is enrolled. The CSV export has no source-IP column.
+- **Screenshots:** Sensitive identifiers such as API keys, passwords and personal content are redacted.
 
 These limits are marked here instead of hidden, so the portfolio reflects exactly what was done.
 
@@ -367,6 +402,7 @@ These limits are marked here instead of hidden, so the portfolio reflects exactl
 - **A rule that parses is not a rule that works.** Detection logic has to be tested against real traffic and real logs every time.
 - **A hardware limit is a decision point, not a dead end.** A documented substitution beats a stalled build.
 - **A near-empty result is still a finding** — almost no readable strings pointed to a packed executable.
+- **Check the clock before blaming the data.** Discover showed nothing for the last 7 days because the laptop clock was about 12 hours behind.
 - **Absence deserves a report too.** A Logon Type that never appeared, even after a deliberate test, is worth writing down.
 - **Independent artefacts that agree carry far more weight** than any single trace.
 - **Context closes a false positive.** A Temp-path execution looked suspicious until the same software was found installed legitimately.
@@ -378,6 +414,7 @@ These limits are marked here instead of hidden, so the portfolio reflects exactl
 ## 🛠️ Skills Demonstrated
 
 - Deploying and tuning a Wazuh SIEM with FIM, custom rules, dashboards and active response
+- Hosting a single-node Wazuh SIEM on an Azure VM and enrolling a Windows endpoint agent
 - Writing and verifying Suricata and Wazuh detection rules against replayed and live activity
 - Standing up firewall, perimeter and segmentation controls
 - Live packet capture and protocol analysis in Wireshark
@@ -432,7 +469,9 @@ Cybersecurity-Lab-Projects/
     |-- project-15-dfir-disk-imaging/
     |-- project-16-windows-artifacts-prefetch/
     |-- project-17-browser-forensics-lnk-analysis/
-    `-- project-18-mantooth-investigation-registry-analysis/
+    |-- project-18-mantooth-investigation-registry-analysis/
+    |-- project-19-wazuh-siem-dashboard-azure/
+    `-- project-20-windows-bruteforce-detection-wazuh/
 ```
 
 <div align="center">
