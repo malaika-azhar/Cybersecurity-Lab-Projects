@@ -299,29 +299,93 @@ This repository is one portfolio told in three steps. It starts with ten self-co
 
 How the portfolio fits together, from raw telemetry to a finished report.
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}, 'flowchart': {'nodeSpacing': 16, 'rankSpacing': 24, 'padding': 6}}}%%
-flowchart LR
-    A["📡 Telemetry"]:::c1 --> B["🚨 Detection"]:::c2 --> C["🧬 Enrichment"]:::c3 --> D["🧭 Triage"]:::c4 --> E["🔬 Analysis"]:::c5 --> F["⏱️ Timeline"]:::c6 --> G["📝 Report"]:::c7
-    classDef c1 fill:#2C3E70,stroke:#131B3A,stroke-width:2px,color:#FFFFFF
-    classDef c2 fill:#1A5276,stroke:#0B2E43,stroke-width:2px,color:#FFFFFF
-    classDef c3 fill:#76448A,stroke:#432752,stroke-width:2px,color:#FFFFFF
-    classDef c4 fill:#B9770E,stroke:#6E4409,stroke-width:2px,color:#FFFFFF
-    classDef c5 fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
-    classDef c6 fill:#1E8449,stroke:#0E4A28,stroke-width:2px,color:#FFFFFF
-    classDef c7 fill:#148F77,stroke:#0B5142,stroke-width:2px,color:#FFFFFF
-    linkStyle default stroke:#2C3E50,stroke-width:2px
-```
+<div align="center">
 
-| Stage | What happens |
-|---|---|
-| 📡 **Telemetry** | Host logs and network traffic |
-| 🚨 **Detection** | Wazuh rules and Suricata signatures |
-| 🧬 **Enrichment** | VirusTotal, URLhaus and MITRE ATT&CK |
-| 🧭 **Triage** | Severity, scope and priority |
-| 🔬 **Analysis** | Malware sandbox, disk and memory artefacts |
-| ⏱️ **Timeline** | Filtered, correlated events |
-| 📝 **Report** | README, INDEX and screenshot evidence |
+<table>
+<tr>
+<td align="center" valign="top" width="11%">
+
+**📡**<br>
+**Telemetry**<br>
+<sub>Host logs<br>Network traffic</sub>
+
+</td>
+<td align="center" valign="middle" width="3%">
+
+**➜**
+
+</td>
+<td align="center" valign="top" width="11%">
+
+**🚨**<br>
+**Detection**<br>
+<sub>Wazuh rules<br>Suricata signatures</sub>
+
+</td>
+<td align="center" valign="middle" width="3%">
+
+**➜**
+
+</td>
+<td align="center" valign="top" width="11%">
+
+**🧬**<br>
+**Enrichment**<br>
+<sub>VirusTotal · URLhaus<br>MITRE ATT&amp;CK</sub>
+
+</td>
+<td align="center" valign="middle" width="3%">
+
+**➜**
+
+</td>
+<td align="center" valign="top" width="11%">
+
+**🧭**<br>
+**Triage**<br>
+<sub>Severity<br>Scope · Priority</sub>
+
+</td>
+<td align="center" valign="middle" width="3%">
+
+**➜**
+
+</td>
+<td align="center" valign="top" width="11%">
+
+**🔬**<br>
+**Analysis**<br>
+<sub>Malware sandbox<br>Disk and memory</sub>
+
+</td>
+<td align="center" valign="middle" width="3%">
+
+**➜**
+
+</td>
+<td align="center" valign="top" width="11%">
+
+**⏱️**<br>
+**Timeline**<br>
+<sub>Filtered,<br>correlated events</sub>
+
+</td>
+<td align="center" valign="middle" width="3%">
+
+**➜**
+
+</td>
+<td align="center" valign="top" width="11%">
+
+**📝**<br>
+**Report**<br>
+<sub>README · INDEX<br>Screenshots</sub>
+
+</td>
+</tr>
+</table>
+
+</div>
 
 ---
 
